@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "OversteerF1"
 include(":app")
- 
+include(":design")
+include(":utilities")

@@ -2,4 +2,18 @@
 <resources>
 
     <style name="Theme.OversteerF1" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="SplashScreenTheme" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background color -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <!-- Use your app logo/icon for the splash screen -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/forza_ferrari</item>
+
+        <!-- Optional: Customize animation duration -->
+        <item name="windowSplashScreenAnimationDuration">300</item>
+
+        <!-- Set the theme of the Activity that follows your splash screen -->
+        <item name="postSplashScreenTheme">@style/Theme.OversteerF1</item>
+    </style>
 </resources>

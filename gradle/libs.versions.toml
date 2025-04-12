@@ -5,9 +5,23 @@ coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxSerializationJson = "1.8.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.04.01"
+coroutine = "1.3.9"
+hiltVersion = "2.51.1"
+hiltNavginComposeVersion = "1.2.0"
+appcompat = "1.6.1"
+material = "1.10.0"
+splashScreenVersion = "1.0.0"
+coilVersion = "3.0.4"
+lottieVersion = "6.6.2"
+retrofit = "2.9.0"
+okhttp = "5.0.0-alpha.2"
+navVersion = "2.7.7"
+composeRuntimeVersion = "1.7.8"
+roomVersion = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,9 +38,31 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+corountine_android = {group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutine"}
+hilt = {group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion"}
+hilt_compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion"}
+hilt_navigation_compose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavginComposeVersion"}
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+splash-screen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreenVersion" }
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilVersion"  }
+coilNetwork = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilVersion"  }
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieVersion" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
+retrofit-converter-gson = {group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit"}
+okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
+okhttp3-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp"}
+navigation-compose = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion"}
+androidx-compose-runtime = {group = "androidx.compose.runtime", name = "runtime", version.ref = "composeRuntimeVersion"}
+room = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}
+room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomVersion"}
+room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
