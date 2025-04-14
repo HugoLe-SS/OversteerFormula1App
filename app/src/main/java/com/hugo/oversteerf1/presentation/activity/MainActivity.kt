@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.oversteerf1.presentation.screens.navigation.AppNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,13 +21,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             AppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = AppTheme.colorScheme.background
-                ) {
-                    // A surface container using the 'background' color from the theme
-                }
-
+                AppNavGraph()
             }
         }
     }
