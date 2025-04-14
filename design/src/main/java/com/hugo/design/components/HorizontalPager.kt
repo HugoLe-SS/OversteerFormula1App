@@ -2,6 +2,7 @@ package com.hugo.design.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -108,8 +109,11 @@ fun ImageCarousel(
                 contentDescription = "Carousel image",
                 modifier = Modifier
                     .fillMaxSize()
+                    .clickable {
+                        // Handle page click
+                    }
                     .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Fit
             )
         }
 
