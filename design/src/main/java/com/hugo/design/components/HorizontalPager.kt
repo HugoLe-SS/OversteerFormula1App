@@ -1,8 +1,12 @@
 package com.hugo.design.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,83 +19,60 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.hugo.design.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun HorizontalPagerComponent(
-    modifier: Modifier = Modifier,
-    itemCount: Int = 4
-){
-    val pagerState = rememberPagerState(pageCount = { itemCount })
-    HorizontalPager(
-        state = pagerState,
-        modifier = Modifier.fillMaxSize()
-    ) { page ->
-        // Our page content
-//        Text(
-//            text = "Page: $page",
-//        )
-        Image(
-            painter = painterResource(R.drawable.ic_person),
-            contentDescription = "$page",
-        )
-    }
-    Row(
-        Modifier
-            .wrapContentHeight()
-            .fillMaxSize()
-            .padding(bottom = 8.dp),
-        verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        repeat(pagerState.pageCount) { iteration ->
-            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .size(16.dp)
-            )
-        }
-    }
-
-}
-
-@Composable
-fun ImageCarousel(
+fun HorizontalPager(
     modifier: Modifier = Modifier,
     imageUrls: List<String>,
     autoScroll: Boolean = true,
-    itemCount: Int = 4
+    //itemCount: Int = 4
 ) {
-    val pagerState = rememberPagerState(pageCount = {itemCount})
+    val pagerState = rememberPagerState(pageCount = {imageUrls.size})
+    val pagerIsDragged by pagerState.interactionSource.collectIsDraggedAsState()
 
-    LaunchedEffect(key1 = pagerState.currentPage, key2 = autoScroll) {
-        if (autoScroll) {
-            delay(3000L)
-            val nextPage = (pagerState.currentPage + 1) % imageUrls.size
-            pagerState.animateScrollToPage(nextPage)
+    val pageInteractionSource = remember { MutableInteractionSource() }
+    val pageIsPressed by pageInteractionSource.collectIsPressedAsState()
+
+    // Stop auto-advancing when pager is dragged or one of the pages is pressed
+    val autoAdvance = !pagerIsDragged && !pageIsPressed
+
+    if(autoAdvance){
+        LaunchedEffect(key1 = pagerState, key2 = pageInteractionSource) {
+            while (true) {
+                delay(3000L)
+
+                val nextPage = (pagerState.currentPage + 1) % imageUrls.size
+
+                if(pagerState.currentPage == imageUrls.size - 1) {
+                    pagerState.animateScrollToPage(0)
+                }
+                else{
+                    pagerState.animateScrollToPage(nextPage)
+                }
+
+            }
         }
     }
+
 
     Column(modifier = modifier) {
         HorizontalPager(
@@ -99,7 +80,8 @@ fun ImageCarousel(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(220.dp)
+                .height(300.dp),
+            pageSize = PageSize.Fill
         ) { page ->
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -109,11 +91,15 @@ fun ImageCarousel(
                 contentDescription = "Carousel image",
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickable {
+                    .clickable (
+                        interactionSource = pageInteractionSource,
+                        indication = LocalIndication.current
+                    ){
                         // Handle page click
+
                     }
                     .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop
             )
         }
 
@@ -147,5 +133,5 @@ fun CarouselComponentPreview(){
         "https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/hamilton",
         "https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/leclerc"
     )
-    ImageCarousel(imageUrls = imageUrls)
+    HorizontalPager(imageUrls = imageUrls)
 }
