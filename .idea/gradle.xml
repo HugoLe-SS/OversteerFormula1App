@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/datasource" />
             <option value="$PROJECT_DIR$/design" />
+            <option value="$PROJECT_DIR$/schedule" />
+            <option value="$PROJECT_DIR$/standings" />
             <option value="$PROJECT_DIR$/utilities" />
           </set>
         </option>

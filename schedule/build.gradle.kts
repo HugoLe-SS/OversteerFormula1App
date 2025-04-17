@@ -1,39 +1,21 @@
-import java.util.Properties
-
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
 
     kotlin("kapt")
-
 }
 
-
-val apiKey: String = project.rootProject.file("local.properties")
-    .inputStream()
-    .use { input ->
-        Properties().apply { load(input) }
-    }
-    .getProperty("RAPID_API_KEY")
-
-
 android {
-    namespace = "com.hugo.oversteerf1"
+    namespace = "com.hugo.schedule"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.hugo.oversteerf1"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Add the API key to the build config
-        buildConfigField("String", "RAPID_API_KEY", "\"$apiKey\"")
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -70,12 +52,6 @@ android {
 
 dependencies {
 
-    implementation(project(":utilities"))
-    implementation(project(":design"))
-    implementation(project(":datasource"))
-    implementation(project(":schedule"))
-    implementation(project(":standings"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -96,13 +72,6 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
-
-    implementation(libs.splash.screen)
-
-    implementation(libs.coil)
-    implementation(libs.coilNetwork)
-
-    implementation(libs.lottie)
 
     implementation(libs.androidx.compose.runtime)
 

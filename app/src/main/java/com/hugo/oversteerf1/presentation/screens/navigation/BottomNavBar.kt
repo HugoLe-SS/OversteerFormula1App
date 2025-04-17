@@ -37,7 +37,6 @@ fun BottomNavBar(
             .padding(20.dp)
             .clip(RoundedCornerShape(35.dp)),
         containerColor = AppTheme.colorScheme.onBackground,
-        //contentColor = AppTheme.colorScheme.onSecondary,
         tonalElevation = 4.dp
     ) {
         bottomNavItems.forEach { item ->
