@@ -21,61 +21,6 @@ import com.hugo.oversteerf1.presentation.screens.navigation.BottomNavBar
 import com.hugo.design.components.HorizontalPager
 import com.hugo.oversteerf1.presentation.components.NewsListItem
 
-
-//@Composable
-//fun HomeScreen(
-//    navController: NavController,
-//    viewModel: HomeViewModel = hiltViewModel()
-//){
-//    val state = viewModel.state.value
-//
-//    Scaffold (
-//        topBar = {
-//            AppToolbar(isHomepage = true)
-//        },
-//        bottomBar = {
-//            BottomNavBar(
-//                //items = bottomNavItems,
-//                navController = navController
-//            )
-//        }
-//    ){
-//        innerPadding ->  Column(modifier = Modifier
-//        .fillMaxSize()
-//        .background(AppTheme.colorScheme.background)
-//        .padding(innerPadding),
-//    ){
-//        val imageUrls = listOf(
-//            "https://mclaren.bloomreach.io/cdn-cgi/image/width=1024,quality=80,format=webp/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
-//            "https://mclaren.bloomreach.io/cdn-cgi/image/width=1024,quality=80,format=webp/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_oscar_team_pic_02.jpg",
-//            "https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/hamilton",
-//            "https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/leclerc"
-//        )
-//
-//        Text(
-//            text = "Home Screen",
-//            style = AppTheme.typography.titleLarge,
-//            color = AppTheme.colorScheme.onSecondary,
-//            textAlign = TextAlign.Center
-//
-//        )
-//
-//        HorizontalPager(
-//            imageUrls = imageUrls
-//        )
-//
-//        LazyColumn(
-//            modifier = Modifier.fillMaxSize()
-//        ) {
-//            items(state.news ?: emptyList()) { news ->
-//                NewsListItem(news)
-//            }
-//        }
-//    }
-//
-//    }
-//}
-
 @Composable
 fun HomeScreen(
     navController: NavController,
