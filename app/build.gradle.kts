@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,15 @@ plugins {
     kotlin("kapt")
 
 }
+
+
+val apiKey: String = project.rootProject.file("local.properties")
+    .inputStream()
+    .use { input ->
+        Properties().apply { load(input) }
+    }
+    .getProperty("RAPID_API_KEY")
+
 
 android {
     namespace = "com.hugo.oversteerf1"
@@ -20,6 +31,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Add the API key to the build config
+        buildConfigField("String", "RAPID_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -58,6 +72,7 @@ dependencies {
 
     implementation(project(":utilities"))
     implementation(project(":design"))
+    implementation(project(":datasource"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -91,4 +106,11 @@ dependencies {
 
     // Navigation animation
     implementation(libs.navigation.compose)
+
+    //retrofit + okhttp3 for API fetching
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging.interceptor)
 }
