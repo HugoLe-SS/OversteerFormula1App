@@ -1,7 +1,7 @@
-package com.hugo.oversteerf1.presentation.domain.usecase
+package com.hugo.oversteerf1.domain.usecase
 
 import com.hugo.datasource.local.entity.F1News
-import com.hugo.oversteerf1.presentation.domain.repository.IF1NewsRepository
+import com.hugo.oversteerf1.domain.repository.IF1NewsRepository
 import com.hugo.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

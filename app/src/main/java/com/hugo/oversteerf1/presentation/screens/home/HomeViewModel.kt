@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hugo.oversteerf1.presentation.domain.usecase.GetF1NewsUseCase
+import com.hugo.oversteerf1.domain.usecase.GetF1NewsUseCase
 import com.hugo.utilities.Resource
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel

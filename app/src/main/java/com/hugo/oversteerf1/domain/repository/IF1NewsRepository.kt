@@ -1,4 +1,4 @@
-package com.hugo.oversteerf1.presentation.domain.repository
+package com.hugo.oversteerf1.domain.repository
 
 import com.hugo.datasource.local.entity.F1News
 import com.hugo.utilities.Resource

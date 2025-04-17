@@ -50,6 +50,8 @@ android {
 
 dependencies {
 
+    implementation(project(":utilities"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,6 +64,8 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.coilNetwork)
+
+    implementation(libs.navigation.compose)
 
 
     implementation(libs.androidx.compose.runtime)

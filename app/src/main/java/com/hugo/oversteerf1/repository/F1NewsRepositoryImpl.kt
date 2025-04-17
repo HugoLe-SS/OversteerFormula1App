@@ -1,7 +1,7 @@
-package com.hugo.oversteerf1.presentation.data.repository
+package com.hugo.oversteerf1.repository
 
 import com.hugo.datasource.local.entity.F1News
-import com.hugo.oversteerf1.presentation.domain.repository.IF1NewsRepository
+import com.hugo.oversteerf1.domain.repository.IF1NewsRepository
 import com.hugo.utilities.Resource
 import com.hugo.utilities.logging.AppLogger
 import kotlinx.coroutines.flow.Flow

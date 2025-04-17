@@ -1,6 +1,7 @@
-package com.hugo.oversteerf1.presentation.screens.navigation
+package com.hugo.design.components
 
-import com.hugo.oversteerf1.R
+import com.hugo.design.R
+import com.hugo.utilities.Screen
 
 data class BottomNavItem(
     val label: String,

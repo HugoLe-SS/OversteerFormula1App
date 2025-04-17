@@ -1,4 +1,4 @@
-package com.hugo.oversteerf1.presentation.screens.navigation
+package com.hugo.utilities
 
 sealed class  Screen (val route: String){
 
