@@ -1,6 +1,7 @@
-package com.hugo.oversteerf1.repository
+package com.hugo.oversteerf1.data.repository
 
 import com.hugo.datasource.local.entity.F1News
+import com.hugo.oversteerf1.data.remote.F1NewsApi
 import com.hugo.oversteerf1.domain.repository.IF1NewsRepository
 import com.hugo.utilities.Resource
 import com.hugo.utilities.logging.AppLogger

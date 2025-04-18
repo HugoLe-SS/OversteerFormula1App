@@ -1,4 +1,4 @@
-package com.hugo.oversteerf1.repository
+package com.hugo.oversteerf1.data.remote
 
 import com.hugo.datasource.local.entity.F1News
 import retrofit2.http.GET
