@@ -20,6 +20,7 @@ val apiKey: String = project.rootProject.file("local.properties")
 
 
 android {
+
     namespace = "com.hugo.oversteerf1"
     compileSdk = 35
 
@@ -31,9 +32,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Add the API key to the build config
-        buildConfigField("String", "RAPID_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -66,6 +64,8 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
     }
+
+
 }
 
 dependencies {

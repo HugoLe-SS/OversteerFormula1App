@@ -6,4 +6,6 @@ object AppConstants {
 
     //F1_News_Base_URL
     const val BASE_URL_F1_NEWS = "https://f1-latest-news.p.rapidapi.com/"
+
+    const val BASE_URL_F1_STANDINGS = "https://api.jolpi.ca/"
 }

@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.schedule.presentation.screens.ScheduleHomeScreen
-import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
+import com.hugo.standings.presentation.screens.Home.Constructor.StandingsHomeScreen
 import com.hugo.utilities.Screen
 
 @Composable

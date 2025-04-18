@@ -1,4 +1,4 @@
-package com.hugo.standings.presentation.screens.Home
+package com.hugo.standings.presentation.screens.Home.Constructor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
@@ -18,8 +19,11 @@ import com.hugo.design.ui.theme.AppTheme
 
 @Composable
 fun StandingsHomeScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ConstructorStandingsHomeViewModel = hiltViewModel()
 ){
+    val state = viewModel.state.value
+
     Scaffold(
         topBar = {
             AppToolbar(isHomepage = true)
