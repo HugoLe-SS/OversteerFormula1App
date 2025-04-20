@@ -62,6 +62,7 @@ fun DriverStandingsDto.toDriverStandingsInfoList(): List<DriverStandingsInfo>
     return mrData.standingsTable.standingsLists.flatMap {list ->
         list.driverStandings.map {standings ->
             DriverStandingsInfo(
+                driverId = standings.driver.driverId,
                 total = total,
                 season = season,
                 round = round,

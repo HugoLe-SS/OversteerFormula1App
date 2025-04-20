@@ -4,7 +4,6 @@ import com.hugo.standings.domain.model.ConstructorStandingsInfo
 import com.hugo.standings.domain.repository.IF1StandingsRepository
 import com.hugo.utilities.Resource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetConstructorStandingsUseCase @Inject constructor(

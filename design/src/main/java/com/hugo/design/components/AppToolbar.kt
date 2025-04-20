@@ -126,7 +126,7 @@ fun AppToolbar(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ){
                     Text(
-                        text = stringResource(R.string.schedule),
+                        text = stringResource(R.string.standings),
                         textAlign = TextAlign.Center,
                         style = AppTheme.typography.body,
                         color = AppTheme.colorScheme.onPrimary,

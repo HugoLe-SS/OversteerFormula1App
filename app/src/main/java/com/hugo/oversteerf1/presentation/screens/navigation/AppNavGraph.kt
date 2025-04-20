@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.schedule.presentation.screens.ScheduleHomeScreen
-import com.hugo.standings.presentation.screens.Home.Constructor.StandingsHomeScreen
+import com.hugo.standings.presentation.screens.Details.ConstructorDetails.ConstructorDetailsScreen
+import com.hugo.standings.presentation.screens.Details.DriverDetails.DriverDetailsScreen
+import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
 import com.hugo.utilities.Screen
 
 @Composable
@@ -84,7 +87,55 @@ fun AppNavGraph(){
             ){
                 StandingsHomeScreen(
                     //setup Clickable actions here
-                    navController = navController
+                    navController = navController,
+                    constructorCardClicked = {
+                        navController.navigate(Screen.ConstructorDetailsScreen.route)
+                    },
+                    driverCardClicked = {
+                        navController.navigate(Screen.DriverDetailsScreen.route)
+                    }
+                )
+            }
+
+            //Driver Details Screen
+            composable(
+                route = Screen.DriverDetailsScreen.route,
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(200))
+                },
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(200)
+                    )
+                }
+            ){
+                DriverDetailsScreen(
+                    backButtonClicked = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            //Constructor Details Screen
+            composable(
+                route = Screen.ConstructorDetailsScreen.route,
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(200))
+                },
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(200)
+                    )
+                }
+            ){
+                ConstructorDetailsScreen(
+                    backButtonClicked = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

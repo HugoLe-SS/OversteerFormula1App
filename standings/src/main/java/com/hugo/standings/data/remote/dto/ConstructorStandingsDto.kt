@@ -50,6 +50,7 @@ fun ConstructorStandingsDto.toConstructorInfoList(): List<ConstructorStandingsIn
     return mrData.standingsTable.standingsLists.flatMap { list ->
         list.constructorStandings.map { standing ->
             ConstructorStandingsInfo(
+                constructorId = standing.constructor.constructorId,
                 total = total,
                 season = season,
                 round = round,
