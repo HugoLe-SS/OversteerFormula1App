@@ -1,6 +1,7 @@
-package com.hugo.standings.data.remote.dto
+package com.hugo.standings.data.remote.dto.Standings
 
 import com.google.gson.annotations.SerializedName
+import com.hugo.standings.data.remote.dto.Constructor
 import com.hugo.standings.domain.model.ConstructorStandingsInfo
 
 data class ConstructorStandingsDto(

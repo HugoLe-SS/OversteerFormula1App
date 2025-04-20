@@ -63,7 +63,7 @@ class DriverDetailsViewModel @Inject constructor(
             when (result) {
                 is Resource.Loading -> {
                     AppLogger.d(message = "DriverDetailsViewModel Loading")
-                    _state.value = DriverDetailsUiState(
+                    _state.value = _state.value.copy(
                         isLoading = true
                     )
                 }

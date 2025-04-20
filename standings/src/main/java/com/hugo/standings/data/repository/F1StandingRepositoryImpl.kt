@@ -1,13 +1,17 @@
 package com.hugo.standings.data.repository
 
 import com.hugo.standings.data.remote.F1StandingsApi
-import com.hugo.standings.data.remote.dto.toConstructorInfoList
-import com.hugo.standings.data.remote.dto.toDriverQualifyingResultInfoList
-import com.hugo.standings.data.remote.dto.toDriverRaceResultInfoList
-import com.hugo.standings.data.remote.dto.toDriverStandingsInfoList
+import com.hugo.standings.data.remote.dto.QualifyingResult.toConstructorQualifyingResultInfoList
+import com.hugo.standings.data.remote.dto.Standings.toConstructorInfoList
+import com.hugo.standings.data.remote.dto.QualifyingResult.toDriverQualifyingResultInfoList
+import com.hugo.standings.data.remote.dto.RaceResult.toConstructorRaceResultInfoList
+import com.hugo.standings.data.remote.dto.RaceResult.toDriverRaceResultInfoList
+import com.hugo.standings.data.remote.dto.Standings.toDriverStandingsInfoList
+import com.hugo.standings.domain.model.ConstructorQualifyingResultsInfo
+import com.hugo.standings.domain.model.ConstructorRaceResultsInfo
 import com.hugo.standings.domain.model.ConstructorStandingsInfo
-import com.hugo.standings.domain.model.DriverQualifyingResultInfo
-import com.hugo.standings.domain.model.DriverRaceResultInfo
+import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
+import com.hugo.standings.domain.model.DriverRaceResultsInfo
 import com.hugo.standings.domain.model.DriverStandingsInfo
 import com.hugo.standings.domain.repository.IF1StandingsRepository
 import com.hugo.utilities.Resource
@@ -20,6 +24,7 @@ import javax.inject.Inject
 
 class F1StandingRepositoryImpl @Inject constructor(
     private val f1StandingsApi: F1StandingsApi
+
 ): IF1StandingsRepository {
     override fun getConstructorStandings(season: String): Flow<Resource<List<ConstructorStandingsInfo>>> = flow {
         AppLogger.d(message="Inside getConstructorStandings")
@@ -57,7 +62,7 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getDriverRaceResults(season: String, driverId: String): Flow<Resource<List<DriverRaceResultInfo>>> = flow {
+    override fun getDriverRaceResults(season: String, driverId: String): Flow<Resource<List<DriverRaceResultsInfo>>> = flow {
         AppLogger.d(message = "inside getDriverRaceResults")
         emit(Resource.Loading())
 
@@ -77,7 +82,7 @@ class F1StandingRepositoryImpl @Inject constructor(
 
     }
 
-    override fun getDriverQualifyingResults(season: String, driverId: String): Flow<Resource<List<DriverQualifyingResultInfo>>> = flow {
+    override fun getDriverQualifyingResults(season: String, driverId: String): Flow<Resource<List<DriverQualifyingResultsInfo>>> = flow {
         AppLogger.d(message = "inside getDriverQualifyingResults")
         emit(Resource.Loading())
 
@@ -98,5 +103,50 @@ class F1StandingRepositoryImpl @Inject constructor(
             emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
         }
     }
+
+    override fun getConstructorRaceResults(season: String, constructorId: String): Flow<Resource<List<ConstructorRaceResultsInfo>>> = flow {
+        AppLogger.d(message = "inside getConstructorRaceResults")
+        emit(Resource.Loading())
+
+        try {
+            val constructorRaceResults = f1StandingsApi.getConstructorRaceResult(season = season, constructorId = constructorId)
+            emit(Resource.Success(constructorRaceResults.toConstructorRaceResultInfoList()))
+            AppLogger.d(message = "Success getting constructor race results ${constructorRaceResults.toConstructorRaceResultInfoList().size}")
+
+        }catch (e:Exception){
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            AppLogger.e(message = "Error getting constructor race results: ${e.localizedMessage}")
+        }
+        catch (e:HttpException)
+        {
+            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
+        }
+
+    }
+
+    override fun getConstructorQualifyingResults(season: String, constructorId: String): Flow<Resource<List<ConstructorQualifyingResultsInfo>>> = flow {
+        AppLogger.d(message = "inside getConstructorQualifyingResults")
+        emit(Resource.Loading())
+
+        AppLogger.d(message = "inside getConstructorRaceResults")
+        emit(Resource.Loading())
+
+        try {
+            val constructorQualifyingResults = f1StandingsApi.getConstructorQualifyingResult(season = season, constructorId = constructorId)
+            emit(Resource.Success(constructorQualifyingResults.toConstructorQualifyingResultInfoList()))
+            AppLogger.d(message = "Success getting Constructor qualifying results ${constructorQualifyingResults.toConstructorQualifyingResultInfoList().size}")
+
+        }catch (e:Exception){
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            AppLogger.e(message = "Error getting Constructor qualifying results: ${e.localizedMessage}")
+        }
+        catch (e:HttpException)
+        {
+            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
+        }
+    }
+
+
+
 
 }

@@ -1,6 +1,6 @@
 package com.hugo.standings.domain.model
 
-data class DriverQualifyingResultInfo(
+data class ConstructorRaceResultsInfo(
     val total: String,
     val driverNumber: String,
     val driverId: String,
@@ -15,7 +15,11 @@ data class DriverQualifyingResultInfo(
     val circuitName: String,
     val country: String,
     val position: String,
-    val q1: String?,
-    val q2: String?,
-    val q3:String?,
+    val positionText: String,
+    val points: String,
+    val grid: String,
+    val laps: String,
+    val time: String, // 1st place interval
+    val fastestLap: String,
+    val status: String
 )

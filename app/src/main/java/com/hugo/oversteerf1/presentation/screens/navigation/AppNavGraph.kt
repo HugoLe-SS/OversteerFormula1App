@@ -92,8 +92,8 @@ fun AppNavGraph(){
                 StandingsHomeScreen(
                     //setup Clickable actions here
                     navController = navController,
-                    constructorCardClicked = {
-                        navController.navigate(Screen.ConstructorDetailsScreen.route)
+                    constructorCardClicked = { constructorId ->
+                        navController.navigate(Screen.ConstructorDetailsScreen.route + "/$constructorId")
                     },
                     driverCardClicked = { driverId ->
                         navController.navigate(Screen.DriverDetailsScreen.route + "/$driverId")
@@ -123,7 +123,7 @@ fun AppNavGraph(){
                 it?.arguments?.getString("${ScreenArguments.DRIVER_ID}")?.also{ driverId ->
                     AppLogger.d(message = "DriverDetailsScreen driverId: $driverId")
                     DriverDetailsScreen(
-                        driverId,
+                        driverId = driverId,
                         backButtonClicked = {
                             navController.popBackStack()
                         }
@@ -134,8 +134,8 @@ fun AppNavGraph(){
 
             //Constructor Details Screen
             composable(
-                route = Screen.ConstructorDetailsScreen.route,
-                popEnterTransition = {
+                route = Screen.ConstructorDetailsScreen.route + "/{${ScreenArguments.CONSTRUCTOR_ID}}",
+                enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
                         tween(200))
@@ -144,13 +144,24 @@ fun AppNavGraph(){
                     slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right,
                         tween(200)
                     )
-                }
-            ){
-                ConstructorDetailsScreen(
-                    backButtonClicked = {
-                        navController.popBackStack()
-                    }
+                },
+                arguments = listOf(
+                    navArgument(name = "${ScreenArguments.CONSTRUCTOR_ID}") {
+                        type = NavType.StringType}
                 )
+
+            ){
+                //get the coinId from the arguments (from WealthHomeScreen to CoinDetailsScreen)
+                it?.arguments?.getString("${ScreenArguments.CONSTRUCTOR_ID}")?.also{ constructorId ->
+                    AppLogger.d(message = "ConstructorDetailsScreen costructorId: $constructorId")
+                    ConstructorDetailsScreen(
+                        constructorId = constructorId,
+                        backButtonClicked = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+
             }
         }
     }

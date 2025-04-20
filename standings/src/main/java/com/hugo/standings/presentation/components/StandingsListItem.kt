@@ -25,7 +25,7 @@ import com.hugo.standings.domain.model.DriverStandingsInfo
 @Composable
 fun ConstructorListItem(
     constructor: ConstructorStandingsInfo,
-    constructorCardClicked: () -> Unit = {}
+    constructorCardClicked: (String) -> Unit = {}
 ){
     Card (
         modifier = Modifier
@@ -33,7 +33,7 @@ fun ConstructorListItem(
             .heightIn(max = 450.dp)
             .wrapContentHeight()
             .clickable {
-                constructorCardClicked()
+                constructorCardClicked(constructor.constructorId)
             }
             .padding(top = 18.dp, start = 18.dp, end = 18.dp)
             .border(1.dp, AppTheme.colorScheme.primary, RoundedCornerShape(10.dp)),

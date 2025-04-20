@@ -1,14 +1,15 @@
-package com.hugo.standings.data.remote.dto
+package com.hugo.standings.data.remote.dto.QualifyingResult
 
 import com.google.gson.annotations.SerializedName
-import com.hugo.standings.domain.model.DriverQualifyingResultInfo
+import com.hugo.standings.domain.model.ConstructorQualifyingResultsInfo
+import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
 
-data class DriverQualifyingResultDto(
+data class ConstructorQualifyingResultDto(
     @SerializedName("MRData")
-    val mrData: DriverQualifyingMRData
+    val mrData: ConstructorQualifyingMRData
 )
 
-data class DriverQualifyingMRData(
+data class ConstructorQualifyingMRData(
     val xmlns: String,
     val series: String,
     val url: String,
@@ -16,50 +17,22 @@ data class DriverQualifyingMRData(
     val offset: String,
     val total: String,
     @SerializedName("RaceTable")
-    val raceTable: QRaceTable
+    val raceTable: ConstructorQRaceTable
 )
 
-data class QRaceTable(
+data class ConstructorQRaceTable(
     val season: String,
-    val driverId: String,
+    val constructorId: String,
     @SerializedName("Races")
     val qualifying: List<QualifyingInfo>
 )
 
-data class QualifyingInfo(
-    val season: String,
-    val round: String,
-    val url: String,
-    val raceName: String,
-    @SerializedName("Circuit")
-    val circuit: Circuit,
-    val date: String,
-    val time: String,
-    @SerializedName("QualifyingResults")
-    val results: List<QualifyingResult>
-)
-
-data class QualifyingResult(
-    val number: String,
-    val position: String,
-    @SerializedName("Driver")
-    val driver: DriverInfo,
-    @SerializedName("Constructor")
-    val constructor: Constructor,
-    @SerializedName("Q1")
-    val q1: String?,
-    @SerializedName("Q2")
-    val q2: String?,
-    @SerializedName("Q3")
-    val q3: String?
-)
-
-fun DriverQualifyingResultDto.toDriverQualifyingResultInfoList(): List<DriverQualifyingResultInfo> {
+fun ConstructorQualifyingResultDto.toConstructorQualifyingResultInfoList(): List<ConstructorQualifyingResultsInfo> {
     val total = mrData.total
 
     return mrData.raceTable.qualifying.flatMap { race ->
         race.results.map { result ->
-            DriverQualifyingResultInfo(
+            ConstructorQualifyingResultsInfo(
                 total = total,
                 driverNumber = result.number,
                 driverId = result.driver.driverId,
@@ -80,6 +53,4 @@ fun DriverQualifyingResultDto.toDriverQualifyingResultInfoList(): List<DriverQua
             )
         }
     }
-
 }
-

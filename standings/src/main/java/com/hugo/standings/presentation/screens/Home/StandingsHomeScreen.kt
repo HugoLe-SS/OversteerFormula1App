@@ -28,7 +28,7 @@ fun StandingsHomeScreen(
     navController: NavController,
     viewModel: StandingsHomeViewModel = hiltViewModel(),
     driverCardClicked: (String) -> Unit = {},
-    constructorCardClicked: () -> Unit = {}
+    constructorCardClicked: (String) -> Unit = {}
 ){
     val state = viewModel.state.value
 
@@ -58,7 +58,10 @@ fun StandingsHomeScreen(
                         items(state.constructorStandings ?: emptyList()) { constructors ->
                             ConstructorListItem(
                                 constructors,
-                                constructorCardClicked = constructorCardClicked
+                                constructorCardClicked = { constructorId ->
+                                    constructorCardClicked(constructorId)
+                                }
+
                             )
                     }
                 }
