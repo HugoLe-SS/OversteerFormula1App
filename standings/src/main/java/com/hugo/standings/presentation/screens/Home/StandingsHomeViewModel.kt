@@ -25,7 +25,7 @@ class StandingsHomeViewModel @Inject constructor(
     init{
         AppLogger.d(message = "Inside StandingsHomeViewModel")
         constructorStandings(season = "current")
-        getDriverStandings(season = "current")
+//        getDriverStandings(season = "current")
     }
 
 
@@ -80,12 +80,12 @@ class StandingsHomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-//    fun toggleStandings() {
-//        val newType = if (_state.value.currentType == StandingsType.CONSTRUCTOR)
-//            StandingsType.DRIVER else StandingsType.CONSTRUCTOR
-//
-//        _state.value = _state.value.copy(currentType = newType)
-//    }
+    private fun loadStandings() {
+        when (_state.value.currentType) {
+            StandingsType.CONSTRUCTOR -> constructorStandings(season = "current")
+            StandingsType.DRIVER -> getDriverStandings(season = "current")
+        }
+    }
 
     fun onEvent(event: ToggleStandingsEvent) {
         when (event) {
@@ -96,16 +96,13 @@ class StandingsHomeViewModel @Inject constructor(
                         StandingsType.DRIVER -> StandingsType.CONSTRUCTOR
                     }
                 )
+                loadStandings()
                 AppLogger.d(message = "${state.value.currentType}")
             }
 
-//            is ToggleStandingsEvent.LoadSeason -> {
-//                constructorStandings(event.season)
-//                getDriverStandings(event.season)
-//            }
-
             is ToggleStandingsEvent.SetStandingsType -> {
                 _state.value = _state.value.copy(currentType = event.type)
+                loadStandings()
             }
         }
     }

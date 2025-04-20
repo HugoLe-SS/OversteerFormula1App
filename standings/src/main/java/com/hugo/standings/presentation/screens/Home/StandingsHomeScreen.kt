@@ -27,7 +27,7 @@ import com.hugo.standings.presentation.components.SegmentedButton
 fun StandingsHomeScreen(
     navController: NavController,
     viewModel: StandingsHomeViewModel = hiltViewModel(),
-    driverCardClicked: () -> Unit = {},
+    driverCardClicked: (String) -> Unit = {},
     constructorCardClicked: () -> Unit = {}
 ){
     val state = viewModel.state.value
@@ -66,7 +66,9 @@ fun StandingsHomeScreen(
                         items(state.driverStandings ?: emptyList()) { drivers ->
                             DriverListItem(
                                 drivers,
-                                driverCardClicked = driverCardClicked
+                                driverCardClicked = { driverId ->
+                                    driverCardClicked(driverId)
+                                }
                             )
                     }
                 }

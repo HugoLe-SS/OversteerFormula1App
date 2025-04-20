@@ -19,3 +19,8 @@ enum class Route(){
     CONSTRUCTOR_DETAILS_SCREEN
     //LEGACY_SCREEN
 }
+
+enum class ScreenArguments (name: String){
+    DRIVER_ID("driverId"),
+    CONSTRUCTOR_ID("constructorId"),
+}

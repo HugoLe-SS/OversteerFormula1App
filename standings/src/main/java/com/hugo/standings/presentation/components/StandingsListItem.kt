@@ -123,7 +123,7 @@ fun ConstructorListItem(
 @Composable
 fun DriverListItem(
     driver: DriverStandingsInfo,
-    driverCardClicked: () -> Unit = {}
+    driverCardClicked: (String) -> Unit = {}
 ){
     Card (
         modifier = Modifier
@@ -131,7 +131,7 @@ fun DriverListItem(
             .heightIn(max = 450.dp)
             .wrapContentHeight()
             .clickable {
-                driverCardClicked()
+                driverCardClicked(driver.driverId)
             }
             .padding(top = 18.dp, start = 18.dp, end = 18.dp)
             .border(1.dp, AppTheme.colorScheme.primary, RoundedCornerShape(10.dp)),

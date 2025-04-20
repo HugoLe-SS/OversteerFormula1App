@@ -7,15 +7,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.schedule.presentation.screens.ScheduleHomeScreen
 import com.hugo.standings.presentation.screens.Details.ConstructorDetails.ConstructorDetailsScreen
 import com.hugo.standings.presentation.screens.Details.DriverDetails.DriverDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
 import com.hugo.utilities.Screen
+import com.hugo.utilities.ScreenArguments
+import com.hugo.utilities.logging.AppLogger
 
 @Composable
 fun AppNavGraph(){
@@ -91,16 +95,16 @@ fun AppNavGraph(){
                     constructorCardClicked = {
                         navController.navigate(Screen.ConstructorDetailsScreen.route)
                     },
-                    driverCardClicked = {
-                        navController.navigate(Screen.DriverDetailsScreen.route)
+                    driverCardClicked = { driverId ->
+                        navController.navigate(Screen.DriverDetailsScreen.route + "/$driverId")
                     }
                 )
             }
 
             //Driver Details Screen
             composable(
-                route = Screen.DriverDetailsScreen.route,
-                popEnterTransition = {
+                route = Screen.DriverDetailsScreen.route + "/{${ScreenArguments.DRIVER_ID}}",
+                enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
                         tween(200))
@@ -109,13 +113,23 @@ fun AppNavGraph(){
                     slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right,
                         tween(200)
                     )
-                }
-            ){
-                DriverDetailsScreen(
-                    backButtonClicked = {
-                        navController.popBackStack()
-                    }
+                },
+                arguments = listOf(
+                    navArgument(name = "${ScreenArguments.DRIVER_ID}") {
+                        type = NavType.StringType}
                 )
+            ){
+                //get the coinId from the arguments (from WealthHomeScreen to CoinDetailsScreen)
+                it?.arguments?.getString("${ScreenArguments.DRIVER_ID}")?.also{ driverId ->
+                    AppLogger.d(message = "DriverDetailsScreen driverId: $driverId")
+                    DriverDetailsScreen(
+                        driverId,
+                        backButtonClicked = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+
             }
 
             //Constructor Details Screen
