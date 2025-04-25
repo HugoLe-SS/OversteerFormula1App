@@ -51,25 +51,6 @@ fun StandingsHomeScreen(
 
             item{
                 ToggleButton(state= state, viewModel = viewModel)
-//                DriverBannerComponent(
-//                    driverGivenName = "Lando",
-//                    driverLastName = "Norris",
-//                    driverNumber = "44",
-//                    teamName = "McLaren",
-//                    driverImgUrl = "https://mclaren.bloomreach.io/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
-//                    teamImgUrl = "https://media.formula1.com/content/dam/fom-website/teams/2025/mclaren-logo.png"
-//                )
-//                ConstructorBannerComponent(
-//                    firstDriverGivenName = "Lando",
-//                    firstDriverLastName = "Norris",
-//                    firstDriverNumber = "44",
-//                    secondDriverNumber = "81",
-//                    secondDriverGivenName = "Grabiel",
-//                    secondDriverLastName = "Bortoleto",
-//                    teamName = "McLaren",
-//                    driverImgUrl = "https://mclaren.bloomreach.io/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
-//                    teamImgUrl = "https://media.formula1.com/content/dam/fom-website/teams/2025/mclaren-logo.png"
-//                )
             }
 
             when (state.currentType) {
@@ -90,7 +71,7 @@ fun StandingsHomeScreen(
                     }
 
                     // Constructor List
-                    items(state.constructorStandings ?: emptyList()) { constructors ->
+                    items(state.constructorStandings) { constructors ->
                         ConstructorListItem(
                             constructors,
                             constructorCardClicked = { constructorId ->
@@ -114,7 +95,7 @@ fun StandingsHomeScreen(
                     }
 
                     // Driver List
-                    items(state.driverStandings ?: emptyList()) { drivers ->
+                    items(state.driverStandings) { drivers ->
                         DriverListItem(
                             drivers,
                             driverCardClicked = { driverId ->

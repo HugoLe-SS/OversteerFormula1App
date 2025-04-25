@@ -34,12 +34,12 @@ private val typography = AppTypography(
     titleLarge = TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp
+        fontSize = 24.sp
     ),
     titleNormal =  TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
+        fontSize = 20.sp
     ),
     body =  TextStyle(
         fontFamily = EvaFont,

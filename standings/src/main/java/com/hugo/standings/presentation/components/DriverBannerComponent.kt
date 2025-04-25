@@ -56,7 +56,7 @@ fun DriverBannerComponent(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 8.dp),
+                        .padding(start = 12.dp),
                 ){
 
                     Text(
@@ -87,14 +87,12 @@ fun DriverBannerComponent(
                                 text = driverGivenName,
                                 style = AppTheme.typography.titleNormal,
                                 color = AppTheme.colorScheme.onSecondary,
-                                fontSize = 20.sp
                             )
 
                             Text(
                                 text = driverLastName,
                                 style = AppTheme.typography.titleLarge,
                                 color = AppColors.Teams.mclaren,
-                                fontSize = 20.sp
                             )
                         }
 

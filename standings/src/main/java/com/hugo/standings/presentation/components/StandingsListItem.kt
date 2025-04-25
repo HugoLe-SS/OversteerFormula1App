@@ -176,7 +176,7 @@ fun DriverListItem(
                         //.wrapContentSize()
                         .weight(8f),
                     //textAlign = TextAlign.Center,
-                    text = "${driver.driverName} ",
+                    text = "${driver.driverGivenName + " " + driver.driverLastName} ",
                     style = AppTheme.typography.body,
                     color = AppTheme.colorScheme.onSecondary,
                 )

@@ -4,14 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.standings.presentation.components.DriverDetailsBannerComponent
+import com.hugo.standings.presentation.components.DriverDetailsListItem
 
 @Composable
 fun DriverDetailsScreen(
@@ -19,7 +24,7 @@ fun DriverDetailsScreen(
     backButtonClicked : () -> Unit = {},
     viewModel: DriverDetailsViewModel = hiltViewModel()
 ){
-    val state = viewModel.state.value
+    val state by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = driverId) {
         viewModel.fetchDriverDetails(season = "current", driverId = driverId)
@@ -35,6 +40,9 @@ fun DriverDetailsScreen(
     )
     {
         padding->
+
+
+
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
@@ -42,10 +50,18 @@ fun DriverDetailsScreen(
                 .padding(padding)
         ){
             item{
-                Text(
-                    text = "Driver Details Screen",
-                    style = AppTheme.typography.titleLarge,
-                    color = AppTheme.colorScheme.onSecondary
+                DriverDetailsBannerComponent(
+                    driver = state.driverRaceResults.firstOrNull() ?: return@item
+                )
+            }
+
+//            items(state.driverRaceResults) { drivers ->
+//                DriverDetailsListItem(drivers)
+//            }
+            items(state.driverRaceResults.zip(state.driverQualifyingResults)) { (race, quali) ->
+                DriverDetailsListItem(
+                    driverRace = race,
+                    driverQuali = quali
                 )
             }
         }

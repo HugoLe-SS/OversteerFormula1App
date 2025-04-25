@@ -126,14 +126,12 @@ fun ConstructorBannerComponent(
                             text = firstDriverGivenName,
                             style = AppTheme.typography.titleNormal,
                             color = AppTheme.colorScheme.onSecondary,
-                            fontSize = 20.sp
                         )
 
                         Text(
                             text = firstDriverLastName,
                             style = AppTheme.typography.titleLarge,
                             color = AppColors.Teams.mclaren,
-                            fontSize = 20.sp
                         )
                     }
 
@@ -181,7 +179,6 @@ fun ConstructorBannerComponent(
                             text = secondDriverGivenName,
                             style = AppTheme.typography.titleNormal,
                             color = AppTheme.colorScheme.onSecondary,
-                            fontSize = 20.sp
 
                         )
 
@@ -189,7 +186,6 @@ fun ConstructorBannerComponent(
                             text = secondDriverLastName,
                             style = AppTheme.typography.titleLarge,
                             color = AppColors.Teams.mclaren,
-                            fontSize = 20.sp
                         )
                     }
 

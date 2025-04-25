@@ -5,6 +5,7 @@ data class DriverRaceResultsInfo(
     val driverNumber: String,
     val driverId: String,
     val constructorId: String,
+    val constructorName: String,
     val driverCode: String,
     val givenName: String,
     val familyName: String,

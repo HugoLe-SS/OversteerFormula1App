@@ -6,6 +6,6 @@ import com.hugo.standings.domain.model.ConstructorRaceResultsInfo
 data class ConstructorDetailsUIState(
     val isLoading: Boolean = true,
     val error: String? = null,
-    val constructorRaceResults: List<ConstructorRaceResultsInfo>? = emptyList(),
-    val constructorQualifyingResults: List<ConstructorQualifyingResultsInfo>? = emptyList(),
+    val constructorRaceResults: List<ConstructorRaceResultsInfo> = emptyList(),
+    val constructorQualifyingResults: List<ConstructorQualifyingResultsInfo> = emptyList(),
 )

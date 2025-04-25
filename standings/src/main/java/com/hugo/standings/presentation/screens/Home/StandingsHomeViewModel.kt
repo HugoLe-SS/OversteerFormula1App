@@ -39,7 +39,7 @@ class StandingsHomeViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = ConstructorStandingsHomeUiState(
                         isLoading = false,
-                        constructorStandings = result.data
+                        constructorStandings = result.data ?: emptyList()
                     )
                 }
                 is Resource.Error -> {
@@ -65,7 +65,7 @@ class StandingsHomeViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        driverStandings = result.data
+                        driverStandings = result.data ?: emptyList()
                     )
                 }
                 is Resource.Error -> {

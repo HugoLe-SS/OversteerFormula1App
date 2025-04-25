@@ -38,6 +38,7 @@ fun DriverRaceResultDto.toDriverRaceResultInfoList(): List<DriverRaceResultsInfo
                 driverNumber = result.number,
                 driverId = result.driver.driverId,
                 constructorId = result.constructor.constructorId,
+                constructorName = result.constructor.name,
                 driverCode = result.driver.code,
                 givenName = result.driver.givenName,
                 familyName = result.driver.familyName,
