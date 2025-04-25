@@ -12,6 +12,11 @@ val EvaFont = FontFamily(
     Font(R.font.evangelion_italic, FontWeight.Normal),
     Font(R.font.evangelion_regular, FontWeight.Normal),
 )
+val F1Font = FontFamily(
+    Font(R.font.formula1_bold, FontWeight.Normal),
+    Font(R.font.formula1_regular, FontWeight.Normal),
+    Font(R.font.formula1_wide, FontWeight.Normal),
+)
 
 
 

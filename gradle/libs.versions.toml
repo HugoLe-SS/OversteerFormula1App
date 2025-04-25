@@ -24,6 +24,7 @@ composeRuntimeVersion = "1.7.8"
 roomVersion = "2.6.1"
 navigationRuntimeKtx = "2.8.9"
 roomCompilerProcessingTesting = "2.7.0"
+storage = "1.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +63,7 @@ room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = 
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-room-compiler-processing-testing = { group = "androidx.room", name = "room-compiler-processing-testing", version.ref = "roomCompilerProcessingTesting" }
+androidx-storage = { group = "androidx.test.services", name = "storage", version.ref = "storage" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

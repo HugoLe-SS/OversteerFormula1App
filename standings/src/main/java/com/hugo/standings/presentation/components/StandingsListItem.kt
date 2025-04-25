@@ -1,13 +1,17 @@
 package com.hugo.standings.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,13 +34,12 @@ fun ConstructorListItem(
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(max = 450.dp)
+            .height(100.dp)
             .wrapContentHeight()
             .clickable {
                 constructorCardClicked(constructor.constructorId)
             }
-            .padding(top = 18.dp, start = 18.dp, end = 18.dp)
-            .border(1.dp, AppTheme.colorScheme.primary, RoundedCornerShape(10.dp)),
+            .padding(12.dp),
 
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
@@ -115,6 +118,13 @@ fun ConstructorListItem(
 
             }
         }
+
+        Spacer(
+            Modifier
+                .fillMaxWidth()
+                .height(2.dp)
+                .background(AppTheme.colorScheme.onBackground)
+        )
     }
 
 
@@ -128,13 +138,12 @@ fun DriverListItem(
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(max = 450.dp)
+            .height(110.dp)
             .wrapContentHeight()
             .clickable {
                 driverCardClicked(driver.driverId)
             }
-            .padding(top = 18.dp, start = 18.dp, end = 18.dp)
-            .border(1.dp, AppTheme.colorScheme.primary, RoundedCornerShape(10.dp)),
+            .padding(12.dp),
 
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
@@ -213,6 +222,13 @@ fun DriverListItem(
 
             }
         }
+
+        Spacer(
+            Modifier
+                .fillMaxWidth()
+                .height(2.dp)
+                .background(AppTheme.colorScheme.onBackground)
+        )
     }
 
 

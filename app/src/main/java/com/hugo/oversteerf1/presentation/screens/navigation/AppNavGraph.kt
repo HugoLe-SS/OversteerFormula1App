@@ -153,7 +153,7 @@ fun AppNavGraph(){
             ){
                 //get the coinId from the arguments (from WealthHomeScreen to CoinDetailsScreen)
                 it?.arguments?.getString("${ScreenArguments.CONSTRUCTOR_ID}")?.also{ constructorId ->
-                    AppLogger.d(message = "ConstructorDetailsScreen costructorId: $constructorId")
+                    AppLogger.d(message = "ConstructorDetailsScreen constructorId: $constructorId")
                     ConstructorDetailsScreen(
                         constructorId = constructorId,
                         backButtonClicked = {

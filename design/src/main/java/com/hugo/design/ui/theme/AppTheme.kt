@@ -32,14 +32,14 @@ private val lightColorScheme = AppColorScheme(
 
 private val typography = AppTypography(
     titleLarge = TextStyle(
-        fontFamily = EvaFont,
+        fontFamily = F1Font,
         fontWeight = FontWeight.Bold,
-        fontSize = 48.sp
+        fontSize = 32.sp
     ),
     titleNormal =  TextStyle(
-        fontFamily = EvaFont,
+        fontFamily = F1Font,
         fontWeight = FontWeight.Bold,
-        fontSize = 36.sp
+        fontSize = 24.sp
     ),
     body =  TextStyle(
         fontFamily = EvaFont,
@@ -47,19 +47,19 @@ private val typography = AppTypography(
         fontSize = 24.sp
     ),
     labelLarge =  TextStyle(
-        fontFamily = EvaFont,
+        fontFamily = F1Font,
         fontWeight = FontWeight.Normal,
         fontSize = 32.sp
     ),
     labelNormal =  TextStyle(
-        fontFamily = EvaFont,
+        fontFamily = F1Font,
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp
     ),
     labelSmall =  TextStyle(
-        fontFamily = EvaFont,
+        fontFamily = F1Font,
         fontWeight = FontWeight.Thin,
-        fontSize = 20.sp
+        fontSize = 18.sp
     )
 )
 
