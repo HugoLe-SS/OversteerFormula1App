@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
@@ -31,7 +32,6 @@ import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
 import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
 import com.hugo.standings.domain.model.DriverRaceResultsInfo
-import com.hugo.standings.domain.model.DriverStandingsInfo
 import com.hugo.utilities.AppUtilities
 
 @Composable
@@ -167,7 +167,7 @@ fun DriverDetailsListItem(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 4.dp),
+                    //.padding(bottom = 4.dp),
             ){
                 Text(
                     modifier = Modifier
@@ -260,6 +260,7 @@ fun DriverPositionChange(
     //Tang Hang
     if(grid.toInt() > position.toInt()){
         ImageComponent(
+            modifier = Modifier.size(18.dp),
             imageResourceValue = R.drawable.ic_arrow_up,
             contentDescription = "Arrow up icon",
             colorFilter = ColorFilter.tint(Color.Green)
@@ -272,6 +273,7 @@ fun DriverPositionChange(
     } else if(grid.toInt() < position.toInt())
     {
         ImageComponent(
+            modifier = Modifier.size(18.dp),
             imageResourceValue = R.drawable.ic_arrow_down,
             contentDescription = "Arrow down icon",
             colorFilter = ColorFilter.tint(Color.Red)
@@ -284,6 +286,7 @@ fun DriverPositionChange(
     }
     else{
         ImageComponent(
+            modifier = Modifier.size(18.dp),
             imageResourceValue = R.drawable.ic_equal,
             contentDescription = "Arrow ~~~~",
             colorFilter = ColorFilter.tint(Color.Green)
