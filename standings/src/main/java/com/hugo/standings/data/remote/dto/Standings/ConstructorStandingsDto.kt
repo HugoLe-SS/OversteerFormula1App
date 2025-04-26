@@ -2,7 +2,6 @@ package com.hugo.standings.data.remote.dto.Standings
 
 import com.google.gson.annotations.SerializedName
 import com.hugo.standings.data.remote.dto.Constructor
-import com.hugo.standings.domain.model.ConstructorStandingsInfo
 
 data class ConstructorStandingsDto(
     @SerializedName("MRData")
@@ -43,27 +42,7 @@ data class ConstructorStanding(
     val constructor: Constructor
 )
 
-fun ConstructorStandingsDto.toConstructorInfoList(): List<ConstructorStandingsInfo> {
-    val total = mrData.total
-    val season = mrData.standingsTable.season
-    val round = mrData.standingsTable.round
 
-    return mrData.standingsTable.standingsLists.flatMap { list ->
-        list.constructorStandings.map { standing ->
-            ConstructorStandingsInfo(
-                constructorId = standing.constructor.constructorId,
-                total = total,
-                season = season,
-                round = round,
-                position = standing.position,
-                points = standing.points,
-                wins = standing.wins,
-                constructorName = standing.constructor.name,
-                constructorNationality = standing.constructor.nationality
-            )
-        }
-    }
-}
 
 
 

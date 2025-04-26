@@ -1,12 +1,12 @@
 package com.hugo.standings.data.repository
 
+import com.hugo.standings.data.mapper.toConstructorInfoList
+import com.hugo.standings.data.mapper.toConstructorQualifyingResultInfoList
+import com.hugo.standings.data.mapper.toConstructorRaceResultInfoList
+import com.hugo.standings.data.mapper.toDriverQualifyingResultInfoList
+import com.hugo.standings.data.mapper.toDriverRaceResultInfoList
+import com.hugo.standings.data.mapper.toDriverStandingsInfoList
 import com.hugo.standings.data.remote.F1StandingsApi
-import com.hugo.standings.data.remote.dto.QualifyingResult.toConstructorQualifyingResultInfoList
-import com.hugo.standings.data.remote.dto.Standings.toConstructorInfoList
-import com.hugo.standings.data.remote.dto.QualifyingResult.toDriverQualifyingResultInfoList
-import com.hugo.standings.data.remote.dto.RaceResult.toConstructorRaceResultInfoList
-import com.hugo.standings.data.remote.dto.RaceResult.toDriverRaceResultInfoList
-import com.hugo.standings.data.remote.dto.Standings.toDriverStandingsInfoList
 import com.hugo.standings.domain.model.ConstructorQualifyingResultsInfo
 import com.hugo.standings.domain.model.ConstructorRaceResultsInfo
 import com.hugo.standings.domain.model.ConstructorStandingsInfo

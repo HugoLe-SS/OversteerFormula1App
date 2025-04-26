@@ -2,7 +2,6 @@ package com.hugo.standings.data.remote.dto.Standings
 
 import com.google.gson.annotations.SerializedName
 import com.hugo.standings.data.remote.dto.Constructor
-import com.hugo.standings.domain.model.DriverStandingsInfo
 
 data class DriverStandingsDto(
     @SerializedName("MRData")
@@ -54,32 +53,4 @@ data class Driver(
     val nationality: String
 )
 
-fun DriverStandingsDto.toDriverStandingsInfoList(): List<DriverStandingsInfo>
-{
-    val total = mrData.total
-    val season = mrData.standingsTable.season
-    val round = mrData.standingsTable.round
-
-    return mrData.standingsTable.standingsLists.flatMap {list ->
-        list.driverStandings.map {standings ->
-            DriverStandingsInfo(
-                driverId = standings.driver.driverId,
-                total = total,
-                season = season,
-                round = round,
-                position = standings.position,
-                points = standings.points,
-                wins = standings.wins,
-                driverGivenName = standings.driver.givenName,
-                driverLastName = standings.driver.familyName,
-                driverNationality = standings.driver.nationality,
-                dateOfBirth = standings.driver.dateOfBirth,
-                constructorName = standings.constructors.first().name,
-                constructorNationality = standings.constructors.first().nationality
-            )
-        }
-
-    }
-
-}
 
