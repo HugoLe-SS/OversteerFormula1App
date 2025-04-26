@@ -8,6 +8,7 @@ sealed class  Screen (val route: String){
     data object NewsScreen : Screen(route = Route.NEWS_SCREEN.name)
     data object DriverDetailsScreen : Screen(route = Route.DRIVER_DETAILS_SCREEN.name)
     data object ConstructorDetailsScreen : Screen(route = Route.CONSTRUCTOR_DETAILS_SCREEN.name)
+    data object CalendarResultScreen : Screen(route = Route.CALENDAR_RESULT_SCREEN.name)
 }
 
 enum class Route(){
@@ -16,11 +17,13 @@ enum class Route(){
     STANDINGS_SCREEN,
     NEWS_SCREEN,
     DRIVER_DETAILS_SCREEN,
-    CONSTRUCTOR_DETAILS_SCREEN
+    CONSTRUCTOR_DETAILS_SCREEN,
+    CALENDAR_RESULT_SCREEN,
     //LEGACY_SCREEN
 }
 
 enum class ScreenArguments (name: String){
     DRIVER_ID("driverId"),
     CONSTRUCTOR_ID("constructorId"),
+    ROUND("round"),
 }

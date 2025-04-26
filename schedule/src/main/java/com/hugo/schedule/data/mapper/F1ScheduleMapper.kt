@@ -1,8 +1,10 @@
 package com.hugo.schedule.data.mapper
 
 import com.hugo.schedule.data.remote.dto.F1CalendarDto
+import com.hugo.schedule.data.remote.dto.F1CalendarResultDto
 import com.hugo.schedule.data.remote.dto.SessionInfoDto
 import com.hugo.schedule.domain.model.F1CalendarInfo
+import com.hugo.schedule.domain.model.F1CalendarResult
 import com.hugo.schedule.domain.model.SessionInfo
 
 fun SessionInfoDto.toDomain() = SessionInfo(date, time)
@@ -16,6 +18,8 @@ fun F1CalendarDto.toF1CalendarInfoList(): List<F1CalendarInfo> {
             season = schedule.season,
             round = schedule.round,
             circuit = schedule.circuit.circuitName,
+            raceName = schedule.raceName,
+            locality = schedule.circuit.location.locality,
             mainRaceDate = schedule.date,
             mainRaceTime = schedule.time ?: "",
             firstPractice = schedule.firstPractice?.toDomain(),
@@ -38,3 +42,36 @@ fun F1CalendarDto.toF1CalendarInfoList(): List<F1CalendarInfo> {
 //        null
 //    }
 //}
+
+fun F1CalendarResultDto.toF1CalendarResultList(): List<F1CalendarResult> {
+    val total = mrData.total.toString()
+
+    return mrData.raceTable.races.flatMap { race ->
+        race.results.map { result ->
+            F1CalendarResult(
+                total = total,
+                driverNumber = result.number,
+                driverId = result.driver.driverId,
+                constructorId = result.constructor.constructorId,
+                constructorName = result.constructor.name,
+                driverCode = result.driver.code,
+                givenName = result.driver.givenName,
+                familyName = result.driver.familyName,
+                season = race.season,
+                round = race.round,
+                raceName = race.raceName,
+                circuitId = race.circuit.circuitId,
+                circuitName = race.circuit.circuitName,
+                country = race.circuit.location.country,
+                position = result.position,
+                positionText = result.positionText,
+                points = result.points,
+                grid = result.grid,
+                laps = result.laps,
+                time = result.time?.time ?: "",
+                fastestLap = result.fastestLap?.fastestLapTime?.time ?: "",
+                status = result.status
+            )
+        }
+    }
+}

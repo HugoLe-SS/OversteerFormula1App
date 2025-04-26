@@ -27,7 +27,8 @@ import com.hugo.schedule.presentation.components.F1CalendarListItem
 @Composable
 fun ScheduleHomeScreen(
     navController: NavController,
-    viewModel: ScheduleHomeViewModel = hiltViewModel()
+    viewModel: ScheduleHomeViewModel = hiltViewModel(),
+    cardClicked: (String) -> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
 
@@ -74,7 +75,12 @@ fun ScheduleHomeScreen(
                 else -> {
                     LazyColumn {
                         items(state.f1Calendar) { race ->
-                            F1CalendarListItem(race)
+                            F1CalendarListItem(
+                                race,
+                                cardClicked = { round->
+                                    cardClicked(round)
+                                }
+                            )
                         }
                     }
                 }

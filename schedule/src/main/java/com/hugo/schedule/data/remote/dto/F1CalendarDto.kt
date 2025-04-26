@@ -48,20 +48,6 @@ data class Race(
 
 )
 
-data class Circuit(
-    val circuitId: String,
-    val url: String,
-    val circuitName: String,
-    @SerializedName("Location")
-    val location: Location
-)
-
-data class Location(
-    val lat: String,
-    val long: String,
-    val locality: String,
-    val country: String
-)
 
 data class SessionInfoDto(
     val date: String,

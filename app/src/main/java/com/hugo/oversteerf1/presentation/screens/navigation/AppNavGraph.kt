@@ -6,14 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
-import com.hugo.schedule.presentation.screens.ScheduleHomeScreen
+import com.hugo.schedule.presentation.screens.Details.CalendarResultScreen
+import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
 import com.hugo.standings.presentation.screens.Details.ConstructorDetails.ConstructorDetailsScreen
 import com.hugo.standings.presentation.screens.Details.DriverDetails.DriverDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
@@ -71,6 +71,10 @@ fun AppNavGraph(){
             ){
                 ScheduleHomeScreen(
                     //setup Clickable actions here
+                    cardClicked = { round ->
+                        navController.navigate(Screen.CalendarResultScreen.route + "/$round")
+                    },
+
                     navController = navController
                 )
             }
@@ -119,7 +123,7 @@ fun AppNavGraph(){
                         type = NavType.StringType}
                 )
             ){
-                //get the coinId from the arguments (from WealthHomeScreen to CoinDetailsScreen)
+                //get the driverId from the arguments (from StandingsHomeScreen to DriverDetailsScreen)
                 it?.arguments?.getString("${ScreenArguments.DRIVER_ID}")?.also{ driverId ->
                     AppLogger.d(message = "DriverDetailsScreen driverId: $driverId")
                     DriverDetailsScreen(
@@ -151,7 +155,7 @@ fun AppNavGraph(){
                 )
 
             ){
-                //get the coinId from the arguments (from WealthHomeScreen to CoinDetailsScreen)
+                //get the constructorId from the arguments (from StandingsHomeScreen to ConstructorDetailsScreen)
                 it?.arguments?.getString("${ScreenArguments.CONSTRUCTOR_ID}")?.also{ constructorId ->
                     AppLogger.d(message = "ConstructorDetailsScreen constructorId: $constructorId")
                     ConstructorDetailsScreen(
@@ -163,6 +167,42 @@ fun AppNavGraph(){
                 }
 
             }
+
+            //Calendar Result Screen
+            composable(
+                route = Screen.CalendarResultScreen.route + "/{${ScreenArguments.ROUND}}",
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(200))
+                },
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(200)
+                    )
+                },
+                arguments = listOf(
+                    navArgument(name = "${ScreenArguments.ROUND}") {
+                        type = NavType.StringType}
+                )
+
+            ){
+                //get the round from the arguments (from ScheduleHomeScreen to CalendarResultScreen)
+                it?.arguments?.getString("${ScreenArguments.ROUND}")?.also{ round ->
+                    AppLogger.d(message = "CalendarResultScreen round: $round")
+                    CalendarResultScreen(
+                        round = round,
+                        backButtonClicked = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+
+            }
+
+
+
+
         }
     }
 
