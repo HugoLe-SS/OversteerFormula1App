@@ -1,11 +1,11 @@
 [versions]
 agp = "8.8.0"
-kotlin = "2.0.0"
+kotlin = "2.1.20"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxSerializationJson = "1.8.0"
+kotlinxSerializationJson = "1.8.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.04.01"
@@ -19,13 +19,12 @@ coilVersion = "3.0.4"
 lottieVersion = "6.6.2"
 retrofit = "2.9.0"
 okhttp = "5.0.0-alpha.2"
-navVersion = "2.7.7"
+navVersion = "2.8.9"
 composeRuntimeVersion = "1.7.8"
 roomVersion = "2.6.1"
-navigationRuntimeKtx = "2.8.9"
-roomCompilerProcessingTesting = "2.7.0"
 storage = "1.5.0"
-roomCompilerProcessingTestingVersion = "2.7.1"
+supabaseBomVersion = "3.1.2"
+ktorVersion = "3.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,10 +61,11 @@ androidx-compose-runtime = {group = "androidx.compose.runtime", name = "runtime"
 room = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}
 room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomVersion"}
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}
-androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
-androidx-room-compiler-processing-testing = { group = "androidx.room", name = "room-compiler-processing-testing", version.ref = "roomCompilerProcessingTesting" }
 androidx-storage = { group = "androidx.test.services", name = "storage", version.ref = "storage" }
-room-compiler-processing-testing = { group = "androidx.room", name = "room-compiler-processing-testing", version.ref = "roomCompilerProcessingTestingVersion" }
+
+supabase-bom = {group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabaseBomVersion"}
+postgrest-kt = {module = "io.github.jan-tennert.supabase:postgrest-kt"}
+ktor-client-android = {module = "io.ktor:ktor-client-android", version.ref = "ktorVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

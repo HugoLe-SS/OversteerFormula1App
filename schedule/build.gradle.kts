@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -5,7 +7,16 @@ plugins {
     alias(libs.plugins.hilt.android)
 
     kotlin("kapt")
+
+    kotlin("plugin.serialization") version "2.1.10" // to use supabase
 }
+
+val apiKey: String = project.rootProject.file("local.properties")
+    .inputStream()
+    .use { input ->
+        Properties().apply { load(input) }
+    }
+    .getProperty("SUPABASE_API_KEY")
 
 android {
     namespace = "com.hugo.schedule"
@@ -16,6 +27,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "SUPABASE_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -78,7 +91,7 @@ dependencies {
 
     implementation(libs.androidx.compose.runtime)
 
-    // Navigation animation
+    // Navigation
     implementation(libs.navigation.compose)
 
     //retrofit + okhttp3 for API fetching
@@ -87,4 +100,9 @@ dependencies {
 
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
+
+    //Supabase
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.postgrest.kt)
+    implementation(libs.ktor.client.android)
 }

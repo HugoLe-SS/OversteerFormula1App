@@ -1,10 +1,9 @@
 package com.hugo.schedule.presentation.screens.Details
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hugo.schedule.domain.usecase.GetF1CalendarResultUseCase
+import com.hugo.schedule.domain.usecase.GetF1CircuitInfoUseCase
 import com.hugo.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,15 +15,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarResultViewModel @Inject constructor(
-    private val getF1CalendarResultUseCase: GetF1CalendarResultUseCase
+    private val getF1CalendarResultUseCase: GetF1CalendarResultUseCase,
+    private val getF1CircuitInfoUseCase: GetF1CircuitInfoUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CalendarResultUiState())
     val state: StateFlow<CalendarResultUiState> = _state
 
 
-    fun fetchF1CalendarResult(season: String, round: String) {
+    init {
+    }
+
+    fun fetchF1CalendarResult(season: String, round: String, circuitId: String) {
         getF1CalendarResult(season, round)
+        getCircuitDetails(circuitId)
     }
 
     private fun getF1CalendarResult(season: String, round: String) {
@@ -58,4 +62,37 @@ class CalendarResultViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+    private fun getCircuitDetails(constructorId: String){
+        getF1CircuitInfoUseCase(constructorId).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            error = null
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            f1CircuitInfo = result.data
+                        )
+                    }
+                }
+                is Resource.Error -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
+                }
+                else -> Unit
+            }
+        }.launchIn(viewModelScope)
+    }
+
 }

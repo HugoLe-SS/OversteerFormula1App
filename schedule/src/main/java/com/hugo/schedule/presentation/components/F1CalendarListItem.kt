@@ -20,11 +20,13 @@ import androidx.compose.ui.unit.dp
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.domain.model.F1CalendarInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.CalendarClickInfo
 
 @Composable
 fun F1CalendarListItem(
     calendar: F1CalendarInfo,
-    cardClicked: (String) -> Unit = {}
+    cardClicked: (CalendarClickInfo) -> Unit = {}
+    //cardClicked: (String) -> Unit = {}
 ){
     Card (
         modifier = Modifier
@@ -32,7 +34,13 @@ fun F1CalendarListItem(
             .height(100.dp)
             .wrapContentHeight()
             .clickable {
-                cardClicked(calendar.round)
+                cardClicked(
+                    CalendarClickInfo(
+                    calendar.round,
+                    calendar.circuitId
+                )
+                )
+                //cardClicked(calendar.round)
             }
             .padding(12.dp),
 
@@ -118,3 +126,4 @@ fun F1CalendarListItem(
 
     }
 }
+

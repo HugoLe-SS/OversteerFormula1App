@@ -8,4 +8,7 @@ object AppConstants {
     const val BASE_URL_F1_NEWS = "https://f1-latest-news.p.rapidapi.com/"
 
     const val BASE_URL_F1_STANDINGS = "https://api.jolpi.ca/"
+
+    // Supabase
+    const val SUPABASE_URL = "https://zoxsiqaduuyrnewuvmyw.supabase.co"
 }

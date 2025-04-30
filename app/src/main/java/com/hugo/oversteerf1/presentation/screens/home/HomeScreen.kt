@@ -13,16 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
-import com.hugo.design.ui.theme.AppTheme
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.HorizontalPager
+import com.hugo.design.ui.theme.AppTheme
 import com.hugo.oversteerf1.presentation.components.NewsListItem
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value

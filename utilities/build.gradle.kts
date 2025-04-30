@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+    kotlin("plugin.serialization") version "2.1.20"
+
 }
 
 android {
@@ -55,5 +57,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.androidx.compose.runtime)
+
+    //Serialization / Navigation
+    implementation(libs.kotlinx.serialization.json)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+    implementation(libs.navigation.compose)
 
 }

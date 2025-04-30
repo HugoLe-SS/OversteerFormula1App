@@ -6,6 +6,7 @@ data class F1CalendarInfo(
     val season: String,
     val round: String,
     val circuit: String,
+    val circuitId: String,
     val raceName: String,
     val locality: String,
     val mainRaceDate: String,

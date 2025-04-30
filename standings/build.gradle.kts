@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt.android)
 
     kotlin("kapt")
+    kotlin("plugin.serialization") version "2.1.10" // to use supabase
 
 }
 
@@ -88,5 +89,10 @@ dependencies {
 
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
+
+    //Supabase
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.postgrest.kt)
+    implementation(libs.ktor.client.android)
 
 }

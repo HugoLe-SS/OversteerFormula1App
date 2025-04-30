@@ -18,6 +18,7 @@ fun F1CalendarDto.toF1CalendarInfoList(): List<F1CalendarInfo> {
             season = schedule.season,
             round = schedule.round,
             circuit = schedule.circuit.circuitName,
+            circuitId = schedule.circuit.circuitId,
             raceName = schedule.raceName,
             locality = schedule.circuit.location.locality,
             mainRaceDate = schedule.date,

@@ -8,6 +8,9 @@ plugins {
 
     kotlin("kapt")
 
+    // Kotlin serialization plugin for type safe routes and navigation arguments
+    kotlin("plugin.serialization") version "2.1.20"
+
 }
 
 
@@ -20,20 +23,6 @@ val apiKey: String = project.rootProject.file("local.properties")
 
 
 android {
-
-//        packaging {
-//            resources {
-//                //excludes += "messages/JavaOptionBundle.properties"
-//                excludes += "/messages/JavaOptionBundle.properties"
-//                excludes += "kotlin/reflect/reflect.kotlin_builtins"
-//                excludes += "kotlin/coroutines/coroutines.kotlin_builtins"
-//                excludes += "/META-INF/{AL2.0,LGPL2.1}"
-//                excludes += "DebugProbesKt.bin"
-//                pickFirsts += "kotlin/collections/collections.kotlin_builtins"
-//
-//            }
-//        }
-
     namespace = "com.hugo.oversteerf1"
     compileSdk = 35
 
@@ -124,6 +113,11 @@ dependencies {
     // Navigation animation
     implementation(libs.navigation.compose)
 
+    //Serialization Navigation
+    implementation(libs.kotlinx.serialization.json)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+
+
     //retrofit + okhttp3 for API fetching
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
@@ -131,14 +125,6 @@ dependencies {
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
 
-//    implementation ("com.google.auto.value:auto-value:1.10.2")
-//    kapt("com.google.auto.value:auto-value:1.10.2")
-//    //implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.10")
-//
-//    // exclude if you're pulling in kotlin-compiler-embeddable indirectly
-//    configurations.all {
-//        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
-//    }
 
 
 }

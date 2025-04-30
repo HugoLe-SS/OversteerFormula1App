@@ -18,17 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.F1CalendarListItem
+import com.hugo.utilities.com.hugo.utilities.Navigation.CalendarClickInfo
 
 @Composable
 fun ScheduleHomeScreen(
-    navController: NavController,
+    navController: NavHostController,
     viewModel: ScheduleHomeViewModel = hiltViewModel(),
-    cardClicked: (String) -> Unit = {}
+    cardClicked: (CalendarClickInfo) -> Unit = {}
+    //cardClicked: (String) -> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
 
@@ -77,12 +79,26 @@ fun ScheduleHomeScreen(
                         items(state.f1Calendar) { race ->
                             F1CalendarListItem(
                                 race,
-                                cardClicked = { round->
-                                    cardClicked(round)
+                                cardClicked = { info->
+                                    cardClicked(
+                                        CalendarClickInfo(
+                                            round = info.round,
+                                            circuitId = info.circuitId
+                                        )
+                                    )
                                 }
                             )
                         }
                     }
+
+//                    LazyColumn {
+//                        items(state.f1Calendar) { race ->
+//                            F1CalendarListItem(
+//                                calendar = race,
+//                                cardClicked = cardClicked // ← Just pass it
+//                            )
+//                        }
+//                    }
                 }
             }
 

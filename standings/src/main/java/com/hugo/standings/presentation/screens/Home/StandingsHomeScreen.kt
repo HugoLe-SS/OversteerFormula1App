@@ -13,19 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
-import com.hugo.standings.presentation.components.DriverBannerComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.presentation.components.ConstructorBannerComponent
 import com.hugo.standings.presentation.components.ConstructorListItem
+import com.hugo.standings.presentation.components.DriverBannerComponent
 import com.hugo.standings.presentation.components.DriverListItem
 import com.hugo.standings.presentation.components.SegmentedButton
 
 @Composable
 fun StandingsHomeScreen(
-    navController: NavController,
+    navController: NavHostController,
     viewModel: StandingsHomeViewModel = hiltViewModel(),
     driverCardClicked: (String) -> Unit = {},
     constructorCardClicked: (String) -> Unit = {}
