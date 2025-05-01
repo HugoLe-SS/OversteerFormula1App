@@ -91,14 +91,6 @@ fun ScheduleHomeScreen(
                         }
                     }
 
-//                    LazyColumn {
-//                        items(state.f1Calendar) { race ->
-//                            F1CalendarListItem(
-//                                calendar = race,
-//                                cardClicked = cardClicked // ← Just pass it
-//                            )
-//                        }
-//                    }
                 }
             }
 
