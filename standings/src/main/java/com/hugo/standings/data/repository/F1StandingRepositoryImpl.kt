@@ -7,15 +7,19 @@ import com.hugo.standings.data.mapper.toDriverQualifyingResultInfoList
 import com.hugo.standings.data.mapper.toDriverRaceResultInfoList
 import com.hugo.standings.data.mapper.toDriverStandingsInfoList
 import com.hugo.standings.data.remote.F1StandingsApi
+import com.hugo.standings.domain.model.ConstructorDetails
 import com.hugo.standings.domain.model.ConstructorQualifyingResultsInfo
 import com.hugo.standings.domain.model.ConstructorRaceResultsInfo
 import com.hugo.standings.domain.model.ConstructorStandingsInfo
+import com.hugo.standings.domain.model.DriverDetails
 import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
 import com.hugo.standings.domain.model.DriverRaceResultsInfo
 import com.hugo.standings.domain.model.DriverStandingsInfo
 import com.hugo.standings.domain.repository.IF1StandingsRepository
 import com.hugo.utilities.Resource
 import com.hugo.utilities.logging.AppLogger
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -23,7 +27,8 @@ import javax.inject.Inject
 
 
 class F1StandingRepositoryImpl @Inject constructor(
-    private val f1StandingsApi: F1StandingsApi
+    private val f1StandingsApi: F1StandingsApi,
+    private val supabaseClient: SupabaseClient
 
 ): IF1StandingsRepository {
     override fun getConstructorStandings(season: String): Flow<Resource<List<ConstructorStandingsInfo>>> = flow {
@@ -144,6 +149,62 @@ class F1StandingRepositoryImpl @Inject constructor(
         {
             emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
         }
+    }
+
+    override fun getF1ConstructorDetails(constructorId: String): Flow<Resource<ConstructorDetails?>> = flow {
+        AppLogger.d(message = "inside getF1CircuitDetails")
+        emit(Resource.Loading())
+
+        try {
+            val result = supabaseClient
+                .postgrest["ConstructorDetails"]
+                .select {
+                    filter{
+                        eq("constructorId", constructorId)
+                    }
+                }
+
+            val constructorDetails = result.decodeList<ConstructorDetails>()
+
+            AppLogger.d(message = "Success getting F1 constructor details ${constructorDetails.size}")
+
+            emit(Resource.Success(constructorDetails.firstOrNull()))
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            AppLogger.e(message = "Error getting F1 constructor details: ${e.localizedMessage}")
+        } catch (e: HttpException) {
+            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
+        }
+
+    }
+
+    override fun getF1DriverDetails(driverId: String): Flow<Resource<DriverDetails?>> = flow {
+        AppLogger.d(message = "inside getF1DriverDetails")
+        emit(Resource.Loading())
+
+        try {
+            val result = supabaseClient
+                .postgrest["DriverDetails"]
+                .select {
+                    filter{
+                        eq("driverId", driverId)
+                    }
+                }
+
+            val driverDetails = result.decodeList<DriverDetails>()
+
+            AppLogger.d(message = "Success getting F1 Driver details ${driverDetails.size}")
+
+            emit(Resource.Success(driverDetails.firstOrNull()))
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            AppLogger.e(message = "Error getting F1 Driver details: ${e.localizedMessage}")
+        } catch (e: HttpException) {
+            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
+        }
+
     }
 
 

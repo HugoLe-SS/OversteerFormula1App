@@ -11,16 +11,16 @@ plugins {
     kotlin("plugin.serialization") version "2.1.10" // to use supabase
 }
 
-val apiKey: String = project.rootProject.file("local.properties")
-    .inputStream()
-    .use { input ->
-        Properties().apply { load(input) }
-    }
-    .getProperty("SUPABASE_API_KEY")
-
 android {
-    namespace = "com.hugo.schedule"
+    namespace = "com.hugo.network"
     compileSdk = 35
+
+    val apiKey: String = project.rootProject.file("local.properties")
+        .inputStream()
+        .use { input ->
+            Properties().apply { load(input) }
+        }
+        .getProperty("SUPABASE_API_KEY")
 
     defaultConfig {
         minSdk = 26
@@ -39,6 +39,7 @@ android {
                 "proguard-rules.pro"
             )
         }
+
         debug {
             isMinifyEnabled = false
             proguardFiles(
@@ -65,45 +66,25 @@ android {
 
 dependencies {
 
-    implementation(project(":design"))
     implementation(project(":utilities"))
-    implementation(project(":network"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Supabase
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.postgrest.kt)
+    implementation(libs.ktor.client.android)
+
+    //hilt
     implementation(libs.corountine.android)
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.androidx.compose.runtime)
-
-    // Navigation
-    implementation(libs.navigation.compose)
-
-    //retrofit + okhttp3 for API fetching
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-
-    implementation(libs.okhttp3)
-    implementation(libs.okhttp3.logging.interceptor)
-
-    //Supabase
-    implementation(platform(libs.supabase.bom))
-    implementation(libs.postgrest.kt)
-    implementation(libs.ktor.client.android)
 }

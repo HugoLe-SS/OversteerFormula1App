@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -9,6 +11,13 @@ plugins {
 
 }
 
+val apiKey: String = project.rootProject.file("local.properties")
+    .inputStream()
+    .use { input ->
+        Properties().apply { load(input) }
+    }
+    .getProperty("SUPABASE_API_KEY")
+
 android {
     namespace = "com.hugo.standings"
     compileSdk = 35
@@ -18,6 +27,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "SUPABASE_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -56,6 +67,7 @@ dependencies {
 
     implementation(project(":design"))
     implementation(project(":utilities"))
+    implementation(project(":network"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

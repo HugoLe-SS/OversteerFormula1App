@@ -1,6 +1,5 @@
 package com.hugo.schedule.di
 
-import com.hugo.schedule.BuildConfig
 import com.hugo.schedule.data.remote.F1ScheduleApi
 import com.hugo.schedule.data.repository.F1CalendarRepositoryImpl
 import com.hugo.schedule.domain.repository.IF1CalendarRepository
@@ -10,8 +9,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -31,18 +28,6 @@ class ScheduleModule {
             .create(F1ScheduleApi::class.java)
     }
 
-    //Supabase
-    @Provides
-    @Singleton
-    fun provideSupabase(): SupabaseClient {
-        val supabase = createSupabaseClient(
-            supabaseUrl = AppConstants.SUPABASE_URL,
-            supabaseKey = BuildConfig.SUPABASE_API_KEY
-        ) {
-            install(Postgrest)
-        }
-        return supabase
-    }
 
     @Provides
     @Singleton

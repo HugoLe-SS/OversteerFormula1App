@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.github.jan.supabase.SupabaseClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -29,7 +30,9 @@ class StandingsModule {
 
     @Provides
     @Singleton
-    fun provideF1StandingsRepository(api: F1StandingsApi): IF1StandingsRepository {
-        return F1StandingRepositoryImpl(api)
+    fun provideF1StandingsRepository(api: F1StandingsApi, supabase: SupabaseClient): IF1StandingsRepository {
+        return F1StandingRepositoryImpl(api, supabase)
     }
+
+
 }

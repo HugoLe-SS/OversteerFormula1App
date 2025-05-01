@@ -57,34 +57,6 @@ class F1CalendarRepositoryImpl @Inject constructor(
     }
 
     // Supabase
-//    override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitInfo?>> = flow {
-//        AppLogger.d(message="Inside getF1CircuitDetails")
-//        emit(Resource.Loading())
-//        try {
-//            val result = supabaseClient.postgrest["CircuitDetails"]
-//                .select(
-//                    filter("circuitId", "eq", circuitId)
-//                )
-//
-//            val f1Circuit = result.decodeList<F1CircuitInfo>()
-//
-//            AppLogger.d(message = "Success getting F1 Circuit Info ${f1Circuit.size}")
-//
-//            emit(Resource.Success(f1Circuit.firstOrNull()))
-//
-//        }catch (e:Exception){
-//            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-//            AppLogger.e(message = "Error getting F1 Circuit info: ${e.localizedMessage}")
-//        }
-//        catch (e: HttpException)
-//        {
-//            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
-//        }
-//    }
-//
-//
-//}
-
     override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitInfo?>> = flow {
         AppLogger.d(message = "Inside getF1CircuitDetails")
         emit(Resource.Loading())

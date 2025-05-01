@@ -2,6 +2,7 @@ package com.hugo.standings.presentation.screens.Details.ConstructorDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hugo.standings.domain.usecase.GetConstructorDetailsUseCase
 import com.hugo.standings.domain.usecase.GetConstructorQualifyingResultsUseCase
 import com.hugo.standings.domain.usecase.GetConstructorRaceResultsUseCase
 import com.hugo.utilities.Resource
@@ -17,11 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ConstructorDetailsViewModel @Inject constructor(
     private val getConstructorRaceResultsUseCase: GetConstructorRaceResultsUseCase,
-    private val getConstructorQualifyingResultsUseCase: GetConstructorQualifyingResultsUseCase
+    private val getConstructorQualifyingResultsUseCase: GetConstructorQualifyingResultsUseCase,
+    private  val getConstructorDetailsUseCase: GetConstructorDetailsUseCase
 ): ViewModel() {
 
-//    private val _state = mutableStateOf(ConstructorDetailsUIState())
-//    val state: MutableState<ConstructorDetailsUIState> = _state
 
     private val _state = MutableStateFlow(ConstructorDetailsUIState())
     val state: StateFlow<ConstructorDetailsUIState> = _state
@@ -30,6 +30,7 @@ class ConstructorDetailsViewModel @Inject constructor(
         AppLogger.d(message = "Inside ConstructorDetailsViewModel")
         getConstructorRaceResults(season = season, constructorId = constructorId)
         getConstructorQualifyingResults(season = season, constructorId = constructorId)
+        getConstructorDetails(constructorId = constructorId)
     }
 
     private fun getConstructorRaceResults(season: String, constructorId:String){
@@ -100,6 +101,43 @@ class ConstructorDetailsViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
+    }
+
+    private fun getConstructorDetails(constructorId: String){
+        getConstructorDetailsUseCase(constructorId).onEach { result ->
+            when(result){
+                is Resource.Loading -> {
+                    AppLogger.d(message = "ConstructorDetailsViewModel Loading")
+                    _state.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            constructorDetails = result.data
+                        )
+                    }
+                    AppLogger.d(message = "Success getting constructor details")
+                }
+
+                is Resource.Error -> {
+                    AppLogger.e(message = "ConstructorDetailsViewModel Error")
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
+                }
+
+                else -> Unit
+            }
+        }.launchIn(viewModelScope)
     }
 
 }
