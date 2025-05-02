@@ -1,6 +1,13 @@
-package com.hugo.standings.domain.model
+package com.hugo.datasource.local.entity.Driver
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.hugo.datasource.local.TableConstants
+
+
+@Entity(tableName = TableConstants.DRIVER_STANDINGS_LIST)
 data class DriverStandingsInfo (
+    @PrimaryKey(autoGenerate = false)
     val driverId: String,
     val total: Int,
     val season: String,

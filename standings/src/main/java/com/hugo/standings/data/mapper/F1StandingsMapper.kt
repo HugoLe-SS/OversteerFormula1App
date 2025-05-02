@@ -1,17 +1,17 @@
 package com.hugo.standings.data.mapper
 
+import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
+import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 import com.hugo.standings.data.remote.dto.QualifyingResult.ConstructorQualifyingResultDto
 import com.hugo.standings.data.remote.dto.QualifyingResult.DriverQualifyingResultDto
 import com.hugo.standings.data.remote.dto.RaceResult.ConstructorRaceResultDto
 import com.hugo.standings.data.remote.dto.RaceResult.DriverRaceResultDto
 import com.hugo.standings.data.remote.dto.Standings.ConstructorStandingsDto
 import com.hugo.standings.data.remote.dto.Standings.DriverStandingsDto
-import com.hugo.standings.domain.model.ConstructorQualifyingResultsInfo
-import com.hugo.standings.domain.model.ConstructorRaceResultsInfo
-import com.hugo.standings.domain.model.ConstructorStandingsInfo
-import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
-import com.hugo.standings.domain.model.DriverRaceResultsInfo
-import com.hugo.standings.domain.model.DriverStandingsInfo
+import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
+import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 
 fun ConstructorRaceResultDto.toConstructorRaceResultInfoList(): List<ConstructorRaceResultsInfo>{
     val total = mrData.total

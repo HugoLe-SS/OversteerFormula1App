@@ -1,6 +1,12 @@
-package com.hugo.standings.domain.model
+package com.hugo.datasource.local.entity.Constructor
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.hugo.datasource.local.TableConstants
+
+@Entity(tableName = TableConstants.CONSTRUCTOR_STANDINGS_LIST)
 data class ConstructorStandingsInfo(
+    @PrimaryKey(autoGenerate = false)
     val constructorId: String,
     val total: Int,
     val season: String,

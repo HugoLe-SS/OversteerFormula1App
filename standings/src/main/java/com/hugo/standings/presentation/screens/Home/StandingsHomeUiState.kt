@@ -1,7 +1,7 @@
 package com.hugo.standings.presentation.screens.Home
 
-import com.hugo.standings.domain.model.ConstructorStandingsInfo
-import com.hugo.standings.domain.model.DriverStandingsInfo
+import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
+import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 
 data class ConstructorStandingsHomeUiState(
     val isLoading: Boolean = true,

@@ -30,8 +30,8 @@ import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppColors
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
-import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
-import com.hugo.standings.domain.model.DriverRaceResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.utilities.AppUtilities
 
 @Composable

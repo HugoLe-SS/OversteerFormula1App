@@ -5,11 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
-
-    kotlin("kapt")
+    alias(libs.plugins.ksp) //use ksp to replace kapt
 
     // Kotlin serialization plugin for type safe routes and navigation arguments
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("plugin.serialization") version "2.1.10"
 
 }
 
@@ -98,8 +97,8 @@ dependencies {
 
     implementation(libs.corountine.android)
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.splash.screen)
 
@@ -124,7 +123,6 @@ dependencies {
 
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
-
 
 
 }

@@ -1,9 +1,15 @@
-package com.hugo.standings.domain.model
+package com.hugo.datasource.local.entity.Driver
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.hugo.datasource.local.TableConstants
+
+@Entity(tableName = TableConstants.DRIVER_RACE_LIST)
 data class DriverRaceResultsInfo(
+    @PrimaryKey(autoGenerate = false)
+    val driverId: String,
     val total: String,
     val driverNumber: String,
-    val driverId: String,
     val constructorId: String,
     val constructorName: String,
     val driverCode: String,

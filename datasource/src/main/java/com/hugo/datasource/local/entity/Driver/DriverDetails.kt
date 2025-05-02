@@ -1,9 +1,14 @@
-package com.hugo.standings.domain.model
+package com.hugo.datasource.local.entity.Driver
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.hugo.datasource.local.TableConstants
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Entity(tableName = TableConstants.DRIVER_DETAILS)
 data class DriverDetails(
+    @PrimaryKey(autoGenerate = false)
     val driverId: String,
     val imageUrl: String?= null,
     val firstEntry: String?= null,

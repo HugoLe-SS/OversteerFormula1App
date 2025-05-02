@@ -1,8 +1,8 @@
 package com.hugo.standings.presentation.screens.Details.DriverDetails
 
-import com.hugo.standings.domain.model.DriverDetails
-import com.hugo.standings.domain.model.DriverQualifyingResultsInfo
-import com.hugo.standings.domain.model.DriverRaceResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverDetails
+import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 
 data class DriverDetailsUiState(
     val isLoading: Boolean = true,

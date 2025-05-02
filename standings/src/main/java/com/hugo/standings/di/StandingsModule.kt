@@ -1,5 +1,6 @@
 package com.hugo.standings.di
 
+import com.hugo.datasource.local.LocalDataSource
 import com.hugo.standings.data.remote.F1StandingsApi
 import com.hugo.standings.data.repository.F1StandingRepositoryImpl
 import com.hugo.standings.domain.repository.IF1StandingsRepository
@@ -30,8 +31,8 @@ class StandingsModule {
 
     @Provides
     @Singleton
-    fun provideF1StandingsRepository(api: F1StandingsApi, supabase: SupabaseClient): IF1StandingsRepository {
-        return F1StandingRepositoryImpl(api, supabase)
+    fun provideF1StandingsRepository(api: F1StandingsApi, supabase: SupabaseClient, localDataSource: LocalDataSource): IF1StandingsRepository {
+        return F1StandingRepositoryImpl(api, supabase, localDataSource)
     }
 
 

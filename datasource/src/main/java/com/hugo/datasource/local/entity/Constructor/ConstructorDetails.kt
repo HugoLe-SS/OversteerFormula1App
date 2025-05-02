@@ -1,9 +1,14 @@
-package com.hugo.standings.domain.model
+package com.hugo.datasource.local.entity.Constructor
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.hugo.datasource.local.TableConstants
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Entity(tableName = TableConstants.CONSTRUCTOR_DETAILS)
 data class ConstructorDetails(
+    @PrimaryKey(autoGenerate = false)
     val constructorId: String,
     val imageUrl: String?= null,
     val chassis: String?= null,
