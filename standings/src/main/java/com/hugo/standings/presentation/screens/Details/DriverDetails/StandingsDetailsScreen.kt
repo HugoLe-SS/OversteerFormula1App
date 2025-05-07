@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,19 +17,26 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.standings.presentation.components.DriverDetailsBannerComponent
-import com.hugo.standings.presentation.components.DriverDetailsListItem
+import com.hugo.standings.presentation.components.Driver.DriverBioList
+import com.hugo.standings.presentation.components.Driver.StandingsDetailsBannerComponent
 
 @Composable
-fun DriverDetailsScreen(
-    driverId: String,
+fun StandingsDetailsScreen(
+    driverId: String? = null,
+    constructorId: String? = null,
     backButtonClicked : () -> Unit = {},
     viewModel: DriverDetailsViewModel = hiltViewModel()
 ){
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(key1 = driverId) {
-        viewModel.fetchDriverDetails(season = "current", driverId = driverId)
+    LaunchedEffect(key1 = driverId, key2 = constructorId) {
+        driverId?.let {
+            viewModel.fetchDriverDetails(season = "current", driverId = it)
+        }
+
+        constructorId?.let {
+            viewModel.fetchConstructorDetails(season = "current", constructorId = it)
+        }
     }
 
     Scaffold (
@@ -65,17 +71,27 @@ fun DriverDetailsScreen(
                         .padding(padding)
                 ){
                     item{
-                        DriverDetailsBannerComponent(
+                        StandingsDetailsBannerComponent(
                             driver = state.driverRaceResults.firstOrNull() ?: return@item
                         )
                     }
 
-                    items(state.driverRaceResults.zip(state.driverQualifyingResults)) { (race, quali) ->
-                        DriverDetailsListItem(
-                            driverRace = race,
-                            driverQuali = quali
+//                    items(state.driverRaceResults.zip(state.driverQualifyingResults)) { (race, quali) ->
+//                        DriverDetailsListItem(
+//                            driverRace = race,
+//                            driverQuali = quali,
+//                        )
+//                    }
+
+                    item {
+                        DriverBioList(
+                            driverDetails = state.driverDetails?: return@item,
+                            driverRace = state.driverRaceResults.firstOrNull()?: return@item,
                         )
                     }
+
+
+
                 }
 
             }

@@ -76,11 +76,11 @@ class F1StandingRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val constructorRaceListFromDB = getConstructorRaceListFromDB()
+            val constructorRaceListFromDB = getConstructorRaceListFromDB(constructorId)
 
             constructorRaceListFromDB?.also{
                 emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting constructor Race from DB with size ${it.size}")
+                AppLogger.d(message = "Success getting constructor Race from DB ${constructorId}")
             }
 
             val constructorRaceResults = f1StandingsApi
@@ -112,11 +112,11 @@ class F1StandingRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val constructorQualifyingListFromDB = getConstructorQualifyingListFromDB()
+            val constructorQualifyingListFromDB = getConstructorQualifyingListFromDB(constructorId)
 
             constructorQualifyingListFromDB?.also {
                 emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting constructor Qualifying Results from DB with size ${it.size}")
+                AppLogger.d(message = "Success getting constructor Qualifying Results from DB ${constructorId}")
             }
 
             val constructorQualifyingResults = f1StandingsApi
@@ -144,11 +144,11 @@ class F1StandingRepositoryImpl @Inject constructor(
     }
 
     override fun getF1ConstructorDetails(constructorId: String): Flow<Resource<ConstructorDetails?>> = flow {
-        AppLogger.d(message = "inside getF1CircuitDetails")
+        AppLogger.d(message = "inside getF1ConstructorDetail")
         emit(Resource.Loading())
 
         try {
-            val constructorDetailsFromDB = getConstructorDetailsFromDB()
+            val constructorDetailsFromDB = getConstructorDetailsFromDB(constructorId)
 
             constructorDetailsFromDB?.also {
                 emit(Resource.Success(it))
@@ -164,6 +164,12 @@ class F1StandingRepositoryImpl @Inject constructor(
                 }
 
             val constructorDetails = result.decodeSingleOrNull<ConstructorDetails>()
+
+//            if (constructorDetails == null) {
+//                emit(Resource.Error("No constructor details found for ID: $constructorId"))
+//                AppLogger.e(message = "No constructor details found in Supabase for ID: $constructorId")
+//                return@flow
+//            }
 
             if(constructorDetails != constructorDetailsFromDB){
                 AppLogger.d(message = "Success getting F1 constructor details ${constructorDetails?.constructorId}")
@@ -221,10 +227,10 @@ class F1StandingRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val driverRaceListFromDB = getDriverRaceResultsListFromDB()
+            val driverRaceListFromDB = getDriverRaceResultsListFromDB(driverId)
             driverRaceListFromDB?.also {
                 emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting Driver Race Results from DB with size ${it.size}")
+                AppLogger.d(message = "Success getting Driver Race Results from DB ${driverId}")
 
             }
 
@@ -259,10 +265,10 @@ class F1StandingRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val driverQualifyingListFromDB = getDriverQualifyingResultsListFromDB()
+            val driverQualifyingListFromDB = getDriverQualifyingResultsListFromDB(driverId)
             driverQualifyingListFromDB?.also {
                 emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting Driver Qualifying Results from DB with size ${it.size}")
+                AppLogger.d(message = "Success getting Driver Qualifying Results from DB ${driverId}")
             }
 
             val driverQualifyingResults = f1StandingsApi.getDriverQualifyingResult(season = season, driverId = driverId).toDriverQualifyingResultInfoList()
@@ -292,7 +298,7 @@ class F1StandingRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val driverDetailsFromDB = getDriverDetailsFromDB()
+            val driverDetailsFromDB = getDriverDetailsFromDB(driverId)
 
             driverDetailsFromDB?.also {
                 emit(Resource.Success(it))
@@ -354,9 +360,9 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getConstructorQualifyingListFromDB(): List<ConstructorQualifyingResultsInfo>? {
+    private suspend fun getConstructorQualifyingListFromDB(constructorId: String): List<ConstructorQualifyingResultsInfo>? {
         return withContext(Dispatchers.IO){
-            val constructorQualifyingList = localDataSource.getConstructorQualifyingListFromDB()
+            val constructorQualifyingList = localDataSource.getConstructorQualifyingListFromDB(constructorId)
             if(constructorQualifyingList.isEmpty()){
                 null
             } else{
@@ -372,9 +378,9 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getConstructorRaceListFromDB(): List<ConstructorRaceResultsInfo>? {
+    private suspend fun getConstructorRaceListFromDB(constructorId: String): List<ConstructorRaceResultsInfo>? {
         return withContext(Dispatchers.IO){
-            val constructorRaceList = localDataSource.getConstructorRaceListFromDB()
+            val constructorRaceList = localDataSource.getConstructorRaceListFromDB(constructorId)
             if(constructorRaceList.isEmpty()){
                 null
             } else{
@@ -390,9 +396,9 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getConstructorDetailsFromDB(): ConstructorDetails? {
+    private suspend fun getConstructorDetailsFromDB(constructorId: String): ConstructorDetails? {
         return withContext(Dispatchers.IO) {
-            localDataSource.getConstructorDetailsFromDB()
+            localDataSource.getConstructorDetailsFromDB(constructorId)
         }
     }
 
@@ -422,9 +428,9 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getDriverQualifyingResultsListFromDB(): List<DriverQualifyingResultsInfo>? {
+    private suspend fun getDriverQualifyingResultsListFromDB(driverId: String): List<DriverQualifyingResultsInfo>? {
         return withContext(Dispatchers.IO){
-            val driverQualifyingResultsInfo = localDataSource.getDriverQualifyingListFromDB()
+            val driverQualifyingResultsInfo = localDataSource.getDriverQualifyingListFromDB(driverId)
             if(driverQualifyingResultsInfo.isEmpty()){
                 null
             } else{
@@ -440,9 +446,9 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getDriverRaceResultsListFromDB(): List<DriverRaceResultsInfo>? {
+    private suspend fun getDriverRaceResultsListFromDB(driverId: String): List<DriverRaceResultsInfo>? {
         return withContext(Dispatchers.IO){
-            val driverRaceResultsInfo = localDataSource.getDriverRaceListFromDB()
+            val driverRaceResultsInfo = localDataSource.getDriverRaceListFromDB(driverId)
             if(driverRaceResultsInfo.isEmpty()){
                 null
             } else{
@@ -458,9 +464,9 @@ class F1StandingRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getDriverDetailsFromDB(): DriverDetails? {
+    private suspend fun getDriverDetailsFromDB(driverId: String): DriverDetails? {
         return withContext(Dispatchers.IO) {
-            localDataSource.getDriverDetailsFromDB()
+            localDataSource.getDriverDetailsFromDB(driverId)
         }
     }
 

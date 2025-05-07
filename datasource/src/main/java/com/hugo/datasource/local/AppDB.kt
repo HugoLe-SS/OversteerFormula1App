@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.hugo.datasource.dao.Constructor.ConstructorDetailsDao
 import com.hugo.datasource.dao.Constructor.ConstructorQualifyingResultsDao
 import com.hugo.datasource.dao.Constructor.ConstructorRaceResultsDao
@@ -12,6 +13,7 @@ import com.hugo.datasource.dao.Driver.DriverDetailsDao
 import com.hugo.datasource.dao.Driver.DriverQualifyingResultsDao
 import com.hugo.datasource.dao.Driver.DriverRaceResultsDao
 import com.hugo.datasource.dao.Driver.DriverStandingsDao
+import com.hugo.datasource.local.converter.Converters
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
@@ -28,6 +30,7 @@ import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 ],
     version = 1,
     exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDB : RoomDatabase() {
 
     abstract fun getConstructorStandingsDao(): ConstructorStandingsDao

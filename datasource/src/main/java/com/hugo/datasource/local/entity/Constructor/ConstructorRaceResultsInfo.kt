@@ -8,6 +8,7 @@ import com.hugo.datasource.local.TableConstants
 data class ConstructorRaceResultsInfo(
     @PrimaryKey(autoGenerate = false)
     val constructorId: String,
+    val constructorName: String,
     val total: String,
     val driverNumber: String,
     val driverId: String,

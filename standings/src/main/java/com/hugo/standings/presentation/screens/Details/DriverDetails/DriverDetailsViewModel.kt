@@ -2,6 +2,9 @@ package com.hugo.standings.presentation.screens.Details.DriverDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hugo.standings.domain.usecase.GetConstructorDetailsUseCase
+import com.hugo.standings.domain.usecase.GetConstructorQualifyingResultsUseCase
+import com.hugo.standings.domain.usecase.GetConstructorRaceResultsUseCase
 import com.hugo.standings.domain.usecase.GetDriverDetailsUseCase
 import com.hugo.standings.domain.usecase.GetDriverQualifyingResultsUseCase
 import com.hugo.standings.domain.usecase.GetDriverRaceResultsUseCase
@@ -19,7 +22,10 @@ import javax.inject.Inject
 class DriverDetailsViewModel @Inject constructor(
     private val getDriverRaceResultsUseCase: GetDriverRaceResultsUseCase,
     private val getDriverQualifyingResultUseCase: GetDriverQualifyingResultsUseCase,
-    private val getDriverDetailsUseCase: GetDriverDetailsUseCase
+    private val getDriverDetailsUseCase: GetDriverDetailsUseCase,
+    private val getConstructorRaceResultsUseCase: GetConstructorRaceResultsUseCase,
+    private val getConstructorQualifyingResultsUseCase: GetConstructorQualifyingResultsUseCase,
+    private  val getConstructorDetailsUseCase: GetConstructorDetailsUseCase
 ): ViewModel() {
 
 
@@ -32,6 +38,13 @@ class DriverDetailsViewModel @Inject constructor(
         getDriverRaceResults(season = season, driverId = driverId)
         getDriverQualifyingResults(season = season, driverId = driverId)
         getDriverDetails(driverId = driverId)
+    }
+
+    fun fetchConstructorDetails(season: String , constructorId: String) {
+        AppLogger.d(message = "Inside ConstructorDetailsViewModel")
+        getConstructorRaceResults(season = season, constructorId = constructorId)
+        getConstructorQualifyingResults(season = season, constructorId = constructorId)
+        getConstructorDetails(constructorId = constructorId)
     }
 
     private fun getDriverRaceResults(season: String, driverId: String) {
@@ -137,6 +150,112 @@ class DriverDetailsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    private fun getConstructorRaceResults(season: String, constructorId:String){
+        getConstructorRaceResultsUseCase(season = season, constructorId = constructorId).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    AppLogger.d(message = "ConstructorDetailsViewModel Loading")
+                    _state.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            constructorRaceResults = result.data ?: emptyList()
+                        )
+                    }
+                    AppLogger.d(message = "Success ${result.data?.size}")
+                }
+                is Resource.Error -> {
+                    AppLogger.e(message = "ConstructorDetailsViewModel Error")
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
+                }
+                else -> Unit
+            }
+        }.launchIn(viewModelScope)
+
+    }
+
+    private fun getConstructorQualifyingResults(season: String, constructorId:String){
+        getConstructorQualifyingResultsUseCase(season = season, constructorId = constructorId).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    AppLogger.d(message = "ConstructorDetailsViewModel Loading")
+                    _state.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            constructorQualifyingResults = result.data ?: emptyList()
+                        )
+                    }
+                    AppLogger.d(message = "Success ${result.data?.size}")
+                }
+                is Resource.Error -> {
+                    AppLogger.e(message = "ConstructorDetailsViewModel Error")
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
+                }
+                else -> Unit
+            }
+        }.launchIn(viewModelScope)
+
+    }
+
+    private fun getConstructorDetails(constructorId: String){
+        getConstructorDetailsUseCase(constructorId).onEach { result ->
+            when(result){
+                is Resource.Loading -> {
+                    AppLogger.d(message = "ConstructorDetailsViewModel Loading")
+                    _state.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            constructorDetails = result.data
+                        )
+                    }
+                    AppLogger.d(message = "Success getting constructor details")
+                }
+
+                is Resource.Error -> {
+                    AppLogger.e(message = "ConstructorDetailsViewModel Error")
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
+                }
+
+                else -> Unit
+            }
+        }.launchIn(viewModelScope)
+    }
 
 
 }

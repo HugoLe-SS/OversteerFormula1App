@@ -33,8 +33,8 @@ class LocalDataSourceImpl(
         appDB.getConstructorQualifyingDao().insertConstructorQualifyingResultsInDB(constructorQualifyingList)
     }
 
-    override fun getConstructorQualifyingListFromDB(): List<ConstructorQualifyingResultsInfo> {
-        return appDB.getConstructorQualifyingDao().getConstructorQualifyingResultsListFromDB()
+    override fun getConstructorQualifyingListFromDB(constructorId: String): List<ConstructorQualifyingResultsInfo> {
+        return appDB.getConstructorQualifyingDao().getConstructorQualifyingResultsListFromDB(constructorId)
     }
 
     override fun deleteAllConstructorQualifyingListFromDB() {
@@ -45,8 +45,8 @@ class LocalDataSourceImpl(
         appDB.getConstructorRaceDao().insertConstructorRaceResultsListInDB(constructorRaceList)
     }
 
-    override fun getConstructorRaceListFromDB(): List<ConstructorRaceResultsInfo> {
-        return appDB.getConstructorRaceDao().getConstructorRaceResultsListFromDB()
+    override fun getConstructorRaceListFromDB(constructorId: String): List<ConstructorRaceResultsInfo> {
+        return appDB.getConstructorRaceDao().getConstructorRaceResultsListFromDB(constructorId)
     }
 
     override fun deleteAllConstructorRaceListFromDB() {
@@ -57,8 +57,8 @@ class LocalDataSourceImpl(
         appDB.getConstructorDetailsDao().insertConstructorDetailsInDB(constructorDetails)
     }
 
-    override fun getConstructorDetailsFromDB(): ConstructorDetails {
-        return appDB.getConstructorDetailsDao().getConstructorDetailsFromDB()
+    override fun getConstructorDetailsFromDB(constructorId: String): ConstructorDetails? {
+        return appDB.getConstructorDetailsDao().getConstructorDetailsFromDB(constructorId)
     }
 
     override fun deleteAllConstructorDetailsFromDB() {
@@ -81,8 +81,8 @@ class LocalDataSourceImpl(
         appDB.getDriverQualifyingDao().insertDriverQualifyingResultsInDB(driverQualifyingList)
     }
 
-    override fun getDriverQualifyingListFromDB(): List<DriverQualifyingResultsInfo> {
-        return appDB.getDriverQualifyingDao().getDriverQualifyingResultsListFromDB()
+    override fun getDriverQualifyingListFromDB(driverId: String): List<DriverQualifyingResultsInfo> {
+        return appDB.getDriverQualifyingDao().getDriverQualifyingResultsListFromDB(driverId)
     }
 
     override fun deleteAllDriverQualifyingListFromDB() {
@@ -93,8 +93,8 @@ class LocalDataSourceImpl(
         appDB.getDriverRaceDao().insertDriverRaceResultsListInDB(driverRaceList)
     }
 
-    override fun getDriverRaceListFromDB(): List<DriverRaceResultsInfo> {
-        return appDB.getDriverRaceDao().getDriverRaceResultsListFromDB()
+    override fun getDriverRaceListFromDB(driverId: String): List<DriverRaceResultsInfo> {
+        return appDB.getDriverRaceDao().getDriverRaceResultsListFromDB(driverId)
     }
 
     override fun deleteAllDriverRaceListFromDB() {
@@ -105,8 +105,8 @@ class LocalDataSourceImpl(
         appDB.getDriverDetailsDao().insertDriverDetailsInDB(driverDetails)
     }
 
-    override fun getDriverDetailsFromDB(): DriverDetails {
-        return appDB.getDriverDetailsDao().getDriverDetailsFromDB()
+    override fun getDriverDetailsFromDB(driverId: String): DriverDetails? {
+        return appDB.getDriverDetailsDao().getDriverDetailsFromDB(driverId)
     }
 
     override fun deleteAllDriverDetailsFromDB() {

@@ -62,7 +62,7 @@ dependencies {
 
     //Serialization / Navigation
     implementation(libs.kotlinx.serialization.json)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
     implementation(libs.navigation.compose)
 
     ksp(libs.hilt.compiler)

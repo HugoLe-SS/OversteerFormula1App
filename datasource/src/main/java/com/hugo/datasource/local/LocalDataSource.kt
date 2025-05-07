@@ -21,21 +21,21 @@ interface LocalDataSource {
     //Constructor Qualifying
     fun insertConstructorQualifyingListInDB(constructorQualifyingList: List<ConstructorQualifyingResultsInfo>)
 
-    fun getConstructorQualifyingListFromDB(): List<ConstructorQualifyingResultsInfo>
+    fun getConstructorQualifyingListFromDB(constructorId: String): List<ConstructorQualifyingResultsInfo>
 
     fun deleteAllConstructorQualifyingListFromDB()
 
     // Constructor Race
     fun insertConstructorRaceListInDB(constructorRaceList: List<ConstructorRaceResultsInfo>)
 
-    fun getConstructorRaceListFromDB(): List<ConstructorRaceResultsInfo>
+    fun getConstructorRaceListFromDB(constructorId: String): List<ConstructorRaceResultsInfo>
 
     fun deleteAllConstructorRaceListFromDB()
 
     // Constructor Details
     fun insertConstructorDetailsInDB(constructorDetails: ConstructorDetails)
 
-    fun getConstructorDetailsFromDB(): ConstructorDetails
+    fun getConstructorDetailsFromDB(constructorId: String): ConstructorDetails?
 
     fun deleteAllConstructorDetailsFromDB()
 
@@ -50,21 +50,21 @@ interface LocalDataSource {
     //Driver Qualifying
     fun insertDriverQualifyingListInDB(driverQualifyingList: List<DriverQualifyingResultsInfo>)
 
-    fun getDriverQualifyingListFromDB(): List<DriverQualifyingResultsInfo>
+    fun getDriverQualifyingListFromDB(driverId: String): List<DriverQualifyingResultsInfo>
 
     fun deleteAllDriverQualifyingListFromDB()
 
     //Driver Race
     fun insertDriverRaceListInDB(driverRaceList: List<DriverRaceResultsInfo>)
 
-    fun getDriverRaceListFromDB(): List<DriverRaceResultsInfo>
+    fun getDriverRaceListFromDB(driverId: String): List<DriverRaceResultsInfo>
 
     fun deleteAllDriverRaceListFromDB()
 
     //Driver Details
     fun insertDriverDetailsInDB(driverDetails: DriverDetails)
 
-    fun getDriverDetailsFromDB(): DriverDetails
+    fun getDriverDetailsFromDB(driverId: String): DriverDetails?
 
     fun deleteAllDriverDetailsFromDB()
 

@@ -133,7 +133,7 @@ fun DriverListItem(
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp)
+            .height(100.dp)
             .wrapContentHeight()
             .clickable {
                 driverCardClicked(driver.driverId)

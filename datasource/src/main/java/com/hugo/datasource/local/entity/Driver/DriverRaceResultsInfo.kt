@@ -15,6 +15,8 @@ data class DriverRaceResultsInfo(
     val driverCode: String,
     val givenName: String,
     val familyName: String,
+    val dateOfBirth: String,
+    val nationality: String,
     val season: String,
     val round: String,
     val raceName: String,

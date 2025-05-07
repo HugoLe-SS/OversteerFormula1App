@@ -14,8 +14,8 @@ interface DriverDetailsDao: BaseDao<DriverDetails> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDriverDetailsInDB(driverDetails: DriverDetails)
 
-    @Query("SELECT * FROM ${TableConstants.DRIVER_DETAILS}")
-    fun getDriverDetailsFromDB(): DriverDetails
+    @Query("SELECT * FROM ${TableConstants.DRIVER_DETAILS} WHERE driverId = :driverId")
+    fun getDriverDetailsFromDB(driverId: String): DriverDetails?
 
     @Query("DELETE FROM ${TableConstants.DRIVER_DETAILS}")
     fun deleteAllDriverDetailsFromDB()

@@ -114,7 +114,7 @@ dependencies {
 
     //Serialization Navigation
     implementation(libs.kotlinx.serialization.json)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
 
 
     //retrofit + okhttp3 for API fetching

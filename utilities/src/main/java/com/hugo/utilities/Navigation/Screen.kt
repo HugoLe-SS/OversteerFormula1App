@@ -13,17 +13,11 @@ sealed interface Screen {
     @Serializable
     object StandingsScreen : Screen
 
-//    @Serializable
-//    data class CalendarResultScreen(val round: String) : Screen
-
     @Serializable
     data class CalendarResultScreen(val info: CalendarClickInfo) : Screen
 
     @Serializable
-    data class ConstructorDetailsScreen(val constructorId: String) : Screen
-
-    @Serializable
-    data class DriverDetailsScreen(val driverId: String) : Screen
+    data class StandingsDetailsScreen(val driverId: String?= null, val constructorId: String?= null) : Screen
 }
 
 

@@ -22,7 +22,7 @@ import com.hugo.design.ui.theme.AppTheme
 fun ConstructorDetailsScreen(
     constructorId: String,
     backButtonClicked : () -> Unit = {},
-    viewModel: ConstructorDetailsViewModel = hiltViewModel()
+    viewModel: ConstructorDetailsViewModel = hiltViewModel(),
 ){
     val state by viewModel.state.collectAsState()
 
@@ -66,6 +66,7 @@ fun ConstructorDetailsScreen(
                             color = AppTheme.colorScheme.onSecondary
                         )
                     }
+
                 }
             }
         }

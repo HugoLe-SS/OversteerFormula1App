@@ -13,8 +13,9 @@ interface ConstructorDetailsDao: BaseDao<ConstructorDetails> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertConstructorDetailsInDB(constructorDetails: ConstructorDetails)
 
-    @Query("SELECT * FROM ${TableConstants.CONSTRUCTOR_DETAILS}")
-    fun getConstructorDetailsFromDB(): ConstructorDetails
+    @Query("SELECT * FROM ${TableConstants.CONSTRUCTOR_DETAILS} WHERE constructorId = :constructorId")
+    fun getConstructorDetailsFromDB(constructorId: String): ConstructorDetails?
+
 
     @Query("DELETE FROM ${TableConstants.CONSTRUCTOR_DETAILS}")
     fun deleteAllConstructorDetailsFromDB()

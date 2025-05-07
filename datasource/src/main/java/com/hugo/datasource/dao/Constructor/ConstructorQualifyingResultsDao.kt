@@ -13,8 +13,8 @@ interface ConstructorQualifyingResultsDao: BaseDao<ConstructorQualifyingResultsI
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertConstructorQualifyingResultsInDB(constructorQualifyingResult: List<ConstructorQualifyingResultsInfo>)
 
-    @Query("SELECT * FROM ${TableConstants.CONSTRUCTOR_QUALIFYING_LIST}")
-    fun getConstructorQualifyingResultsListFromDB(): List<ConstructorQualifyingResultsInfo>
+    @Query("SELECT * FROM ${TableConstants.CONSTRUCTOR_QUALIFYING_LIST} WHERE constructorId = :constructorId")
+    fun getConstructorQualifyingResultsListFromDB(constructorId: String): List<ConstructorQualifyingResultsInfo>
 
     @Query("DELETE FROM ${TableConstants.CONSTRUCTOR_QUALIFYING_LIST}")
     fun deleteAllConstructorQualifyingResultsListFromDB()

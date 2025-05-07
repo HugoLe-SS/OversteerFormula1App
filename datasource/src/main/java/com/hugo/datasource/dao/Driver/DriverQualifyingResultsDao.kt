@@ -13,8 +13,8 @@ interface DriverQualifyingResultsDao: BaseDao<DriverQualifyingResultsInfo> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDriverQualifyingResultsInDB(driverQualifyingResults: List<DriverQualifyingResultsInfo>)
 
-    @Query("SELECT * FROM ${TableConstants.DRIVER_QUALIFYING_LIST}")
-    fun getDriverQualifyingResultsListFromDB(): List<DriverQualifyingResultsInfo>
+    @Query("SELECT * FROM ${TableConstants.DRIVER_QUALIFYING_LIST} WHERE driverId = :driverId")
+    fun getDriverQualifyingResultsListFromDB(driverId: String): List<DriverQualifyingResultsInfo>
 
     @Query("DELETE FROM ${TableConstants.DRIVER_QUALIFYING_LIST}")
     fun deleteAllDriverQualifyingResultsListFromDB()

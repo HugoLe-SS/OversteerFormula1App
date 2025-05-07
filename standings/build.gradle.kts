@@ -84,7 +84,7 @@ dependencies {
 
     implementation(libs.androidx.compose.runtime)
 
-    // Navigation animation
+    // Navigation
     implementation(libs.navigation.compose)
 
     //retrofit + okhttp3 for API fetching

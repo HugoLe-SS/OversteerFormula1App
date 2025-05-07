@@ -20,9 +20,7 @@ import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.standings.presentation.components.ConstructorBannerComponent
 import com.hugo.standings.presentation.components.ConstructorListItem
-import com.hugo.standings.presentation.components.DriverBannerComponent
 import com.hugo.standings.presentation.components.DriverListItem
 import com.hugo.standings.presentation.components.SegmentedButton
 
@@ -74,17 +72,17 @@ fun StandingsHomeScreen(
                         StandingsType.CONSTRUCTOR -> {
                             // Constructor Standings
                             item{
-                                ConstructorBannerComponent(
-                                    firstDriverGivenName = "Lando",
-                                    firstDriverLastName = "Norris",
-                                    firstDriverNumber = "44",
-                                    secondDriverNumber = "81",
-                                    secondDriverGivenName = "Grabiel",
-                                    secondDriverLastName = "Bortoleto",
-                                    teamName = "McLaren",
-                                    driverImgUrl = "https://mclaren.bloomreach.io/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
-                                    teamImgUrl = "https://media.formula1.com/content/dam/fom-website/teams/2025/mclaren-logo.png"
-                                )
+//                                ConstructorBannerComponent(
+//                                    firstDriverGivenName = "Lando",
+//                                    firstDriverLastName = "Norris",
+//                                    firstDriverNumber = "44",
+//                                    secondDriverNumber = "81",
+//                                    secondDriverGivenName = "Grabiel",
+//                                    secondDriverLastName = "Bortoleto",
+//                                    teamName = "McLaren",
+//                                    driverImgUrl = "https://mclaren.bloomreach.io/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
+//                                    teamImgUrl = "https://media.formula1.com/content/dam/fom-website/teams/2025/mclaren-logo.png"
+//                                )
                             }
 
                             // Constructor List
@@ -101,14 +99,14 @@ fun StandingsHomeScreen(
                         StandingsType.DRIVER -> {
                             // Driver Standings
                             item{
-                                DriverBannerComponent(
-                                    driverGivenName = "Lando",
-                                    driverLastName = "Norris",
-                                    driverNumber = "44",
-                                    teamName = "McLaren",
-                                    driverImgUrl = "https://mclaren.bloomreach.io/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
-                                    teamImgUrl = "https://media.formula1.com/content/dam/fom-website/teams/2025/mclaren-logo.png"
-                                )
+//                                DriverBannerComponent(
+//                                    driverGivenName = "Lando",
+//                                    driverLastName = "Norris",
+//                                    driverNumber = "44",
+//                                    teamName = "McLaren",
+//                                    driverImgUrl = "https://mclaren.bloomreach.io/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
+//                                    teamImgUrl = "https://media.formula1.com/content/dam/fom-website/teams/2025/mclaren-logo.png"
+//                                )
                             }
 
                             // Driver List

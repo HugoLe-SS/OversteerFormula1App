@@ -1,6 +1,10 @@
 package com.hugo.standings.data.mapper
 
+import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
+import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
+import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
+import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 import com.hugo.standings.data.remote.dto.QualifyingResult.ConstructorQualifyingResultDto
 import com.hugo.standings.data.remote.dto.QualifyingResult.DriverQualifyingResultDto
@@ -8,10 +12,6 @@ import com.hugo.standings.data.remote.dto.RaceResult.ConstructorRaceResultDto
 import com.hugo.standings.data.remote.dto.RaceResult.DriverRaceResultDto
 import com.hugo.standings.data.remote.dto.Standings.ConstructorStandingsDto
 import com.hugo.standings.data.remote.dto.Standings.DriverStandingsDto
-import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
-import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
-import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
-import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 
 fun ConstructorRaceResultDto.toConstructorRaceResultInfoList(): List<ConstructorRaceResultsInfo>{
     val total = mrData.total
@@ -23,6 +23,7 @@ fun ConstructorRaceResultDto.toConstructorRaceResultInfoList(): List<Constructor
                 driverNumber = result.number,
                 driverId = result.driver.driverId,
                 constructorId = result.constructor.constructorId,
+                constructorName = result.constructor.name,
                 driverCode = result.driver.code,
                 givenName = result.driver.givenName,
                 familyName = result.driver.familyName,
@@ -59,6 +60,8 @@ fun DriverRaceResultDto.toDriverRaceResultInfoList(): List<DriverRaceResultsInfo
                 driverCode = result.driver.code,
                 givenName = result.driver.givenName,
                 familyName = result.driver.familyName,
+                dateOfBirth = result.driver.dateOfBirth,
+                nationality = result.driver.nationality,
                 season = race.season,
                 round = race.round,
                 raceName = race.raceName,
