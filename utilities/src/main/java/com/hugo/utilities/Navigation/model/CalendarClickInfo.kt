@@ -1,4 +1,4 @@
-package com.hugo.utilities.com.hugo.utilities.Navigation
+package com.hugo.utilities.com.hugo.utilities.Navigation.model
 
 import kotlinx.serialization.Serializable
 

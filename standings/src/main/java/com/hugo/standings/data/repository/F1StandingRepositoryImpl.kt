@@ -165,12 +165,6 @@ class F1StandingRepositoryImpl @Inject constructor(
 
             val constructorDetails = result.decodeSingleOrNull<ConstructorDetails>()
 
-//            if (constructorDetails == null) {
-//                emit(Resource.Error("No constructor details found for ID: $constructorId"))
-//                AppLogger.e(message = "No constructor details found in Supabase for ID: $constructorId")
-//                return@flow
-//            }
-
             if(constructorDetails != constructorDetailsFromDB){
                 AppLogger.d(message = "Success getting F1 constructor details ${constructorDetails?.constructorId}")
                 emit(Resource.Success(constructorDetails))

@@ -13,11 +13,14 @@ import androidx.navigation.toRoute
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.schedule.presentation.screens.Details.CalendarResultScreen
 import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
-import com.hugo.standings.presentation.screens.Details.DriverDetails.StandingsDetailsScreen
+import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
-import com.hugo.utilities.com.hugo.utilities.Navigation.CalendarClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType
 import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType.CalendarClickInfoNavType
 import com.hugo.utilities.com.hugo.utilities.Navigation.Screen
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import com.hugo.utilities.logging.AppLogger
 import kotlin.reflect.typeOf
 
@@ -68,8 +71,8 @@ fun AppNavGraph() {
             ) {
                 ScheduleHomeScreen(
                     cardClicked = { clickInfo ->
-                        AppLogger.d(message = "ScheduleHomeScreen round: $clickInfo")
-                        navController.navigate(Screen.CalendarResultScreen(clickInfo)) // ✅ no string building
+                        AppLogger.d(message = "ScheduleHomeScreen round: ${clickInfo.round}")
+                        navController.navigate(Screen.CalendarResultScreen(clickInfo))
                     },
                     navController = navController
                 )
@@ -92,13 +95,13 @@ fun AppNavGraph() {
             ) {
                 StandingsHomeScreen(
                     navController = navController,
-                    constructorCardClicked = { constructorId ->
-                        AppLogger.d(message = "Standings Detail Screen constructorId: $constructorId")
-                        navController.navigate(Screen.StandingsDetailsScreen(constructorId)) // ✅
+                    constructorCardClicked = { constructorClickInfo ->
+                        AppLogger.d(message = "Standings Detail Screen constructorId: ${constructorClickInfo.constructorId}")
+                        navController.navigate(Screen.StandingsDetailsScreen(constructorClickInfo = constructorClickInfo, driverClickInfo = null))
                     },
-                    driverCardClicked = { driverId ->
-                        AppLogger.d(message = "Standings Detail Screen driverId: $driverId")
-                        navController.navigate(Screen.StandingsDetailsScreen(driverId)) // ✅
+                    driverCardClicked = { driverClickInfo ->
+                        AppLogger.d(message = "Standings Detail Screen driverId: ${driverClickInfo.driverId}")
+                        navController.navigate(Screen.StandingsDetailsScreen(constructorClickInfo = null, driverClickInfo = driverClickInfo))
                     }
                 )
             }
@@ -113,11 +116,19 @@ fun AppNavGraph() {
                 CalendarResultScreen(info = screen.info)
             }
 
-            //Standings Details Screen
-            composable<Screen.StandingsDetailsScreen> { backStackEntry ->
+            composable<Screen.StandingsDetailsScreen>(
+                typeMap = mapOf(
+                    typeOf<ConstructorClickInfo?>() to CustomNavType.ConstructorClickInfoNavType,
+                    typeOf<DriverClickInfo?>() to CustomNavType.DriverClickInfoNavType
+                )
+            ) { backStackEntry ->
                 val screen: Screen.StandingsDetailsScreen = backStackEntry.toRoute()
-                StandingsDetailsScreen(driverId = screen.driverId, constructorId = screen.constructorId)
+                StandingsDetailsScreen(
+                    constructorClickInfo = screen.constructorClickInfo,
+                    driverClickInfo = screen.driverClickInfo,
+                )
             }
+
         }
     }
 

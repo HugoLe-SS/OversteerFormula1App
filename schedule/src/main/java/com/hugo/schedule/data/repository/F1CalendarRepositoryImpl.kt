@@ -69,9 +69,13 @@ class F1CalendarRepositoryImpl @Inject constructor(
                     }
                 }
 
+            AppLogger.d(message = "Circuit raw details: ${result}"  )
+
             val f1Circuit = result.decodeList<F1CircuitInfo>()
 
             AppLogger.d(message = "Success getting F1 Circuit Info ${f1Circuit.size}")
+
+            AppLogger.d(message = "Circuit decoded details: ${f1Circuit}"  )
 
             emit(Resource.Success(f1Circuit.firstOrNull()))
         } catch (e: Exception) {

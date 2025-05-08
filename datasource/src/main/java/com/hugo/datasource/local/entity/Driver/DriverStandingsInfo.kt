@@ -9,6 +9,7 @@ import com.hugo.datasource.local.TableConstants
 data class DriverStandingsInfo (
     @PrimaryKey(autoGenerate = false)
     val driverId: String,
+    val constructorId: String,
     val total: Int,
     val season: String,
     val round: String,
@@ -17,8 +18,10 @@ data class DriverStandingsInfo (
     val wins: String,
     val driverGivenName: String,
     val driverLastName: String,
+    val driverNumber: String,
+    val driverCode: String,
     val driverNationality: String,
     val dateOfBirth: String,
     val constructorName: String,
-    val constructorNationality: String,
+    val constructorNationality: String
 )

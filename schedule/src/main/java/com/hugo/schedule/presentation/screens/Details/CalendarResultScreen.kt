@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.utilities.com.hugo.utilities.Navigation.CalendarClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 
 @Composable
 fun CalendarResultScreen(

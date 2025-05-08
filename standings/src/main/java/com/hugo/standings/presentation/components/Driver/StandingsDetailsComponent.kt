@@ -38,112 +38,6 @@ import com.hugo.standings.R
 import com.hugo.utilities.AppUtilities
 
 @Composable
-fun StandingsDetailsBannerComponent(
-    driver: DriverRaceResultsInfo,
-    teamColor: Color = AppColors.Teams.colors[driver.constructorId.lowercase()] ?: Color.Transparent,
-    gradientBrush: Brush = Brush.horizontalGradient(
-        colors = listOf(
-            AppTheme.colorScheme.background,
-            teamColor
-        )
-    ),
-){
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(500.dp)
-            .background(brush = gradientBrush)
-
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 12.dp),
-            verticalArrangement = Arrangement.SpaceAround
-        ){
-            Text(
-                text = "${driver.givenName}",
-                style = AppTheme.typography.titleLarge,
-                color = AppTheme.colorScheme.onSecondary
-            )
-
-            Text(
-                text = "${driver.familyName}",
-                style = AppTheme.typography.titleNormal,
-                color = teamColor
-            )
-
-            //Season
-            Text(
-                text = "${driver.season} season",
-                style = AppTheme.typography.labelSmall,
-                color = AppTheme.colorScheme.onSecondary,
-            )
-
-            //Position
-            Text(
-                text = buildAnnotatedString {
-                    append("${driver.position} ")
-                    withStyle(
-                        style = AppTheme.typography.labelNormal.toSpanStyle().copy(
-                            color = teamColor
-                        )
-                    ) {
-                        append("POS")
-                    }
-                },
-                style = AppTheme.typography.titleLarge,
-                color = AppTheme.colorScheme.onSecondary
-            )
-
-            //Points
-            Text(
-                text = buildAnnotatedString {
-                    append("${driver.points} ")
-                    withStyle(
-                        style = AppTheme.typography.labelNormal.toSpanStyle().copy(
-                            color = teamColor
-                        )
-                    ) {
-                        append("POINTS")
-                    }
-                },
-                style = AppTheme.typography.titleLarge,
-                color = AppTheme.colorScheme.onSecondary
-            )
-            //Wins get through ROOM DB
-//            Row(
-//
-//            )
-//            {
-//                ImageComponent(
-//                    imageResourceValue = R.drawable.ic_trophy,
-//                    contentDescription = "Trophy icon"
-//                )
-//                Column {
-//                    Text(
-//                        text = "${driver.wins}",
-//                        style = AppTheme.typography.titleNormal
-//                    )
-//                    Text(
-//                        if(driver.wins <= "1") {
-//                            "${driver.wins} Win"
-//                        } else {
-//                            "${driver.wins} Wins"
-//                        },
-//                        style = AppTheme.typography.titleNormal
-//                    )
-//                }
-//            }
-
-            //Podiums, Poles, DNF?
-        }
-    }
-
-}
-
-@Composable
 fun StandingsDetailsListItem(
     driverRace: DriverRaceResultsInfo,
     driverQuali: DriverQualifyingResultsInfo,
@@ -260,7 +154,6 @@ fun StandingsDetailsListItem(
 
 @Composable fun DriverBioList(
     driverDetails: DriverDetails,
-    driverRace: DriverRaceResultsInfo,
 ){
     Column(
         Modifier
@@ -271,13 +164,13 @@ fun StandingsDetailsListItem(
     ){
         StandingsBioItem(
             imageResourceValue = R.drawable.ic_trophy,
-            info = driverRace.driverCode,
+            info = driverDetails.driverInfo?.getOrNull(0) ?: "",
             infoTag = stringResource(R.string.driver_code)
         )
 
         StandingsBioItem(
             imageResourceValue = R.drawable.ic_mclaren,
-            info = driverRace.constructorName,
+            info = driverDetails.driverInfo?.getOrNull(1) ?: "",
             infoTag = stringResource(R.string.team)
         )
 
@@ -308,8 +201,14 @@ fun StandingsDetailsListItem(
 
         StandingsBioItem(
             imageResourceValue = R.drawable.ic_equal,
-            info = driverRace.dateOfBirth,
+            info = driverDetails.driverInfo?.getOrNull(2) ?: "",
             infoTag = stringResource(R.string.date_of_birth)
+        )
+
+        StandingsBioItem(
+            imageResourceValue = R.drawable.ic_equal,
+            info = driverDetails.driverInfo?.getOrNull(3) ?: "",
+            infoTag = stringResource(R.string.nationality)
         )
 
     }

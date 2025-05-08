@@ -1,4 +1,4 @@
-package com.hugo.standings.presentation.screens.Details.DriverDetails
+package com.hugo.standings.presentation.screens.Details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class DriverDetailsViewModel @Inject constructor(
+class StandingsDetailsViewModel @Inject constructor(
     private val getDriverRaceResultsUseCase: GetDriverRaceResultsUseCase,
     private val getDriverQualifyingResultUseCase: GetDriverQualifyingResultsUseCase,
     private val getDriverDetailsUseCase: GetDriverDetailsUseCase,
@@ -29,8 +29,8 @@ class DriverDetailsViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    private val _state = MutableStateFlow(DriverDetailsUiState())
-    val state: StateFlow<DriverDetailsUiState> = _state
+    private val _state = MutableStateFlow(StandingsDetailsUIState())
+    val state: StateFlow<StandingsDetailsUIState> = _state
 
 
     fun fetchDriverDetails(season: String , driverId: String) {
@@ -259,3 +259,4 @@ class DriverDetailsViewModel @Inject constructor(
 
 
 }
+

@@ -1,4 +1,4 @@
-package com.hugo.standings.presentation.screens.Details.DriverDetails
+package com.hugo.standings.presentation.screens.Details
 
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
@@ -7,9 +7,10 @@ import com.hugo.datasource.local.entity.Driver.DriverDetails
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 
-data class DriverDetailsUiState(
+data class StandingsDetailsUIState(
     val isLoading: Boolean = true,
     val error: String? = null,
+
 
     val driverRaceResults: List<DriverRaceResultsInfo> = emptyList(),
     val driverQualifyingResults: List<DriverQualifyingResultsInfo> = emptyList(),

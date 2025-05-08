@@ -169,6 +169,7 @@ fun DriverStandingsDto.toDriverStandingsInfoList(): List<DriverStandingsInfo> {
         list.driverStandings.map {standings ->
             DriverStandingsInfo(
                 driverId = standings.driver.driverId,
+                constructorId = standings.constructors.first().constructorId,
                 total = total,
                 season = season,
                 round = round,
@@ -177,6 +178,8 @@ fun DriverStandingsDto.toDriverStandingsInfoList(): List<DriverStandingsInfo> {
                 wins = standings.wins,
                 driverGivenName = standings.driver.givenName,
                 driverLastName = standings.driver.familyName,
+                driverNumber = standings.driver.permanentNumber,
+                driverCode = standings.driver.code,
                 driverNationality = standings.driver.nationality,
                 dateOfBirth = standings.driver.dateOfBirth,
                 constructorName = standings.constructors.first().name,

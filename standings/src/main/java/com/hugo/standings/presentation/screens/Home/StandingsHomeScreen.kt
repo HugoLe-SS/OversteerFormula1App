@@ -23,13 +23,15 @@ import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.presentation.components.ConstructorListItem
 import com.hugo.standings.presentation.components.DriverListItem
 import com.hugo.standings.presentation.components.SegmentedButton
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 
 @Composable
 fun StandingsHomeScreen(
     navController: NavHostController,
     viewModel: StandingsHomeViewModel = hiltViewModel(),
-    driverCardClicked: (String) -> Unit = {},
-    constructorCardClicked: (String) -> Unit = {}
+    driverCardClicked: (DriverClickInfo) -> Unit = {},
+    constructorCardClicked: (ConstructorClickInfo) -> Unit = {}
 ){
     val state = viewModel.state.value
 
@@ -89,8 +91,18 @@ fun StandingsHomeScreen(
                             items(state.constructorStandings) { constructors ->
                                 ConstructorListItem(
                                     constructors,
-                                    constructorCardClicked = { constructorId ->
-                                        constructorCardClicked(constructorId)
+                                    constructorCardClicked = { info ->
+                                        constructorCardClicked(
+                                            ConstructorClickInfo(
+                                                constructorId = info.constructorId,
+                                                constructorName = info.constructorName,
+                                                season = info.season,
+                                                nationality = info.nationality,
+                                                position = info.position,
+                                                points = info.points,
+                                                wins = info.wins
+                                            )
+                                        )
                                     }
 
                                 )
@@ -113,8 +125,22 @@ fun StandingsHomeScreen(
                             items(state.driverStandings) { drivers ->
                                 DriverListItem(
                                     drivers,
-                                    driverCardClicked = { driverId ->
-                                        driverCardClicked(driverId)
+                                    driverCardClicked = { info ->
+                                        driverCardClicked(
+                                            DriverClickInfo(
+                                                driverId = info.driverId,
+                                                constructorName = info.constructorName,
+                                                constructorId = info.constructorId,
+                                                season = info.season,
+                                                givenName = info.givenName,
+                                                familyName = info.familyName,
+                                                driverNumber = info.driverNumber,
+                                                driverCode = info.driverCode,
+                                                position = info.position,
+                                                points = info.points,
+                                                wins = info.wins
+                                            )
+                                        )
                                     }
 
                                 )

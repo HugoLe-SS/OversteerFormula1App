@@ -20,11 +20,13 @@ import androidx.compose.ui.unit.dp
 import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 
 @Composable
 fun ConstructorListItem(
     constructor: ConstructorStandingsInfo,
-    constructorCardClicked: (String) -> Unit = {}
+    constructorCardClicked: (ConstructorClickInfo) -> Unit = {}
 ){
     Card (
         modifier = Modifier
@@ -32,7 +34,17 @@ fun ConstructorListItem(
             .height(100.dp)
             .wrapContentHeight()
             .clickable {
-                constructorCardClicked(constructor.constructorId)
+                constructorCardClicked(
+                    ConstructorClickInfo(
+                        constructorId = constructor.constructorId,
+                        constructorName = constructor.constructorName,
+                        season = constructor.season,
+                        nationality = constructor.constructorNationality,
+                        position = constructor.position,
+                        points = constructor.points,
+                        wins = constructor.wins
+                    )
+                )
             }
             .padding(12.dp),
 
@@ -128,7 +140,7 @@ fun ConstructorListItem(
 @Composable
 fun DriverListItem(
     driver: DriverStandingsInfo,
-    driverCardClicked: (String) -> Unit = {}
+    driverCardClicked: (DriverClickInfo) -> Unit = {}
 ){
     Card (
         modifier = Modifier
@@ -136,7 +148,21 @@ fun DriverListItem(
             .height(100.dp)
             .wrapContentHeight()
             .clickable {
-                driverCardClicked(driver.driverId)
+                driverCardClicked(
+                    DriverClickInfo(
+                        driverId = driver.driverId,
+                        constructorName = driver.constructorName,
+                        constructorId = driver.constructorId,
+                        season = driver.season,
+                        givenName = driver.driverGivenName,
+                        familyName = driver.driverLastName,
+                        driverNumber = driver.driverNumber,
+                        driverCode = driver.driverCode,
+                        position = driver.position,
+                        points = driver.points,
+                        wins = driver.wins
+                    )
+                )
             }
             .padding(12.dp),
 

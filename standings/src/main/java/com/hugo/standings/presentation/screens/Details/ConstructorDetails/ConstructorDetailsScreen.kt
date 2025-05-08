@@ -20,14 +20,16 @@ import com.hugo.design.ui.theme.AppTheme
 
 @Composable
 fun ConstructorDetailsScreen(
-    constructorId: String,
+    constructorId: String?= null,
     backButtonClicked : () -> Unit = {},
     viewModel: ConstructorDetailsViewModel = hiltViewModel(),
 ){
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = constructorId) {
-        viewModel.fetchConstructorDetails(season = "current", constructorId = constructorId)
+        constructorId?.let {
+            viewModel.fetchConstructorDetails(season = "current", constructorId = it)
+        }
     }
 
     Scaffold (

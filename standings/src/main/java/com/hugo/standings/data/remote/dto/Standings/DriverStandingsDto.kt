@@ -50,7 +50,9 @@ data class Driver(
     val givenName: String,
     val familyName: String,
     val dateOfBirth: String,
-    val nationality: String
+    val nationality: String,
+    val permanentNumber: String,
+    val code: String,
 )
 
 
