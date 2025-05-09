@@ -1,20 +1,15 @@
 package com.hugo.standings.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -22,14 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
+import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.standings.domain.model.ConstructorStandingsInfo
-import com.hugo.standings.domain.model.DriverStandingsInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 
 @Composable
 fun ConstructorListItem(
     constructor: ConstructorStandingsInfo,
-    constructorCardClicked: (String) -> Unit = {}
+    constructorCardClicked: (ConstructorClickInfo) -> Unit = {}
 ){
     Card (
         modifier = Modifier
@@ -37,7 +34,17 @@ fun ConstructorListItem(
             .height(100.dp)
             .wrapContentHeight()
             .clickable {
-                constructorCardClicked(constructor.constructorId)
+                constructorCardClicked(
+                    ConstructorClickInfo(
+                        constructorId = constructor.constructorId,
+                        constructorName = constructor.constructorName,
+                        season = constructor.season,
+                        nationality = constructor.constructorNationality,
+                        position = constructor.position,
+                        points = constructor.points,
+                        wins = constructor.wins
+                    )
+                )
             }
             .padding(12.dp),
 
@@ -133,15 +140,29 @@ fun ConstructorListItem(
 @Composable
 fun DriverListItem(
     driver: DriverStandingsInfo,
-    driverCardClicked: (String) -> Unit = {}
+    driverCardClicked: (DriverClickInfo) -> Unit = {}
 ){
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp)
+            .height(100.dp)
             .wrapContentHeight()
             .clickable {
-                driverCardClicked(driver.driverId)
+                driverCardClicked(
+                    DriverClickInfo(
+                        driverId = driver.driverId,
+                        constructorName = driver.constructorName,
+                        constructorId = driver.constructorId,
+                        season = driver.season,
+                        givenName = driver.driverGivenName,
+                        familyName = driver.driverLastName,
+                        driverNumber = driver.driverNumber,
+                        driverCode = driver.driverCode,
+                        position = driver.position,
+                        points = driver.points,
+                        wins = driver.wins
+                    )
+                )
             }
             .padding(12.dp),
 

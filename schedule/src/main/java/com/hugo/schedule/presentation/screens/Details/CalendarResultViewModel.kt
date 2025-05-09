@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugo.schedule.domain.usecase.GetF1CalendarResultUseCase
 import com.hugo.schedule.domain.usecase.GetF1CircuitInfoUseCase
 import com.hugo.utilities.Resource
+import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,6 +50,7 @@ class CalendarResultViewModel @Inject constructor(
                             f1CalendarResult = result.data ?: emptyList()
                         )
                     }
+                    AppLogger.d(message = "Success getting calendar results")
                 }
                 is Resource.Error -> {
                     _state.update {
@@ -81,6 +83,7 @@ class CalendarResultViewModel @Inject constructor(
                             f1CircuitInfo = result.data
                         )
                     }
+                    AppLogger.d(message = "Success getting circuit Details")
                 }
                 is Resource.Error -> {
                     _state.update {

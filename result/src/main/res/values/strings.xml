@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arrow_up_icon">Arrow up icon</string>
+    <string name="arrow_down_icon">Arrow down icon</string>
+    <string name="arrow">Arrow ~~~~</string>
+</resources>

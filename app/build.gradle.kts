@@ -5,11 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
-
-    kotlin("kapt")
+    alias(libs.plugins.ksp) //use ksp to replace kapt
 
     // Kotlin serialization plugin for type safe routes and navigation arguments
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("plugin.serialization") version "2.1.10"
 
 }
 
@@ -79,6 +78,7 @@ dependencies {
     implementation(project(":datasource"))
     implementation(project(":schedule"))
     implementation(project(":standings"))
+    implementation(project(":result"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -98,8 +98,8 @@ dependencies {
 
     implementation(libs.corountine.android)
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.splash.screen)
 
@@ -115,7 +115,7 @@ dependencies {
 
     //Serialization Navigation
     implementation(libs.kotlinx.serialization.json)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
 
 
     //retrofit + okhttp3 for API fetching
@@ -124,7 +124,6 @@ dependencies {
 
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
-
 
 
 }

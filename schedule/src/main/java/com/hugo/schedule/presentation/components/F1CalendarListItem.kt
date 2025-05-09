@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.domain.model.F1CalendarInfo
-import com.hugo.utilities.com.hugo.utilities.Navigation.CalendarClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 
 @Composable
 fun F1CalendarListItem(

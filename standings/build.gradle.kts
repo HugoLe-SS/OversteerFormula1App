@@ -3,11 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp) //use ksp to replace kapt
 
-    kotlin("kapt")
     kotlin("plugin.serialization") version "2.1.10" // to use supabase
 
 }
+
 
 android {
     namespace = "com.hugo.standings"
@@ -18,6 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
     }
 
     buildTypes {
@@ -56,6 +58,8 @@ dependencies {
 
     implementation(project(":design"))
     implementation(project(":utilities"))
+    implementation(project(":datasource"))
+    implementation(project(":network"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -75,12 +79,12 @@ dependencies {
 
     implementation(libs.corountine.android)
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.androidx.compose.runtime)
 
-    // Navigation animation
+    // Navigation
     implementation(libs.navigation.compose)
 
     //retrofit + okhttp3 for API fetching
@@ -94,5 +98,7 @@ dependencies {
     implementation(platform(libs.supabase.bom))
     implementation(libs.postgrest.kt)
     implementation(libs.ktor.client.android)
+
+
 
 }

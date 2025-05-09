@@ -23,7 +23,7 @@ import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.F1CalendarListItem
-import com.hugo.utilities.com.hugo.utilities.Navigation.CalendarClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 
 @Composable
 fun ScheduleHomeScreen(
@@ -91,14 +91,6 @@ fun ScheduleHomeScreen(
                         }
                     }
 
-//                    LazyColumn {
-//                        items(state.f1Calendar) { race ->
-//                            F1CalendarListItem(
-//                                calendar = race,
-//                                cardClicked = cardClicked // ← Just pass it
-//                            )
-//                        }
-//                    }
                 }
             }
 

@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.android)
-    kotlin("kapt")
+    alias(libs.plugins.ksp) //use ksp to replace kapt
+
 
     kotlin("plugin.serialization") version "2.1.10"
 
@@ -60,16 +61,16 @@ dependencies {
 
     //dagger hilt
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     //Room DB
     implementation(libs.room)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     //Serialization
-    dependencies {
-        implementation(libs.kotlinx.serialization.json)
-    }
+    implementation(libs.kotlinx.serialization.json)
+
+
 }

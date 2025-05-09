@@ -11,16 +11,18 @@ object AppColors {
     val onBackground = Color(0xFF1B1B1B)
 
     object Teams{
-        val mercedes = Color(0xFF27F4D2)
-        val redbull = Color(0xFF3671C6)
-        val ferrari = Color(0xFFE80020)
-        val mclaren = Color(0xFFFF8000)
-        val alpine = Color(0xFF00A1E8)
-        val racingbulls = Color(0xFF6692FF)
-        val astonmartin = Color(0xFF229971)
-        val williams = Color(0xFF1868DB)
-        val kicksauber = Color(0xFF52E252)
-        val haas = Color(0xFFB6BABD)
+        val colors: Map<String, Color> = mapOf(
+            "mclaren" to Color(0xFFFF8000),
+            "red_bull" to Color(0xFF3671C6),
+            "ferrari" to Color(0xFFE80020),
+            "mercedes" to Color(0xFF27F4D2),
+            "alpine" to Color(0xFF00A1E8),
+            "rb" to Color(0xFF6692FF),
+            "aston_martin" to Color(0xFF229971),
+            "williams" to Color(0xFF1868DB),
+            "sauber" to Color(0xFF52E252),
+            "haas" to Color(0xFFB6BABD)
+        )
     }
 
     object DriverLapTimes{

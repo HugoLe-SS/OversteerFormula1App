@@ -14,6 +14,7 @@ hiltVersion = "2.51.1"
 hiltNavginComposeVersion = "1.2.0"
 appcompat = "1.6.1"
 material = "1.10.0"
+roomCompiler = "2.7.1"
 splashScreenVersion = "1.0.0"
 coilVersion = "3.0.4"
 lottieVersion = "6.6.2"
@@ -21,10 +22,10 @@ retrofit = "2.9.0"
 okhttp = "5.0.0-alpha.2"
 navVersion = "2.8.9"
 composeRuntimeVersion = "1.7.8"
-roomVersion = "2.6.1"
 storage = "1.5.0"
 supabaseBomVersion = "3.1.2"
 ktorVersion = "3.1.1"
+ksp-version = "2.1.20-1.0.31"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,10 +59,10 @@ okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okht
 okhttp3-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp"}
 navigation-compose = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion"}
 androidx-compose-runtime = {group = "androidx.compose.runtime", name = "runtime", version.ref = "composeRuntimeVersion"}
-room = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}
-room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomVersion"}
-room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}
-androidx-storage = { group = "androidx.test.services", name = "storage", version.ref = "storage" }
+
+room = {group = "androidx.room", name = "room-runtime", version.ref = "roomCompiler"}
+room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler"}
+room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomCompiler"}
 
 supabase-bom = {group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabaseBomVersion"}
 postgrest-kt = {module = "io.github.jan-tennert.supabase:postgrest-kt"}
@@ -73,4 +74,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }
 

@@ -1,12 +1,9 @@
 package com.hugo.design.components
 
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,18 +16,21 @@ import com.hugo.design.ui.theme.AppTheme
 fun ButtonComponent(
     text: String = "Button",
     buttonColor: Color = AppTheme.colorScheme.secondary,
+    textColor: Color = AppTheme.colorScheme.onSecondary,
     buttonClicked: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
    Button(
-        onClick = { buttonClicked() },
+        onClick = buttonClicked,
         modifier = modifier
-            .width(120.dp),
+            //.width(120.dp)
+            .wrapContentWidth()
+            .wrapContentHeight(),
         enabled = true,
         shape = AppTheme.shape.button,
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor,
-            contentColor = AppTheme.colorScheme.onSecondary
+            contentColor = textColor
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 4.dp,

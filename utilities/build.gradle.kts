@@ -2,8 +2,10 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp) //use ksp to replace kapt
 
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("plugin.serialization") version "2.1.10"
+
 
 }
 
@@ -60,7 +62,9 @@ dependencies {
 
     //Serialization / Navigation
     implementation(libs.kotlinx.serialization.json)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
     implementation(libs.navigation.compose)
+
+    ksp(libs.hilt.compiler)
 
 }
