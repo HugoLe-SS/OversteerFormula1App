@@ -17,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Driver.DriverDetails
+import com.hugo.design.components.ButtonComponent
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppColors
 import com.hugo.design.ui.theme.AppTheme
@@ -35,6 +37,7 @@ fun StandingsDetailsBannerComponent(
     constructorDetails: ConstructorDetails?= null,
     driverClickInfo: DriverClickInfo? = null,
     constructorClickInfo: ConstructorClickInfo? = null,
+    buttonClicked: (String) -> Unit = {},
 ){
     val teamColor = if (driverDetails != null || driverClickInfo != null) {
         AppColors.Teams.colors[driverClickInfo?.constructorId] ?: Color.Transparent
@@ -54,30 +57,40 @@ fun StandingsDetailsBannerComponent(
             .fillMaxWidth()
             .height(500.dp)
             .background(brush = gradientBrush)
-
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 12.dp),
-            verticalArrangement = Arrangement.SpaceAround
+                .padding(12.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-
-            if(driverDetails != null && driverClickInfo != null){
+            if (driverDetails != null && driverClickInfo != null) {
                 DriverDetailsBanner(
                     driverDetails = driverDetails,
                     driverClickInfo = driverClickInfo,
                     teamColor = teamColor
                 )
-            } else if(constructorDetails != null && constructorClickInfo != null) {
+            } else if (constructorDetails != null && constructorClickInfo != null) {
                 ConstructorDetailsBanner(
                     constructorDetails = constructorDetails,
                     constructorClickInfo = constructorClickInfo,
                 )
             }
-
         }
+
+        // View Results Button
+        ButtonComponent(
+            modifier = Modifier
+                .align(Alignment.BottomEnd),
+            text = stringResource(R.string.view_results),
+            buttonClicked = {
+                buttonClicked(
+                    driverClickInfo?.driverId ?: constructorClickInfo?.constructorId ?: ""
+                )
+            }
+        )
     }
+
 
 }
 

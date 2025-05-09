@@ -78,6 +78,7 @@ dependencies {
     implementation(project(":datasource"))
     implementation(project(":schedule"))
     implementation(project(":standings"))
+    implementation(project(":result"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

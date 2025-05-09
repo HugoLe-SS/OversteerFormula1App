@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
+import com.hugo.result.presentation.screens.ResultScreen
 import com.hugo.schedule.presentation.screens.Details.CalendarResultScreen
 import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
 import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
@@ -126,6 +127,31 @@ fun AppNavGraph() {
                 StandingsDetailsScreen(
                     constructorClickInfo = screen.constructorClickInfo,
                     driverClickInfo = screen.driverClickInfo,
+                    viewResultButtonClicked = { id ->
+                        AppLogger.d(message = "View Result Button Clicked: $id")
+                        navController.navigate(Screen.ResultScreen(id))
+                    },
+                )
+            }
+
+            // Result Screen
+            composable<Screen.ResultScreen>(
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(200)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(200)
+                    )
+                }
+            ) { backStackEntry ->
+                val screen: Screen.ResultScreen = backStackEntry.toRoute()
+                ResultScreen(
+                    raceId = screen.driverId?: screen.constructorId
                 )
             }
 
@@ -133,3 +159,5 @@ fun AppNavGraph() {
     }
 
 }
+
+

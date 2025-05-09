@@ -29,6 +29,7 @@ fun StandingsDetailsScreen(
     constructorClickInfo: ConstructorClickInfo? = null,
     driverClickInfo: DriverClickInfo? = null,
     backButtonClicked : () -> Unit = {},
+    viewResultButtonClicked: (String) -> Unit = {},
     viewModel: StandingsDetailsViewModel = hiltViewModel()
 ){
     val state by viewModel.state.collectAsState()
@@ -82,6 +83,7 @@ fun StandingsDetailsScreen(
                             StandingsDetailsBannerComponent(
                                 constructorDetails = state.constructorDetails,
                                 constructorClickInfo = constructorClickInfo,
+                                buttonClicked = viewResultButtonClicked
                             )
                         }
                         item {
@@ -96,6 +98,7 @@ fun StandingsDetailsScreen(
                             StandingsDetailsBannerComponent(
                                 driverDetails = state.driverDetails,
                                 driverClickInfo = driverClickInfo,
+                                buttonClicked = viewResultButtonClicked
                             )
                         }
                         item {
@@ -112,10 +115,3 @@ fun StandingsDetailsScreen(
 
     }
 }
-
-//                    items(state.driverRaceResults.zip(state.driverQualifyingResults)) { (race, quali) ->
-//                        DriverDetailsListItem(
-//                            driverRace = race,
-//                            driverQuali = quali,
-//                        )
-//                    }
