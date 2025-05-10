@@ -9,6 +9,9 @@ import com.hugo.datasource.local.entity.Driver.DriverDetails
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
+import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class LocalDataSourceImpl(
@@ -16,6 +19,41 @@ class LocalDataSourceImpl(
 ) : LocalDataSource {
 
     private val appDB: AppDB = AppDB.getDatabase(context)
+    override fun insertF1CalendarInDB(f1CalendarInfo: List<F1CalendarInfo>) {
+        appDB.getF1CalendarDao().insertF1CalendarInDB(f1CalendarInfo)
+    }
+
+    override fun getF1CalendarFromDB(): List<F1CalendarInfo> {
+        return appDB.getF1CalendarDao().getF1CalendarFromDB()
+    }
+
+    override fun deleteAllF1CalendarFromDB() {
+        appDB.getF1CalendarDao().deleteAllF1CalendarFromDB()
+    }
+
+    override fun insertF1CircuitDetailsInDB(f1CircuitDetails: F1CircuitDetails) {
+        appDB.getF1CircuitDetailsDao().insertF1CircuitDetailsInDB(f1CircuitDetails)
+    }
+
+    override fun getF1CircuitDetailsFromDB(circuitId: String): F1CircuitDetails? {
+        return appDB.getF1CircuitDetailsDao().getF1CircuitDetailsFromDB(circuitId)
+    }
+
+    override fun deleteAllF1CircuitDetailsFromDB() {
+        appDB.getF1CircuitDetailsDao().deleteAllF1CircuitDetailsFromDB()
+    }
+
+    override fun insertF1CalendarResultInDB(f1CalendarResult: List<F1CalendarRaceResult>) {
+        appDB.getF1CalendarResultDao().insertF1CalendarResultInDB(f1CalendarResult)
+    }
+
+    override fun getF1CalendarResultFromDB(circuitId: String): List<F1CalendarRaceResult> {
+        return appDB.getF1CalendarResultDao().getF1CalendarResultFromDB(circuitId)
+    }
+
+    override fun deleteAllF1CalendarResultFromDB() {
+        appDB.getF1CalendarResultDao().deleteAllF1CalendarResultFromDB()
+    }
 
     override fun insertConstructorStandingsListInDB(constructorStandingsList: List<ConstructorStandingsInfo>) {
         appDB.getConstructorStandingsDao().insertConstructorStandingsListInDB(constructorStandingsList)

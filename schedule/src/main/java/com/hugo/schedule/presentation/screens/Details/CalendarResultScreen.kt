@@ -23,14 +23,12 @@ import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 fun CalendarResultScreen(
     viewModel: CalendarResultViewModel = hiltViewModel(),
     backButtonClicked: () -> Unit = {},
-    //round: String,
-    //circuitId: String,
     info: CalendarClickInfo
 ){
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect (key1 = info.round) {
-        viewModel.fetchF1CalendarResult(season = "current", round = info.round, circuitId = info.circuitId)
+    LaunchedEffect (key1 = info.circuitId) {
+        viewModel.fetchF1CalendarResult(season = "current", circuitId = info.circuitId)
     }
 
     Scaffold (

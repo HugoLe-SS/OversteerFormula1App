@@ -24,16 +24,13 @@ class CalendarResultViewModel @Inject constructor(
     val state: StateFlow<CalendarResultUiState> = _state
 
 
-    init {
-    }
-
-    fun fetchF1CalendarResult(season: String, round: String, circuitId: String) {
-        getF1CalendarResult(season, round)
+    fun fetchF1CalendarResult(season: String, circuitId: String) {
+        getF1CalendarResult(season, circuitId)
         getCircuitDetails(circuitId)
     }
 
-    private fun getF1CalendarResult(season: String, round: String) {
-        getF1CalendarResultUseCase(season, round).onEach { result ->
+    private fun getF1CalendarResult(season: String, circuitId: String) {
+        getF1CalendarResultUseCase(season, circuitId).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
                     _state.update {
@@ -65,8 +62,8 @@ class CalendarResultViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun getCircuitDetails(constructorId: String){
-        getF1CircuitInfoUseCase(constructorId).onEach { result ->
+    private fun getCircuitDetails(circuitId: String){
+        getF1CircuitInfoUseCase(circuitId).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
                     _state.update {

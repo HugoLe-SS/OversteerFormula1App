@@ -29,8 +29,6 @@ class F1StandingRepositoryImpl @Inject constructor(
 ): IF1StandingsRepository {
     override fun getConstructorStandings(season: String): Flow<Resource<List<ConstructorStandingsInfo>>> = flow {
 
-
-
         AppLogger.d(message="Inside getConstructorStandings")
         emit(Resource.Loading())
         try {

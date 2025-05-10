@@ -3,9 +3,9 @@ package com.hugo.schedule.data.mapper
 import com.hugo.schedule.data.remote.dto.F1CalendarDto
 import com.hugo.schedule.data.remote.dto.F1CalendarResultDto
 import com.hugo.schedule.data.remote.dto.SessionInfoDto
-import com.hugo.schedule.domain.model.F1CalendarInfo
-import com.hugo.schedule.domain.model.F1CalendarResult
-import com.hugo.schedule.domain.model.SessionInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
+import com.hugo.datasource.local.entity.Schedule.SessionInfo
 
 fun SessionInfoDto.toDomain() = SessionInfo(date, time)
 
@@ -44,12 +44,12 @@ fun F1CalendarDto.toF1CalendarInfoList(): List<F1CalendarInfo> {
 //    }
 //}
 
-fun F1CalendarResultDto.toF1CalendarResultList(): List<F1CalendarResult> {
+fun F1CalendarResultDto.toF1CalendarResultList(): List<F1CalendarRaceResult> {
     val total = mrData.total.toString()
 
     return mrData.raceTable.races.flatMap { race ->
         race.results.map { result ->
-            F1CalendarResult(
+            F1CalendarRaceResult(
                 total = total,
                 driverNumber = result.number,
                 driverId = result.driver.driverId,

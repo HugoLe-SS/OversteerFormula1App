@@ -1,5 +1,6 @@
 package com.hugo.schedule.di
 
+import com.hugo.datasource.local.LocalDataSource
 import com.hugo.schedule.data.remote.F1ScheduleApi
 import com.hugo.schedule.data.repository.F1CalendarRepositoryImpl
 import com.hugo.schedule.domain.repository.IF1CalendarRepository
@@ -31,8 +32,8 @@ class ScheduleModule {
 
     @Provides
     @Singleton
-    fun provideF1StandingsRepository(api: F1ScheduleApi, supabase: SupabaseClient): IF1CalendarRepository {
-        return F1CalendarRepositoryImpl(api, supabase)
+    fun provideF1StandingsRepository(api: F1ScheduleApi, supabase: SupabaseClient, localDataSouce: LocalDataSource): IF1CalendarRepository {
+        return F1CalendarRepositoryImpl(api, supabase, localDataSouce)
     }
 
 

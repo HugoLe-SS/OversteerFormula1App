@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.schedule.domain.model.F1CalendarInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 
 @Composable
