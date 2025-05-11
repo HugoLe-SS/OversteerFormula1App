@@ -7,4 +7,10 @@ data class ScheduleHomeUiState(
     val error: String?= null,
     val f1Calendar: List<F1CalendarInfo> = emptyList(),
 
-    )
+    val currentType: ScheduleType = ScheduleType.UPCOMING
+)
+
+enum class ScheduleType() {
+    UPCOMING,
+    PAST
+}

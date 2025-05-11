@@ -1,6 +1,7 @@
 package com.hugo.schedule.presentation.screens.Home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,13 +15,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
+import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.F1CalendarListItem
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
@@ -30,13 +32,25 @@ fun ScheduleHomeScreen(
     navController: NavHostController,
     viewModel: ScheduleHomeViewModel = hiltViewModel(),
     cardClicked: (CalendarClickInfo) -> Unit = {}
-    //cardClicked: (String) -> Unit = {}
-){
+) {
     val state by viewModel.state.collectAsState()
 
     Scaffold(
         topBar = {
-            AppToolbar(isHomepage = true)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(AppTheme.colorScheme.background)
+            ) {
+                AppToolbar(isStandingsPage = true)
+                SegmentedButton(
+                    state = state,
+                    viewModel = viewModel,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                )
+            }
         },
         bottomBar = {
             BottomNavBar(
@@ -44,42 +58,39 @@ fun ScheduleHomeScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ){
-            Text(
-                text = "Schedule",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .background(AppTheme.colorScheme.onBackground),
-                textAlign = TextAlign.Center,
-                style = AppTheme.typography.titleLarge,
-                color = AppTheme.colorScheme.onPrimary
-            )
+        when {
+            state.isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                   ) {
+                       CircularProgressIndicator(
+                           modifier = Modifier.size(24.dp),
+                            color = AppTheme.colorScheme.onSecondary
+                       )
+                }
+            }
 
-
-            when {
-                state.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            //.padding(innerPadding)
-                            .size(24.dp),
-                        color = AppTheme.colorScheme.onSecondary
+                state.error != null -> {
+                    Text(
+                        text = "Error: ${state.error}",
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
-                state.error != null -> {
-                    Text(text = "Error: ${state.error}")
-                }
+
                 else -> {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .background(AppTheme.colorScheme.background)
+                    ) {
                         items(state.f1Calendar) { race ->
                             F1CalendarListItem(
                                 race,
-                                cardClicked = { info->
+                                cardClicked = { info ->
                                     cardClicked(
                                         CalendarClickInfo(
                                             round = info.round,
@@ -96,8 +107,36 @@ fun ScheduleHomeScreen(
 
         }
 
-
-
-    }
-
 }
+
+@Composable
+fun SegmentedButton(
+    state: ScheduleHomeUiState,
+    viewModel: ScheduleHomeViewModel,
+    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+) {
+    val selectedIndex = when (state.currentType) {
+        ScheduleType.UPCOMING -> 0
+        ScheduleType.PAST -> 1
+        else -> 0 // Default to the first option
+    }
+    val options = listOf("Upcoming", "Past")
+
+    SingleChoiceSegmentedButton(
+        options = options,
+        selectedIndex = selectedIndex,
+        onOptionSelected = { index ->
+//                viewModel.onEvent(
+//                    when (index) {
+//                        0 -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
+//                        1 -> ToggleStandingsEvent.SetStandingsType(StandingsType.DRIVER)
+//                        else -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
+//                    }
+//                )
+        },
+        modifier = modifier
+    )
+}
+
+
+

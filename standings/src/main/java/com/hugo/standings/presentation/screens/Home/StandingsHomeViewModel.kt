@@ -54,6 +54,7 @@ class StandingsHomeViewModel @Inject constructor(
 
     }
 
+
     private fun getDriverStandings(season: String) {
         getDriverStandingsUseCase(season = season).onEach{result ->
             when(result){

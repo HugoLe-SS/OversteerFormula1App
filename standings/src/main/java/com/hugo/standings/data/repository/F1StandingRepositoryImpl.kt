@@ -32,23 +32,24 @@ class F1StandingRepositoryImpl @Inject constructor(
         AppLogger.d(message="Inside getConstructorStandings")
         emit(Resource.Loading())
         try {
+
             val constructorStandingsListFromDB = getConstructorStandingsListFromDB()
-            constructorStandingsListFromDB?.also {
-                emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting constructor standings from DB with size ${it.size}")
-            }
 
-            val constructorStandings = f1StandingsApi
-                .getConstructorStandings(season)
-                .toConstructorInfoList()
-
-            if(constructorStandings != constructorStandingsListFromDB){
-                emit(Resource.Success(constructorStandings))
-                AppLogger.d(message = "Success getting constructor standings ${constructorStandings.size}")
-                insertConstructorStandingsListInDB(constructorStandings) // add to RoomDB
+            if(!constructorStandingsListFromDB.isNullOrEmpty()){
+                emit(Resource.Success(constructorStandingsListFromDB))
+                AppLogger.d(message = "Success getting constructor standings from DB with size ${constructorStandingsListFromDB.size}")
             }
             else{
-                AppLogger.d(message = "API data and DB data are identical; skipping update")
+                val constructorStandings = f1StandingsApi
+                    .getConstructorStandings(season)
+                    .toConstructorInfoList()
+
+                insertConstructorStandingsListInDB(constructorStandings) // add to RoomDB
+                AppLogger.d(message = "Success saving constructor standings to DB")
+
+                emit(Resource.Success(constructorStandings))
+                AppLogger.d(message = "Success getting constructor standings ${constructorStandings.size}")
+
             }
 
         }catch (e:Exception){
@@ -106,22 +107,36 @@ class F1StandingRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
         try {
             val driverStandingsListFromDB = getDriverStandingsListFromDB()
-            driverStandingsListFromDB?.also {
-                emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting driver standings from DB with size ${it.size}")
-            }
 
-            val driverStandings = f1StandingsApi.getDriverStandings(season).toDriverStandingsInfoList()
-
-            if(driverStandings != driverStandingsListFromDB)
-            {
-                emit(Resource.Success(driverStandings))
-                AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
-                insertDriverStandingsListInDB(driverStandings) // add to RoomDB
+            if(!driverStandingsListFromDB.isNullOrEmpty()){
+                emit(Resource.Success(driverStandingsListFromDB))
+                AppLogger.d(message = "Success getting driver standings from DB with size ${driverStandingsListFromDB.size}")
             }
             else{
-                AppLogger.d(message = "API data and DB data are identical; skipping update")
+                val driverStandings = f1StandingsApi
+                    .getDriverStandings(season)
+                    .toDriverStandingsInfoList()
+
+                insertDriverStandingsListInDB(driverStandings) // add to RoomDB
+                AppLogger.d(message = "Success saving driver standings to DB")
+
+                emit(Resource.Success(driverStandings))
+                AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
             }
+
+            //            driverStandingsListFromDB?.also {
+//                emit(Resource.Success(it))
+//                AppLogger.d(message = "Success getting driver standings from DB with size ${it.size}")
+//            }
+//            if(driverStandings != driverStandingsListFromDB)
+//            {
+//                emit(Resource.Success(driverStandings))
+//                AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
+//                insertDriverStandingsListInDB(driverStandings) // add to RoomDB
+//            }
+//            else{
+//                AppLogger.d(message = "API data and DB data are identical; skipping update")
+//            }
 
 
         }catch (e:Exception){

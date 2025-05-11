@@ -1,8 +1,8 @@
 package com.hugo.standings.presentation.screens.Home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,18 +13,20 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
+import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.presentation.components.ConstructorListItem
 import com.hugo.standings.presentation.components.DriverListItem
-import com.hugo.standings.presentation.components.SegmentedButton
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
+
 
 @Composable
 fun StandingsHomeScreen(
@@ -32,12 +34,25 @@ fun StandingsHomeScreen(
     viewModel: StandingsHomeViewModel = hiltViewModel(),
     driverCardClicked: (DriverClickInfo) -> Unit = {},
     constructorCardClicked: (ConstructorClickInfo) -> Unit = {}
-){
+) {
     val state = viewModel.state.value
 
     Scaffold(
         topBar = {
-            AppToolbar(isStandingsPage = true)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(AppTheme.colorScheme.background)
+            ) {
+                AppToolbar(isStandingsPage = true)
+                SegmentedButton(
+                    state = state,
+                    viewModel = viewModel,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                )
+            }
         },
         bottomBar = {
             BottomNavBar(
@@ -45,19 +60,28 @@ fun StandingsHomeScreen(
             )
         }
     ) { innerPadding ->
-        when{
+        when {
             state.isLoading -> {
-                CircularProgressIndicator(
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        //.padding(innerPadding)
-                        .size(24.dp),
-                    color = AppTheme.colorScheme.onSecondary
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = AppTheme.colorScheme.onSecondary
+                    )
+                }
+            }
+
+            state.error != null -> {
+                Text(
+                    text = "Error: ${state.error}",
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
-            state.error != null -> {
-                Text(text = "Error: ${state.error}")
-            }
+
             else -> {
                 LazyColumn(
                     modifier = Modifier
@@ -65,11 +89,6 @@ fun StandingsHomeScreen(
                         .padding(innerPadding)
                         .background(AppTheme.colorScheme.background)
                 ) {
-
-                    item{
-                        ToggleButton(state= state, viewModel = viewModel)
-                    }
-
                     when (state.currentType) {
                         StandingsType.CONSTRUCTOR -> {
                             // Constructor Standings
@@ -87,7 +106,6 @@ fun StandingsHomeScreen(
 //                                )
                             }
 
-                            // Constructor List
                             items(state.constructorStandings) { constructors ->
                                 ConstructorListItem(
                                     constructors,
@@ -104,10 +122,10 @@ fun StandingsHomeScreen(
                                             )
                                         )
                                     }
-
                                 )
                             }
                         }
+
                         StandingsType.DRIVER -> {
                             // Driver Standings
                             item{
@@ -121,7 +139,6 @@ fun StandingsHomeScreen(
 //                                )
                             }
 
-                            // Driver List
                             items(state.driverStandings) { drivers ->
                                 DriverListItem(
                                     drivers,
@@ -142,48 +159,43 @@ fun StandingsHomeScreen(
                                             )
                                         )
                                     }
-
                                 )
                             }
                         }
                     }
-
-
                 }
             }
         }
-
     }
 }
 
 @Composable
-fun ToggleButton(state: ConstructorStandingsHomeUiState,
-           viewModel: StandingsHomeViewModel) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        val selectedType = state.currentType
-
-        SegmentedButton(
-            text = "Constructor",
-            selected = selectedType == StandingsType.CONSTRUCTOR,
-            onClick = {
-                if (selectedType != StandingsType.CONSTRUCTOR) {
-                    viewModel.onEvent(ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR))
-                }
-            }
-        )
-        SegmentedButton(
-            text = "Driver",
-            selected = selectedType == StandingsType.DRIVER,
-            onClick = {
-                if (selectedType != StandingsType.DRIVER) {
-                    viewModel.onEvent(ToggleStandingsEvent.SetStandingsType(StandingsType.DRIVER))
-                }
-            }
-        )
+fun SegmentedButton(
+    state: ConstructorStandingsHomeUiState,
+    viewModel: StandingsHomeViewModel,
+    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+) {
+    val selectedIndex = when (state.currentType) {
+        StandingsType.CONSTRUCTOR -> 0
+        StandingsType.DRIVER -> 1
+        else -> 0 // Default to the first option
     }
+    val options = listOf("Constructor", "Driver")
+
+    SingleChoiceSegmentedButton(
+        options = options,
+        selectedIndex = selectedIndex,
+        onOptionSelected = { index ->
+            viewModel.onEvent(
+                when (index) {
+                    0 -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
+                    1 -> ToggleStandingsEvent.SetStandingsType(StandingsType.DRIVER)
+                    else -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
+                }
+            )
+        },
+        modifier = modifier
+    )
 }
+
+
