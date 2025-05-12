@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    implementation(project(":datasource"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

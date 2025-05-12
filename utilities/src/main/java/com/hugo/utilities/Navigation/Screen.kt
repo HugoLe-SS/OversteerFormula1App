@@ -1,6 +1,6 @@
 package com.hugo.utilities.com.hugo.utilities.Navigation
 
-import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import kotlinx.serialization.Serializable
@@ -17,7 +17,7 @@ sealed interface Screen {
     data object StandingsScreen : Screen
 
     @Serializable
-    data class CalendarResultScreen(val info: CalendarClickInfo) : Screen
+    data class CalendarDetailsScreen(val info: F1CalendarInfo) : Screen
 
     @Serializable
     data class StandingsDetailsScreen(val constructorClickInfo: ConstructorClickInfo?= null , val driverClickInfo: DriverClickInfo?= null) : Screen

@@ -10,16 +10,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.result.presentation.screens.ResultScreen
-import com.hugo.schedule.presentation.screens.Details.CalendarResultScreen
+import com.hugo.schedule.presentation.screens.Details.CalendarDetailsScreen
 import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
 import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
 import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType
 import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType.CalendarClickInfoNavType
 import com.hugo.utilities.com.hugo.utilities.Navigation.Screen
-import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import com.hugo.utilities.logging.AppLogger
@@ -72,8 +72,8 @@ fun AppNavGraph() {
             ) {
                 ScheduleHomeScreen(
                     cardClicked = { clickInfo ->
-                        AppLogger.d(message = "ScheduleHomeScreen round: ${clickInfo.round}")
-                        navController.navigate(Screen.CalendarResultScreen(clickInfo))
+                        AppLogger.d(message = "ScheduleHomeScreen circuit: ${clickInfo.circuitId}")
+                        navController.navigate(Screen.CalendarDetailsScreen(clickInfo))
                     },
                     navController = navController
                 )
@@ -107,16 +107,17 @@ fun AppNavGraph() {
                 )
             }
 
-            // Calendar Result Screen
-            composable<Screen.CalendarResultScreen>(
+            // Calendar Details Screen
+            composable<Screen.CalendarDetailsScreen>(
                 typeMap = mapOf(
-                    typeOf<CalendarClickInfo>() to CalendarClickInfoNavType
+                    typeOf<F1CalendarInfo>() to CalendarClickInfoNavType
                 )
             ) { backStackEntry ->
-                val screen: Screen.CalendarResultScreen = backStackEntry.toRoute()
-                CalendarResultScreen(info = screen.info)
+                val screen: Screen.CalendarDetailsScreen = backStackEntry.toRoute()
+                CalendarDetailsScreen(calendarInfo = screen.info)
             }
 
+            // Standings Details Screen
             composable<Screen.StandingsDetailsScreen>(
                 typeMap = mapOf(
                     typeOf<ConstructorClickInfo?>() to CustomNavType.ConstructorClickInfoNavType,

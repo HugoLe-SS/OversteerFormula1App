@@ -20,18 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.schedule.presentation.components.F1CalendarListItem
-import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
+import com.hugo.schedule.presentation.components.HomeScreen.F1CalendarListItem
 
 @Composable
 fun ScheduleHomeScreen(
     navController: NavHostController,
     viewModel: ScheduleHomeViewModel = hiltViewModel(),
-    cardClicked: (CalendarClickInfo) -> Unit = {}
+    cardClicked: (F1CalendarInfo) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -90,13 +90,8 @@ fun ScheduleHomeScreen(
                         items(state.f1Calendar) { race ->
                             F1CalendarListItem(
                                 race,
-                                cardClicked = { info ->
-                                    cardClicked(
-                                        CalendarClickInfo(
-                                            round = info.round,
-                                            circuitId = info.circuitId
-                                        )
-                                    )
+                                cardClicked = { clickInfo ->
+                                    cardClicked(clickInfo)
                                 }
                             )
                         }

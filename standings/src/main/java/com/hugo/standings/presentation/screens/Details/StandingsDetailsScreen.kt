@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.standings.presentation.components.Driver.ConstructorBioList
-import com.hugo.standings.presentation.components.Driver.DriverBioList
-import com.hugo.standings.presentation.components.Driver.StandingsDetailsBannerComponent
+import com.hugo.standings.presentation.components.StandingsDetailScreen.ConstructorBioList
+import com.hugo.standings.presentation.components.StandingsDetailScreen.DriverBioList
+import com.hugo.standings.presentation.components.StandingsDetailScreen.StandingsBannerListItem
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import com.hugo.utilities.logging.AppLogger
@@ -80,7 +80,7 @@ fun StandingsDetailsScreen(
 
                     constructorClickInfo?.let {
                         item{
-                            StandingsDetailsBannerComponent(
+                            StandingsBannerListItem(
                                 constructorDetails = state.constructorDetails,
                                 constructorClickInfo = constructorClickInfo,
                                 buttonClicked = viewResultButtonClicked
@@ -95,7 +95,7 @@ fun StandingsDetailsScreen(
 
                     driverClickInfo?.let {
                         item{
-                            StandingsDetailsBannerComponent(
+                            StandingsBannerListItem(
                                 driverDetails = state.driverDetails,
                                 driverClickInfo = driverClickInfo,
                                 buttonClicked = viewResultButtonClicked

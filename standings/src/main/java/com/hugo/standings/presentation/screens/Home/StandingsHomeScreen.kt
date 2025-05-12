@@ -22,8 +22,8 @@ import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.standings.presentation.components.ConstructorListItem
-import com.hugo.standings.presentation.components.DriverListItem
+import com.hugo.standings.presentation.components.StandingsHomeScreen.ConstructorListItem
+import com.hugo.standings.presentation.components.StandingsHomeScreen.DriverListItem
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 

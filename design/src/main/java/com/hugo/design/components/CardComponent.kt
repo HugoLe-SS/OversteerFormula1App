@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ fun CardComponent(
     color: CardColors = CardDefaults.cardColors(
         containerColor = AppTheme.colorScheme.background
     ),
+    teamColor: Color,
     firstColumnDescription: String? = "",
     firstColumnDetails: String? = "",
     secondColumnDescription: String? = "",
@@ -42,9 +44,9 @@ fun CardComponent(
     circuitImage: Int? = null,
 ){
     Card(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .height(100.dp)
-            //.wrapContentHeight()
             .clickable { cardOnClicked() }
             .padding(12.dp),
         elevation = elevation,
@@ -58,7 +60,8 @@ fun CardComponent(
             thirdColumnDescription = thirdColumnDescription,
             thirdColumnDetails = thirdColumnDetails,
             circuitImage = circuitImage,
-            icon = R.drawable.ic_forward
+            icon = R.drawable.ic_forward,
+            teamColor = teamColor
         )
     }
 }
@@ -73,6 +76,7 @@ fun CardDetails(
     thirdColumnDetails: String?= "",
     circuitImage: Int? = null,
     icon: Int? = null,
+    teamColor: Color
 ){
     Column(
         modifier = Modifier
@@ -91,7 +95,7 @@ fun CardDetails(
                     Text(
                         modifier = Modifier
                             .weight(1f)
-                            .wrapContentSize(),
+                            .fillMaxSize(),
                         textAlign = TextAlign.Center,
                         text = it,
                         style = AppTheme.typography.body,
@@ -103,7 +107,7 @@ fun CardDetails(
                     Text(
                         modifier = Modifier
                             .weight(1f)
-                            .wrapContentSize(),
+                            .fillMaxSize(),
                         textAlign = TextAlign.Center,
                         text = it,
                         style = AppTheme.typography.body,
@@ -139,7 +143,7 @@ fun CardDetails(
                         textAlign = TextAlign.Center,
                         text = it,
                         style = AppTheme.typography.labelSmall,
-                        color = AppTheme.colorScheme.onSecondary,
+                        color = teamColor,
                     )
                 }
 
@@ -148,13 +152,13 @@ fun CardDetails(
             //Column 3
             Column(
                 modifier = Modifier
-                    .weight(1f),
+                    .weight(1f)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 if(circuitImage != null){
                     ImageComponent(
-                        modifier = Modifier
-                            .wrapContentSize(),
                         contentScale = ContentScale.Fit,
                         imageResourceValue = circuitImage,
                         contentDescription = "Circuit Image",
@@ -215,12 +219,13 @@ fun CardDetails(
 fun CardComponentPreview() {
     AppTheme(isDarkTheme = true) {
         CardComponent(
-            firstColumnDescription = "Driver",
-            firstColumnDetails = "Lewis Hamilton",
+            firstColumnDescription = "16",
+            firstColumnDetails = "Mar",
             secondColumnDescription = "Constructor",
             secondColumnDetails = "Mercedes",
             thirdColumnDescription = "Points",
-            thirdColumnDetails = "PTS"
+            thirdColumnDetails = "PTS",
+            teamColor = Color.Cyan
         )
     }
 }
