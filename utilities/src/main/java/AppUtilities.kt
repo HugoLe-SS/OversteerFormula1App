@@ -1,5 +1,8 @@
 package com.hugo.utilities
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 object AppUtilities {
     fun calculatePositionChange(grid: String, position: String): String {
         val gridValue = grid.toInt()
@@ -13,6 +16,17 @@ object AppUtilities {
         }
     }
 
+
+    fun parseDate(dateString: String): Triple<Int, Int, Int> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.parse(dateString, formatter)
+
+        val year = date.year
+        val month = date.monthValue
+        val day = date.dayOfMonth
+
+        return Triple(year, month, day)
+    }
 
 
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.utilities.AppUtilities
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.CalendarClickInfo
 
 //@Composable
@@ -132,6 +133,8 @@ fun F1CalendarListItem(
     calendar: F1CalendarInfo,
     cardClicked: (CalendarClickInfo) -> Unit = {}
 ){
+    val raceDate = AppUtilities.parseDate(calendar.mainRaceDate)
+
     Card (
         modifier = Modifier
             .fillMaxWidth()
@@ -158,7 +161,7 @@ fun F1CalendarListItem(
                 .padding(12.dp),
         ) {
             //row 1
-            Row(
+              Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 4.dp),
@@ -168,7 +171,7 @@ fun F1CalendarListItem(
                         //.wrapContentSize()
                         .weight(2f),
                     //textAlign = TextAlign.Center,
-                    text = "${calendar.mainRaceDate} ",
+                    text = "${raceDate.third} ",
                     style = AppTheme.typography.body,
                     color = AppTheme.colorScheme.onSecondary,
                 )

@@ -59,7 +59,7 @@ private val typography = AppTypography(
     labelSmall =  TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Thin,
-        fontSize = 18.sp
+        fontSize = 16.sp
     )
 )
 
