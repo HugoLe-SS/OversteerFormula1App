@@ -11,6 +11,7 @@ data class DriverDetails(
     @PrimaryKey(autoGenerate = false)
     val driverId: String,
     val driverInfo: List<String>?= null,
+    val driverStats: List<String>?= null,
     val imageUrl: String?= null,
     val firstEntry: String?= null,
     val firstWin: String?= null,

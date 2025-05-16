@@ -10,9 +10,9 @@ import kotlinx.serialization.Serializable
 data class ConstructorDetails(
     @PrimaryKey(autoGenerate = false)
     val constructorId: String,
-
     val firstDriver: List<String>?= null,
     val secondDriver: List<String>?= null,
+    val constructorStats: List<String>?= null,
     val imageUrl: String?= null,
     val chassis: String?= null,
     val powerUnit: String?= null,

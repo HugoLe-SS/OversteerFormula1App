@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Driver.DriverDetails
+import com.hugo.design.R.drawable
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
@@ -34,19 +35,19 @@ import com.hugo.standings.R
         verticalArrangement = Arrangement.Center
     ){
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_trophy,
+            imageResourceValue = drawable.ic_trophy,
             info = driverDetails.driverInfo?.getOrNull(0) ?: "",
             infoTag = stringResource(R.string.driver_code)
         )
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = driverDetails.driverInfo?.getOrNull(1) ?: "",
             infoTag = stringResource(R.string.team)
         )
 
         StandingsBioItem(
-            imageResourceValue = com.hugo.design.R.drawable.ic_calendar,
+            imageResourceValue = drawable.ic_calendar,
             info = "${driverDetails.firstEntry}",
             infoTag = stringResource(R.string.first_entry)
         )
@@ -58,26 +59,26 @@ import com.hugo.standings.R
                 infoTag = stringResource(R.string.first_win)
             )
         } ?: StandingsBioItem(
-            imageResourceValue = R.drawable.ic_trophy,
+            imageResourceValue = drawable.ic_trophy,
             info = "${driverDetails.firstPodium}",
             infoTag = stringResource(R.string.first_podium)
         )
 
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = "${driverDetails.wdc}",
             infoTag = stringResource(R.string.world_championships)
         )
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = driverDetails.driverInfo?.getOrNull(2) ?: "",
             infoTag = stringResource(R.string.date_of_birth)
         )
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = driverDetails.driverInfo?.getOrNull(3) ?: "",
             infoTag = stringResource(R.string.nationality)
         )
@@ -97,49 +98,49 @@ import com.hugo.standings.R
         verticalArrangement = Arrangement.Center
     ){
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = constructorDetails.firstDriver?.getOrNull(1) ?: "",
             infoTag = constructorDetails.firstDriver?.getOrNull(2) ?: "",
         )
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = constructorDetails.secondDriver?.getOrNull(1) ?: "",
             infoTag = constructorDetails.secondDriver?.getOrNull(2) ?: "",
         )
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = constructorDetails.chassis?: "",
             infoTag = stringResource(R.string.chassis)
         )
 
         StandingsBioItem(
-            imageResourceValue = R.drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_mclaren,
             info = constructorDetails.powerUnit?: "",
             infoTag = stringResource(R.string.power_unit)
         )
 
         StandingsBioItem(
-            imageResourceValue = com.hugo.design.R.drawable.ic_person,
+            imageResourceValue = drawable.ic_person,
             info = "${constructorDetails.teamPrincipal}",
             infoTag = stringResource(R.string.team_principal)
         )
 
         StandingsBioItem(
-            imageResourceValue = com.hugo.design.R.drawable.ic_trophy,
+            imageResourceValue = drawable.ic_trophy,
             info = "${constructorDetails.firstEntry}",
             infoTag = stringResource(R.string.first_entry)
         )
 
         StandingsBioItem(
-            imageResourceValue = com.hugo.design.R.drawable.ic_trophy,
+            imageResourceValue = drawable.ic_trophy,
             info = "${constructorDetails.wcc}",
             infoTag = "Constructors Championship"
         )
 
         StandingsBioItem(
-            imageResourceValue = com.hugo.design.R.drawable.ic_trophy,
+            imageResourceValue = drawable.ic_trophy,
             info = "${constructorDetails.wdc}",
             infoTag = "Drivers Championship"
         )

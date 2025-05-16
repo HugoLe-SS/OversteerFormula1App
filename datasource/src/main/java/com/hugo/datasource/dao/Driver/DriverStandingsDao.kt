@@ -18,5 +18,4 @@ interface DriverStandingsDao : BaseDao<DriverStandingsInfo> {
 
         @Query("DELETE FROM ${TableConstants.DRIVER_STANDINGS_LIST}")
         fun deleteAllDriverStandingsListFromDB()
-
 }

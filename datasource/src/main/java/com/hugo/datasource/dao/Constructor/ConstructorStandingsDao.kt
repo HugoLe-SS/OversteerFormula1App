@@ -20,6 +20,5 @@ interface ConstructorStandingsDao: BaseDao<ConstructorStandingsInfo> {
     @Query("DELETE FROM ${TableConstants.CONSTRUCTOR_STANDINGS_LIST}")
     fun deleteAllConstructorStandingsListFromDB()
 
-
 }
 

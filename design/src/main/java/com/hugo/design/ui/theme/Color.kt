@@ -29,9 +29,9 @@ object AppColors {
             val colors: Map<String, Color> = mapOf(
                 "North America" to Color(0xFF008000),
                 "South America" to Color(0xFF7F00FF),
-                "Asia" to Color(0xFF0000FF),
+                "Asia" to Color(0xFF00A1E8),
                 "Africa" to Color(0xFFFFFF00),
-                "Europe" to Color(0xFFB31B1B),
+                "Europe" to Color(0xFFE80020),
                 "Oceania" to Color(0xFFFF8000),
             )
 
