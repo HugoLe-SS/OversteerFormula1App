@@ -22,7 +22,7 @@ fun F1CalendarBannerListItem(
     val mainRaceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
     val fp1Date = AppUtilities.parseDate(calendarInfo.firstPractice?.date?:"")
 
-    val gradientBrush = Brush.horizontalGradient(
+    val gradientBrush = Brush.verticalGradient(
         colors = listOf(
             AppTheme.colorScheme.background,
             circuitColor.copy(alpha = 0.6f),

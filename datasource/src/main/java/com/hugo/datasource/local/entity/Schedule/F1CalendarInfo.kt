@@ -17,6 +17,7 @@ data class F1CalendarInfo(
     val circuit: String,
     val raceName: String,
     val locality: String,
+    val country: String,
     val mainRaceDate: String,
     val mainRaceTime: String,
     val firstPractice: SessionInfo?,

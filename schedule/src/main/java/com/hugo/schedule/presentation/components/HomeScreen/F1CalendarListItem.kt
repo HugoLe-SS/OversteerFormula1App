@@ -23,6 +23,7 @@ fun F1CalendarListItem(
     val raceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
     val teamColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
     val raceName = calendarInfo.raceName.toShortGPFormat()
+
     CardComponent(
         cardOnClicked ={
             cardClicked(
@@ -33,7 +34,7 @@ fun F1CalendarListItem(
         firstColumnDetails = "${raceDate?.monthShort} ",
         secondColumnDescription = "$raceName ",
         secondColumnDetails = "${calendarInfo.locality} ",
-        circuitImage = R.drawable.ic_mclaren,
+        circuitImage = R.drawable.flag_usa,
         teamColor = teamColor,
     )
 
@@ -44,6 +45,6 @@ fun F1CalendarListItem(
             .background(AppTheme.colorScheme.onBackground)
     )
 
-
-
 }
+
+

@@ -223,6 +223,7 @@ fun CardComponentPreview() {
             firstColumnDetails = "Mar",
             secondColumnDescription = "Constructor",
             secondColumnDetails = "Mercedes",
+            circuitImage = R.drawable.flag_belgium,
             thirdColumnDescription = "Points",
             thirdColumnDetails = "PTS",
             teamColor = Color.Cyan
