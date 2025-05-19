@@ -1,7 +1,5 @@
 package com.hugo.standings.presentation.screens.Home
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hugo.standings.domain.usecase.GetConstructorStandingsUseCase
@@ -9,8 +7,11 @@ import com.hugo.standings.domain.usecase.GetDriverStandingsUseCase
 import com.hugo.utilities.Resource
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,8 +20,8 @@ class StandingsHomeViewModel @Inject constructor(
     private val getDriverStandingsUseCase: GetDriverStandingsUseCase
 ): ViewModel() {
 
-    private val _state = mutableStateOf(ConstructorStandingsHomeUiState())
-    val state: MutableState<ConstructorStandingsHomeUiState> = _state
+    private val _state = MutableStateFlow(ConstructorStandingsHomeUiState())
+    val state: StateFlow<ConstructorStandingsHomeUiState> = _state
 
     init{
         AppLogger.d(message = "Inside StandingsHomeViewModel")
@@ -34,19 +35,28 @@ class StandingsHomeViewModel @Inject constructor(
         getConstructorStandingsUseCase(season = season).onEach{ result ->
             when(result){
                 is Resource.Loading -> {
-                    _state.value = ConstructorStandingsHomeUiState(isLoading = true)
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            error = null
+                        )
+                    }
                 }
                 is Resource.Success -> {
-                    _state.value = ConstructorStandingsHomeUiState(
-                        isLoading = false,
-                        constructorStandings = result.data ?: emptyList()
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            constructorStandings = result.data ?: emptyList()
+                        )
+                    }
                 }
                 is Resource.Error -> {
-                    _state.value = ConstructorStandingsHomeUiState(
-                        isLoading = false,
-                        error = result.message
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
                 }
                 else -> Unit
             }
@@ -59,21 +69,29 @@ class StandingsHomeViewModel @Inject constructor(
         getDriverStandingsUseCase(season = season).onEach{result ->
             when(result){
                 is Resource.Loading -> {
-                    _state.value = _state.value.copy(
-                        isLoading = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            error = null
+                        )
+                    }
                 }
+
                 is Resource.Success -> {
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        driverStandings = result.data ?: emptyList()
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            driverStandings = result.data ?: emptyList()
+                        )
+                    }
                 }
                 is Resource.Error -> {
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        error = result.message
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
                 }
                 else -> Unit
             }
@@ -88,6 +106,7 @@ class StandingsHomeViewModel @Inject constructor(
         }
     }
 
+
     fun onEvent(event: ToggleStandingsEvent) {
         when (event) {
             is ToggleStandingsEvent.ToggleStandingsType -> {
@@ -97,8 +116,7 @@ class StandingsHomeViewModel @Inject constructor(
                         StandingsType.DRIVER -> StandingsType.CONSTRUCTOR
                     }
                 )
-                loadStandings()
-                AppLogger.d(message = "${state.value.currentType}")
+                AppLogger.d(message = "${_state.value.currentType}")
             }
 
             is ToggleStandingsEvent.SetStandingsType -> {

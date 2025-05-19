@@ -27,7 +27,7 @@ fun StandingsBannerListItem(
         AppColors.Teams.colors[constructorClickInfo?.constructorId] ?: AppTheme.colorScheme.onSecondary
     }
 
-    val gradientBrush = Brush.horizontalGradient(
+    val gradientBrush = Brush.verticalGradient(
         colors = listOf(
             AppTheme.colorScheme.background,
             teamColor.copy(alpha = 0.6f),

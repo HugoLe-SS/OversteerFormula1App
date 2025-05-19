@@ -13,6 +13,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
-import com.hugo.design.components.SingleChoiceSegmentedButton
+import com.hugo.design.components.SegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
 import com.hugo.standings.presentation.components.Driver.StandingsBannerComponent
@@ -37,9 +39,14 @@ fun StandingsHomeScreen(
     driverCardClicked: (DriverClickInfo) -> Unit = {},
     constructorCardClicked: (ConstructorClickInfo) -> Unit = {}
 ) {
-    val state = viewModel.state.value
+    val state by viewModel.state.collectAsState()
 
-
+    val selectedIndex = when (state.currentType) {
+        StandingsType.CONSTRUCTOR -> 0
+        StandingsType.DRIVER -> 1
+        else -> 0 // Default to the first option
+    }
+    val options = listOf("Constructor", "Driver")
 
     Scaffold(
         topBar = {
@@ -50,8 +57,15 @@ fun StandingsHomeScreen(
             ) {
                 AppToolbar(isStandingsPage = true)
                 SegmentedButton(
-                    state = state,
-                    viewModel = viewModel,
+                    options = options,
+                    selectedIndex = selectedIndex,
+                    onOptionSelected = { index ->
+                        viewModel.onEvent(
+                            ToggleStandingsEvent.SetStandingsType(
+                                if (index == 0) StandingsType.CONSTRUCTOR else StandingsType.DRIVER
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -96,7 +110,7 @@ fun StandingsHomeScreen(
                     when (state.currentType) {
                         StandingsType.CONSTRUCTOR -> {
                             // Constructor Standings
-                            state.constructorStandings?.let{
+                            state.constructorStandings.let{
                                 item{
                                     StandingsBannerComponent(
                                         constructorInfo = it[0],
@@ -127,7 +141,7 @@ fun StandingsHomeScreen(
 
                         StandingsType.DRIVER -> {
                             // Driver Standings
-                            state.driverStandings?.let{
+                            state.driverStandings.let{
                                 item{
                                     StandingsBannerComponent(
                                         driverInfo = it[0],
@@ -165,37 +179,6 @@ fun StandingsHomeScreen(
             }
         }
     }
-}
-
-@Composable
-fun SegmentedButton(
-    state: ConstructorStandingsHomeUiState,
-    viewModel: StandingsHomeViewModel,
-    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-) {
-    val selectedIndex = when (state.currentType) {
-        StandingsType.CONSTRUCTOR -> 0
-        StandingsType.DRIVER -> 1
-        else -> 0 // Default to the first option
-    }
-    val options = listOf("Constructor", "Driver")
-
-    SingleChoiceSegmentedButton(
-        options = options,
-        selectedIndex = selectedIndex,
-        onOptionSelected = { index ->
-            viewModel.onEvent(
-                when (index) {
-                    0 -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
-                    1 -> ToggleStandingsEvent.SetStandingsType(StandingsType.DRIVER)
-                    else -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
-                }
-            )
-        },
-        modifier = modifier
-    )
-
-
 }
 
 

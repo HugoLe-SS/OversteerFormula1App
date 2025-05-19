@@ -11,6 +11,25 @@ import com.hugo.design.ui.theme.AppTheme
 
 // Mot se cho vao trong AppTopbar
 
+
+@Composable
+fun SegmentedButton(
+    options: List<String>,
+    selectedIndex: Int,
+    onOptionSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    SingleChoiceSegmentedButton(
+        options = options,
+        selectedIndex = selectedIndex,
+        onOptionSelected = { index ->
+            onOptionSelected(index)
+        },
+        modifier = modifier
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleChoiceSegmentedButton(
