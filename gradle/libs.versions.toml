@@ -27,6 +27,7 @@ supabaseBomVersion = "3.1.2"
 ktorVersion = "3.1.1"
 ksp-version = "2.1.20-1.0.31"
 uiGraphics = "1.0.1"
+composeTesting = "1.0.0-alpha04"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -69,6 +70,7 @@ supabase-bom = {group = "io.github.jan-tennert.supabase", name = "bom", version.
 postgrest-kt = {module = "io.github.jan-tennert.supabase:postgrest-kt"}
 ktor-client-android = {module = "io.ktor:ktor-client-android", version.ref = "ktorVersion"}
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
+androidx-compose-testing = { group = "androidx.xr.compose", name = "compose-testing", version.ref = "composeTesting" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

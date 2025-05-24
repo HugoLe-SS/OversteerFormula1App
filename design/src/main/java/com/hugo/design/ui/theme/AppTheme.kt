@@ -49,17 +49,17 @@ private val typography = AppTypography(
     labelLarge =  TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Normal,
-        fontSize = 32.sp
+        fontSize = 24.sp
     ),
     labelNormal =  TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp
+        fontSize = 16.sp
     ),
     labelSmall =  TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Thin,
-        fontSize = 16.sp
+        fontSize = 12.sp
     )
 )
 

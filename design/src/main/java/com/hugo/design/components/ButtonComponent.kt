@@ -15,7 +15,7 @@ import com.hugo.design.ui.theme.AppTheme
 @Composable
 fun ButtonComponent(
     text: String = "Button",
-    buttonColor: Color = AppTheme.colorScheme.secondary,
+    buttonColor: Color = AppTheme.colorScheme.background,
     textColor: Color = AppTheme.colorScheme.onSecondary,
     buttonClicked: () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -41,7 +41,7 @@ fun ButtonComponent(
     ) {
         Text(
             text = text,
-            style = AppTheme.typography.labelSmall,
+            style = AppTheme.typography.labelNormal,
         )
     }
 }

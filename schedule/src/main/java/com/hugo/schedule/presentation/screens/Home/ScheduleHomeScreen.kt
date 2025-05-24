@@ -13,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,9 +24,10 @@ import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
-import com.hugo.design.components.SingleChoiceSegmentedButton
+import com.hugo.design.components.SegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.HomeScreen.F1CalendarListItem
+import com.hugo.schedule.presentation.components.HomeScreen.ScheduleBannerComponent
 
 @Composable
 fun ScheduleHomeScreen(
@@ -34,6 +36,21 @@ fun ScheduleHomeScreen(
     cardClicked: (F1CalendarInfo) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
+    val filteredEvents by viewModel.filteredEvents.collectAsState()
+    val countdown by viewModel.countdown.collectAsState()
+
+    LaunchedEffect(key1 = filteredEvents.firstOrNull()) {
+        filteredEvents.firstOrNull()?.let {
+            viewModel.updateCountdownFromSessions(it)
+        }
+    }
+
+    val options = listOf("Upcoming", "Past")
+    val selectedIndex = when (state.currentType) {
+        ScheduleType.UPCOMING -> 0
+        ScheduleType.PAST -> 1
+        else -> 0
+    }
 
     Scaffold(
         topBar = {
@@ -44,8 +61,15 @@ fun ScheduleHomeScreen(
             ) {
                 AppToolbar(isStandingsPage = true)
                 SegmentedButton(
-                    state = state,
-                    viewModel = viewModel,
+                    options = options,
+                    selectedIndex = selectedIndex,
+                    onOptionSelected = { index ->
+                        viewModel.onEvent(
+                            ToggleScheduleEvent.SetScheduleType(
+                                if (index == 0) ScheduleType.UPCOMING else ScheduleType.PAST
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -87,7 +111,34 @@ fun ScheduleHomeScreen(
                             .padding(innerPadding)
                             .background(AppTheme.colorScheme.background)
                     ) {
-                        items(state.f1Calendar) { race ->
+                        when(state.currentType){
+                            ScheduleType.UPCOMING ->{
+                                filteredEvents.let{ calendar ->
+                                    item{
+                                        ScheduleBannerComponent(
+                                            calendarInfo = calendar[0],
+                                            imageUrl = com.hugo.design.R.drawable.circuit_monaco,
+                                            countdown = countdown
+                                        )
+                                    }
+                                }
+                            }
+
+                            ScheduleType.PAST ->{
+                                filteredEvents.let{ calendar ->
+                                    item{
+                                        ScheduleBannerComponent(
+                                            calendarInfo = calendar[0],
+                                            imageUrl = com.hugo.design.R.drawable.circuit_monaco,
+                                            countdown = countdown
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+
+                        items(filteredEvents) { race ->
                             F1CalendarListItem(
                                 race,
                                 cardClicked = { clickInfo ->
@@ -104,34 +155,6 @@ fun ScheduleHomeScreen(
 
 }
 
-@Composable
-fun SegmentedButton(
-    state: ScheduleHomeUiState,
-    viewModel: ScheduleHomeViewModel,
-    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-) {
-    val selectedIndex = when (state.currentType) {
-        ScheduleType.UPCOMING -> 0
-        ScheduleType.PAST -> 1
-        else -> 0 // Default to the first option
-    }
-    val options = listOf("Upcoming", "Past")
-
-    SingleChoiceSegmentedButton(
-        options = options,
-        selectedIndex = selectedIndex,
-        onOptionSelected = { index ->
-//                viewModel.onEvent(
-//                    when (index) {
-//                        0 -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
-//                        1 -> ToggleStandingsEvent.SetStandingsType(StandingsType.DRIVER)
-//                        else -> ToggleStandingsEvent.SetStandingsType(StandingsType.CONSTRUCTOR)
-//                    }
-//                )
-        },
-        modifier = modifier
-    )
-}
 
 
 

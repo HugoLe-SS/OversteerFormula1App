@@ -68,7 +68,7 @@ fun StandingsDetailsBannerComponent(
                 //Season
                 Text(
                     text = "$season season",
-                    style = AppTheme.typography.labelSmall,
+                    style = AppTheme.typography.labelNormal,
                     color = AppTheme.colorScheme.onSecondary,
                 )
 
@@ -224,7 +224,7 @@ fun ScheduleDetailsBannerComponent(
                 //Round
                 Text(
                     text = "Round $round ",
-                    style = AppTheme.typography.labelSmall,
+                    style = AppTheme.typography.labelNormal,
                     color = AppTheme.colorScheme.onSecondary,
                 )
 
@@ -244,7 +244,7 @@ fun ScheduleDetailsBannerComponent(
                 //date
                 Text(
                     text = date,
-                    style = AppTheme.typography.labelSmall,
+                    style = AppTheme.typography.labelNormal,
                     color = AppTheme.colorScheme.onSecondary,
                 )
 
@@ -367,7 +367,7 @@ fun DetailsRow(
         )
         Text(
             text = description,
-            style = AppTheme.typography.labelSmall,
+            style = AppTheme.typography.labelNormal,
             color = textColor
         )
     }

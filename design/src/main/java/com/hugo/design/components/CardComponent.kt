@@ -142,7 +142,7 @@ fun CardDetails(
                             .wrapContentSize(),
                         textAlign = TextAlign.Center,
                         text = it,
-                        style = AppTheme.typography.labelSmall,
+                        style = AppTheme.typography.labelNormal,
                         color = teamColor,
                     )
                 }
@@ -184,7 +184,7 @@ fun CardDetails(
                                 .wrapContentSize(),
                             textAlign = TextAlign.Center,
                             text = it,
-                            style = AppTheme.typography.labelSmall,
+                            style = AppTheme.typography.labelNormal,
                             color = AppTheme.colorScheme.onSecondary,
                         )
                     }
