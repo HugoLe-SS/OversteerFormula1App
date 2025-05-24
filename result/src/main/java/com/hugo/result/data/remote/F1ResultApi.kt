@@ -35,4 +35,5 @@ interface F1ResultApi {
         @Path("season") season: String,
         @Path("constructorId") constructorId: String
     ): ConstructorQualifyingResultDto
+
 }

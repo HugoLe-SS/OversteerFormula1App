@@ -11,9 +11,6 @@ interface F1ScheduleApi {
     @GET("ergast/f1/{season}")
     suspend fun getF1Calendar(@Path("season") season: String): F1CalendarDto
 
-    //F1 circuit info
-
-
     //Result
     @GET("ergast/f1/{season}/circuits/{circuitId}/results")
     suspend fun getF1CalendarResults(

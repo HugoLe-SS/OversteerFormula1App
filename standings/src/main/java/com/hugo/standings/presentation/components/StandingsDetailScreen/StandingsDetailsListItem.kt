@@ -181,7 +181,7 @@ fun StandingsBioItem(
             )
             Text(
                 text = infoTag,
-                style = AppTheme.typography.labelSmall,
+                style = AppTheme.typography.labelNormal,
                 color = AppTheme.colorScheme.onSecondary,
             )
         }

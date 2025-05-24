@@ -23,7 +23,7 @@ sealed interface Screen {
     data class StandingsDetailsScreen(val constructorClickInfo: ConstructorClickInfo?= null , val driverClickInfo: DriverClickInfo?= null) : Screen
 
     @Serializable
-    data class ResultScreen(val driverId: String?= null, val constructorId: String?= null) : Screen
+    data class ResultScreen(val driverId: String?= null, val constructorId: String?= null, val circuitId: String?= null) : Screen
 
 }
 

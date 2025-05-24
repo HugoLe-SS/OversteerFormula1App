@@ -110,10 +110,10 @@ fun StandingsHomeScreen(
                     when (state.currentType) {
                         StandingsType.CONSTRUCTOR -> {
                             // Constructor Standings
-                            state.constructorStandings.let{
+                            state.constructorStandings.let{ constructors ->
                                 item{
                                     StandingsBannerComponent(
-                                        constructorInfo = it[0],
+                                        constructorInfo = constructors[0],
                                         imageUrl = R.drawable.mclaren
                                     )
                                 }
