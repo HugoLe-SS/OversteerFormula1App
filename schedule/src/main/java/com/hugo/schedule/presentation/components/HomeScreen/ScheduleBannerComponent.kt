@@ -26,21 +26,23 @@ import com.hugo.design.ui.theme.AppColors
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.R
 import com.hugo.utilities.AppUtilities
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CountDownInfo
 
 @Composable
 fun ScheduleBannerComponent(
     calendarInfo: F1CalendarInfo?= null,
-    countdown: AppUtilities.CountDownInfo?= null,
-    imageUrl: Int,
+    countdown: CountDownInfo?= null,
+    imageUrl: Int? = null,
     buttonClicked: () -> Unit = {},
 
-){
+    ){
     val circuitColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo?.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
     val mainRaceDate = AppUtilities.parseDate(calendarInfo?.mainRaceDate)
     val fp1Date = AppUtilities.parseDate(calendarInfo?.firstPractice?.date?:"")
 
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(
+            AppTheme.colorScheme.background,
             circuitColor.copy(alpha = 0.6f),
             AppTheme.colorScheme.background,
         )
@@ -261,7 +263,8 @@ fun ScheduleBannerComponent(
         ButtonComponent(
             modifier = Modifier
                 .weight(1f)
-                .align(Alignment.End),
+                .align(Alignment.End)
+                .padding(end = 12.dp),
             text = stringResource(R.string.view_schedule),
             buttonClicked = buttonClicked
         )
@@ -311,7 +314,7 @@ fun ScheduleBannerComponentPreview(){
                 )
             ),
             imageUrl = com.hugo.design.R.drawable.circuit_monaco,
-            countdown = AppUtilities.CountDownInfo(
+            countdown = CountDownInfo(
                 sessionName = "FP1",
                 days = "1",
                 hours = "20",

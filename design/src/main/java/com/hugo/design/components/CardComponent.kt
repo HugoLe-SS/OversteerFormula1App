@@ -2,6 +2,7 @@ package com.hugo.design.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -88,31 +89,41 @@ fun CardDetails(
             //Column 1
             Column(
                 modifier = Modifier
-                    .weight(1f),
+                    .weight(1f)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
             ) {
                 firstColumnDescription?.also {
-                    Text(
+                    Box(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxSize(),
-                        textAlign = TextAlign.Center,
-                        text = it,
-                        style = AppTheme.typography.body,
-                        color = AppTheme.colorScheme.onSecondary,
-                    )
+                        contentAlignment = Alignment.Center
+                    ){
+                        Text(
+                            text = it,
+                            style = AppTheme.typography.labelNormal,
+                            color = AppTheme.colorScheme.onSecondary,
+                        )
+                    }
+
                 }
 
                 firstColumnDetails?.also {
-                    Text(
+                    Box(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxSize(),
-                        textAlign = TextAlign.Center,
-                        text = it,
-                        style = AppTheme.typography.body,
-                        color = AppTheme.colorScheme.onSecondary,
-                    )
+                        contentAlignment = Alignment.Center
+                    ){
+                        Text(
+                            text = it,
+                            style = AppTheme.typography.labelSmall,
+                            color = AppTheme.colorScheme.onSecondary,
+                        )
+                    }
+
                 }
 
             }
@@ -130,7 +141,7 @@ fun CardDetails(
                             .wrapContentSize(),
                         textAlign = TextAlign.Center,
                         text = it,
-                        style = AppTheme.typography.body,
+                        style = AppTheme.typography.titleNormal,
                         color = AppTheme.colorScheme.onSecondary,
                     )
                 }
@@ -142,7 +153,7 @@ fun CardDetails(
                             .wrapContentSize(),
                         textAlign = TextAlign.Center,
                         text = it,
-                        style = AppTheme.typography.labelNormal,
+                        style = AppTheme.typography.labelSmall,
                         color = teamColor,
                     )
                 }
@@ -172,7 +183,7 @@ fun CardDetails(
                                 .wrapContentSize(),
                             textAlign = TextAlign.Center,
                             text = it,
-                            style = AppTheme.typography.body,
+                            style = AppTheme.typography.titleNormal,
                             color = AppTheme.colorScheme.onSecondary,
                         )
                     }

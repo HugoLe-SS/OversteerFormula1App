@@ -7,6 +7,8 @@ import com.hugo.schedule.domain.usecase.GetF1CalendarUseCase
 import com.hugo.utilities.AppUtilities
 import com.hugo.utilities.AppUtilities.getNextUpcomingSession
 import com.hugo.utilities.Resource
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CountDownInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.Session
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -30,10 +32,10 @@ class ScheduleHomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(ScheduleHomeUiState())
     val state: StateFlow<ScheduleHomeUiState> = _state
 
-    private val _countdown = MutableStateFlow<AppUtilities.CountDownInfo?>(null)
-    val countdown: StateFlow<AppUtilities.CountDownInfo?> = _countdown
+    private val _countdown = MutableStateFlow<CountDownInfo?>(null)
+    val countdown: StateFlow<CountDownInfo?> = _countdown
 
-    private val _nextSession = MutableStateFlow<AppUtilities.Session?>(null)
+    private val _nextSession = MutableStateFlow<Session?>(null)
     //val nextSession: StateFlow<AppUtilities.Session?> = _nextSession
 
     val filteredEvents = _state
@@ -63,7 +65,7 @@ class ScheduleHomeViewModel @Inject constructor(
         getF1Calendar(season = "current")
     }
 
-    private fun startCountdown(session: AppUtilities.Session?) {
+    private fun startCountdown(session: Session?) {
         viewModelScope.launch {
             if (session == null) {
                 _countdown.value = null
@@ -111,44 +113,16 @@ class ScheduleHomeViewModel @Inject constructor(
         }
     }
 
-//    private fun startCountdown(session: AppUtilities.Session?) {
-//        viewModelScope.launch {
-//            if (session == null) return@launch
-//
-//            val sessionStartMillis = AppUtilities.convertToMillis(session.date?:"", session.time?:"")
-//            val sessionEndMillis = sessionStartMillis + (session.sessionDuration.times(60 * 1000))
-//
-//
-//            while (true) {
-//                val now = System.currentTimeMillis()
-//
-//                // Stop countdown when session ends
-//                if (now >= sessionEndMillis) {
-//                    val calendar = _state.value.f1Calendar
-//                    val currentEvent = calendar.firstOrNull { it.mainRaceDate == session.date } // crude match
-//                    currentEvent?.let {
-//                        updateCountdownFromSessions(it)
-//                    }
-//                    break
-//                }
-//
-//                _countdown.value = AppUtilities.formatToDaysHoursMinutes(session.name,session.date, session.time, session.sessionDuration)
-//
-//                // restart countdown every minute
-//                delay(60_000L)
-//            }
-//        }
-//    }
 
     fun updateCountdownFromSessions(info: F1CalendarInfo) {
         val sessions = listOf(
-            AppUtilities.Session(name = "FP1", date = info.firstPractice?.date, time = info.firstPractice?.time, sessionDuration = 60),
-            AppUtilities.Session(name = "FP2", date = info.secondPractice?.date, time = info.secondPractice?.time, sessionDuration = 60 ),
-            AppUtilities.Session(name = "FP3", date = info.thirdPractice?.date, time = info.thirdPractice?.time, sessionDuration = 60),
-            AppUtilities.Session(name = "Qualifying", date = info.qualifying?.date, time = info.qualifying?.time, sessionDuration = 45),
-            AppUtilities.Session(name = "Main Race", date = info.mainRaceDate, time = info.mainRaceTime, sessionDuration = 120),
-            AppUtilities.Session(name = "Sprint Qualifying", date = info.sprintQualifying?.date, time = info.sprintQualifying?.time, sessionDuration = 30),
-            AppUtilities.Session(name = "Sprint Race", date = info.sprintRace?.date, time = info.sprintRace?.time, sessionDuration = 30),
+            Session(name = "FP1", date = info.firstPractice?.date, time = info.firstPractice?.time, sessionDuration = 60),
+            Session(name = "FP2", date = info.secondPractice?.date, time = info.secondPractice?.time, sessionDuration = 60 ),
+            Session(name = "FP3", date = info.thirdPractice?.date, time = info.thirdPractice?.time, sessionDuration = 60),
+            Session(name = "Qualifying", date = info.qualifying?.date, time = info.qualifying?.time, sessionDuration = 70),
+            Session(name = "Main Race", date = info.mainRaceDate, time = info.mainRaceTime, sessionDuration = 120),
+            Session(name = "Sprint Qualifying", date = info.sprintQualifying?.date, time = info.sprintQualifying?.time, sessionDuration = 30),
+            Session(name = "Sprint Race", date = info.sprintRace?.date, time = info.sprintRace?.time, sessionDuration = 30),
         )
 
         val next = getNextUpcomingSession(sessions)

@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.R
-import com.hugo.utilities.AppUtilities
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CountDownInfo
 
 
 @Composable
 fun ProgressBarComponent(
-    countdown: AppUtilities.CountDownInfo?,
+    countdown: CountDownInfo?,
     color: Color
 ) {
     if (countdown?.status == "Live") {
@@ -88,7 +88,7 @@ fun ProgressBarComponent(
 fun ProgressBarPreview(){
     AppTheme(isDarkTheme = true){
         ProgressBarComponent(
-            countdown = AppUtilities.CountDownInfo(
+            countdown = CountDownInfo(
                 sessionName = "FP1",
                 days = "",
                 hours = "",

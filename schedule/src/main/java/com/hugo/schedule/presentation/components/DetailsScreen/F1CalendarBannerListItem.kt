@@ -17,6 +17,7 @@ import com.hugo.utilities.AppUtilities
 fun F1CalendarBannerListItem(
     circuitDetails: F1CircuitDetails,
     calendarInfo: F1CalendarInfo,
+    viewResultButtonClicked:(F1CircuitDetails) -> Unit = {}
 ){
     val circuitColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
     val mainRaceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
@@ -25,7 +26,6 @@ fun F1CalendarBannerListItem(
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(
             AppTheme.colorScheme.background,
-            circuitColor.copy(alpha = 0.6f),
             circuitColor.copy(alpha = 0.6f),
             AppTheme.colorScheme.background,
         )
@@ -47,6 +47,20 @@ fun F1CalendarBannerListItem(
                 elevation = circuitDetails.circuitBasicInfo?.getOrNull(4) ?: "",
                 circuitColor = circuitColor,
                 circuitImgUrl = circuitDetails.imageUrl ?: "",
+                buttonClicked = {viewResultButtonClicked(
+                    F1CircuitDetails(
+                        circuitId = circuitDetails.circuitId,
+                        imageUrl = circuitDetails.imageUrl,
+                        circuitDescription = circuitDetails.circuitDescription,
+                        circuitFacts = circuitDetails.circuitFacts,
+                        circuitBasicInfo = circuitDetails.circuitBasicInfo,
+                        circuitPodiums = circuitDetails.circuitPodiums,
+                        fastestLaps = circuitDetails.fastestLaps,
+                        fastestPit = circuitDetails.fastestPit,
+                        dotd = circuitDetails.dotd
+                    )
+                )
+                }
             )
         }
 
