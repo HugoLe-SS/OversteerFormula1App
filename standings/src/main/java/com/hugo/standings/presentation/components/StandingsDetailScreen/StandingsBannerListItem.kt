@@ -31,7 +31,6 @@ fun StandingsBannerListItem(
         colors = listOf(
             AppTheme.colorScheme.background,
             teamColor.copy(alpha = 0.6f),
-            teamColor.copy(alpha = 0.6f),
             AppTheme.colorScheme.background,
         )
     )
