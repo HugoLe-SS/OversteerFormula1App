@@ -4,6 +4,7 @@ import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResults
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -15,4 +16,6 @@ interface IF1ResultRepository {
     fun getConstructorRaceResults(season: String, constructorId: String): Flow<Resource<List<ConstructorRaceResultsInfo>>>
 
     fun getConstructorQualifyingResults(season: String, constructorId: String): Flow<Resource<List<ConstructorQualifyingResultsInfo>>>
+
+    fun getF1CalendarResult(season: String, circuitId: String): Flow<Resource<List<F1CalendarRaceResult>>>
 }

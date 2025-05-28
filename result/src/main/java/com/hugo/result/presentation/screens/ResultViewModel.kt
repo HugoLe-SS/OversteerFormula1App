@@ -6,6 +6,7 @@ import com.hugo.result.domain.usecase.GetConstructorQualifyingResultsUseCase
 import com.hugo.result.domain.usecase.GetConstructorRaceResultsUseCase
 import com.hugo.result.domain.usecase.GetDriverQualifyingResultsUseCase
 import com.hugo.result.domain.usecase.GetDriverRaceResultsUseCase
+import com.hugo.result.domain.usecase.GetF1CalendarResultUseCase
 import com.hugo.utilities.Resource
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ class ResultViewModel @Inject constructor(
     private val getDriverQualifyingResultUseCase: GetDriverQualifyingResultsUseCase,
     private val getConstructorRaceResultsUseCase: GetConstructorRaceResultsUseCase,
     private val getConstructorQualifyingResultsUseCase: GetConstructorQualifyingResultsUseCase,
+    private val getF1CalendarResultUseCase: GetF1CalendarResultUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(ResultUIState())
     val state: StateFlow<ResultUIState> = _state
@@ -29,13 +31,50 @@ class ResultViewModel @Inject constructor(
     fun fetchDriverRaceResults(season: String, driverId: String) {
         AppLogger.d(message = "Inside ResultViewModel")
         getDriverRaceResults(season = season, driverId = driverId)
-        getDriverQualifyingResults(season = season, driverId = driverId)
+        //getDriverQualifyingResults(season = season, driverId = driverId)
     }
 
     fun fetchConstructorRaceResults(season: String, constructorId: String) {
         AppLogger.d(message = "Inside ResultViewModel")
         getConstructorRaceResults(season = season, constructorId = constructorId)
-        getConstructorQualifyingResults(season = season, constructorId = constructorId)
+        //getConstructorQualifyingResults(season = season, constructorId = constructorId)
+    }
+
+    fun fetchF1CalendarResult(season: String, circuitId: String) {
+        getF1CalendarResult(season, circuitId)
+    }
+
+    private fun getF1CalendarResult(season: String, circuitId: String) {
+        getF1CalendarResultUseCase(season, circuitId).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            error = null
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            f1CalendarResult = result.data ?: emptyList()
+                        )
+                    }
+                    AppLogger.d(message = "Success getting calendar results")
+                }
+                is Resource.Error -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message
+                        )
+                    }
+                }
+                else -> Unit
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun getDriverRaceResults(season: String, driverId: String) {

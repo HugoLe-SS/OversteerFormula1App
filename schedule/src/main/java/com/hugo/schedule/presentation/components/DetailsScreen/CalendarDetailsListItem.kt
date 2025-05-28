@@ -139,7 +139,7 @@ fun CalendarItem(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 text = month,
-                style = AppTheme.typography.labelSmall,
+                style = AppTheme.typography.labelNormal,
                 color = AppTheme.colorScheme.onSecondary,
             )
         }
@@ -155,7 +155,7 @@ fun CalendarItem(
             )
             Text(
                 text = time,
-                style = AppTheme.typography.labelSmall,
+                style = AppTheme.typography.labelNormal,
                 color = AppTheme.colorScheme.onSecondary,
             )
         }

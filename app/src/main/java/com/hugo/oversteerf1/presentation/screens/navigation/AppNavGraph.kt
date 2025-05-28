@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
+import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.result.presentation.screens.ResultScreen
 import com.hugo.schedule.presentation.screens.Details.CalendarDetailsScreen
@@ -18,7 +19,7 @@ import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
 import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
 import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType
-import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType.CalendarClickInfoNavType
+//import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType.CalendarClickInfoNavType
 import com.hugo.utilities.com.hugo.utilities.Navigation.Screen
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
@@ -110,11 +111,17 @@ fun AppNavGraph() {
             // Calendar Details Screen
             composable<Screen.CalendarDetailsScreen>(
                 typeMap = mapOf(
-                    typeOf<F1CalendarInfo>() to CalendarClickInfoNavType
+                    typeOf<F1CalendarInfo>() to CustomNavType.CalendarClickInfoNavType
                 )
             ) { backStackEntry ->
                 val screen: Screen.CalendarDetailsScreen = backStackEntry.toRoute()
-                CalendarDetailsScreen(calendarInfo = screen.info)
+                CalendarDetailsScreen(
+                    calendarInfo = screen.info,
+                    viewResultButtonClicked = { f1CircuitDetails ->
+                        AppLogger.d(message = "CircuitID: ${f1CircuitDetails.circuitId}")
+                        navController.navigate(Screen.ResultScreen(circuitDetails = f1CircuitDetails))
+                    }
+                )
             }
 
             // Standings Details Screen
@@ -137,6 +144,9 @@ fun AppNavGraph() {
 
             // Result Screen
             composable<Screen.ResultScreen>(
+                typeMap = mapOf(
+                    typeOf<F1CircuitDetails?>() to CustomNavType.CircuitDetailsNavType
+                ),
                 popEnterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -152,7 +162,8 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.ResultScreen = backStackEntry.toRoute()
                 ResultScreen(
-                    raceId = screen.driverId?: screen.constructorId
+                    raceId = screen.driverId?: screen.constructorId,
+                    circuitDetails = screen.circuitDetails
                 )
             }
 

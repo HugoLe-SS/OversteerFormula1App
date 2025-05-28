@@ -29,6 +29,7 @@ data class F1CalendarRaceResult(
     val grid: String,
     val laps: String,
     val time: String, // 1st place interval
+    val millis: String?, // Milliseconds of the 1st place interval
     val fastestLap: String,
     val status: String
 )

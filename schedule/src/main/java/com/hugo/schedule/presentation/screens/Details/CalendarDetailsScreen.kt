@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
+import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.DetailsScreen.CalendarListItem
@@ -26,12 +27,11 @@ fun CalendarDetailsScreen(
     viewModel: CalendarDetailsViewModel = hiltViewModel(),
     backButtonClicked: () -> Unit = {},
     calendarInfo: F1CalendarInfo,
+    viewResultButtonClicked: (F1CircuitDetails)-> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect (key1 = calendarInfo.circuitId) {
-        viewModel.fetchF1CalendarResult(season = "current", circuitId = calendarInfo.circuitId)
-
         viewModel.fetchCircuitDetails(circuitId = calendarInfo.circuitId)
     }
 
@@ -69,7 +69,8 @@ fun CalendarDetailsScreen(
                         state.f1CircuitDetails?.let { circuitDetails ->
                             F1CalendarBannerListItem(
                                 circuitDetails = circuitDetails,
-                                calendarInfo = calendarInfo
+                                calendarInfo = calendarInfo,
+                                viewResultButtonClicked = viewResultButtonClicked
                             )
                         }
                     }

@@ -3,6 +3,7 @@ package com.hugo.utilities.com.hugo.utilities.Navigation
 import android.os.Bundle
 import androidx.navigation.NavType
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
+import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import kotlinx.serialization.json.Json
@@ -23,6 +24,24 @@ object CustomNavType{
         }
 
         override fun put(bundle: Bundle, key: String, value: F1CalendarInfo) {
+            bundle.putString(key, Json.encodeToString(value))
+        }
+    }
+
+    val CircuitDetailsNavType = object : NavType<F1CircuitDetails?>(isNullableAllowed = true) {
+        override fun get(bundle: Bundle, key: String): F1CircuitDetails? {
+            return bundle.getString(key)?.let { Json.decodeFromString(it) }
+        }
+
+        override fun parseValue(value: String): F1CircuitDetails? {
+            return Json.decodeFromString(value)
+        }
+
+        override fun serializeAsValue(value: F1CircuitDetails?): String {
+            return Json.encodeToString(value)
+        }
+
+        override fun put(bundle: Bundle, key: String, value: F1CircuitDetails?) {
             bundle.putString(key, Json.encodeToString(value))
         }
     }

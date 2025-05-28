@@ -1,6 +1,10 @@
 package com.hugo.utilities
 
+import android.annotation.SuppressLint
 import android.content.Context
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.CountDownInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.DateInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.Session
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -26,28 +30,8 @@ object AppUtilities {
     }
 
 
-    data class DateInfo(
-        val year: String,
-        val monthShort: String,
-        val monthFull: String,
-        val day: String
-    )
 
-    data class CountDownInfo(
-        val sessionName: String,
-        val days: String,
-        val hours: String,
-        val minutes: String,
-        val status: String?,
-        val progress: Float = 0f
-    )
 
-    data class Session(
-        val name: String,
-        val date: String?,
-        val time: String?,
-        val sessionDuration: Int
-    )
 
     // Readable Date
     fun parseDate(dateString: String?): DateInfo? {
@@ -169,6 +153,24 @@ object AppUtilities {
     fun String.toShortGPFormat(): String {
         return this.replace("Grand Prix", "GP").trim()
     }
+
+    @SuppressLint("DefaultLocale")
+    fun Long.formatMillisToTime(): String {
+        val hours = this / (1000 * 60 * 60)
+        val minutes = (this / (1000 * 60)) % 60
+        val seconds = (this / 1000) % 60
+        val milliseconds = this % 1000
+
+        return if (hours > 0) {
+            String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds)
+        } else if (minutes>0) {
+            String.format("%d:%02d.%03d", minutes, seconds, milliseconds)
+        }
+        else {
+            String.format("%2d.%03d", seconds, milliseconds)
+        }
+    }
+
 
     fun String.toFlagName(): Int {
         return "R.drawable.flag_${this.lowercase()}".toInt()

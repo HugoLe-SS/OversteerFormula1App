@@ -4,6 +4,7 @@ import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResults
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 
 data class ResultUIState(
     val isLoading: Boolean = true,
@@ -14,4 +15,7 @@ data class ResultUIState(
 
     val constructorRaceResults: List<ConstructorRaceResultsInfo> = emptyList(),
     val constructorQualifyingResults: List<ConstructorQualifyingResultsInfo> = emptyList(),
-)
+
+    val f1CalendarResult: List<F1CalendarRaceResult> = emptyList(),
+
+    )

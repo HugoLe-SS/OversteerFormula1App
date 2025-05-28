@@ -5,10 +5,12 @@ import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResults
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.result.data.mapper.toConstructorQualifyingResultInfoList
 import com.hugo.result.data.mapper.toConstructorRaceResultInfoList
 import com.hugo.result.data.mapper.toDriverQualifyingResultInfoList
 import com.hugo.result.data.mapper.toDriverRaceResultInfoList
+import com.hugo.result.data.mapper.toF1CalendarResultList
 import com.hugo.result.data.remote.F1ResultApi
 import com.hugo.result.domain.repository.IF1ResultRepository
 import com.hugo.utilities.Resource
@@ -167,6 +169,39 @@ class F1ResultRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getF1CalendarResult(
+        season: String,
+        circuitId: String
+    ): Flow<Resource<List<F1CalendarRaceResult>>> = flow {
+        AppLogger.d(message = "Inside getF1CalendarResult")
+        emit(Resource.Loading())
+        try {
+            val calendarResultListFromDB = getCalendarResultListFromDB(circuitId)
+            calendarResultListFromDB?.also {
+                emit(Resource.Success(it))
+                AppLogger.d(message = "Success getting F1 Calendar result from DB with size ${it.size}")
+            }
+
+            val f1CalendarResult = f1ResultApi
+                .getF1CalendarResults(season = season, circuitId = circuitId)
+                .toF1CalendarResultList()
+            if(f1CalendarResult != calendarResultListFromDB){
+                emit(Resource.Success(f1CalendarResult))
+                AppLogger.d(message = "Success getting F1 Calendar result ${f1CalendarResult.size}")
+                insertCalendarResultListInDB(f1CalendarResult) // add to RoomDB
+            }else{
+                AppLogger.d(message = "API data and DB data are identical; skipping update")
+            }
+
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            AppLogger.e(message = "Error getting F1 Calendar result: ${e.localizedMessage}")
+        } catch (e: HttpException) {
+            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
+        }
+    }
+
 
     // Constructor DB operations
     private suspend fun insertConstructorQualifyingListInDB(constructorQualifyingList: List<ConstructorQualifyingResultsInfo>) {
@@ -238,6 +273,25 @@ class F1ResultRepositoryImpl @Inject constructor(
                 null
             } else{
                 driverRaceResultsInfo
+            }
+        }
+    }
+
+    //Circuit Result DB operations
+    private suspend fun insertCalendarResultListInDB(calendarResult: List<F1CalendarRaceResult>) {
+        withContext(Dispatchers.IO){
+            localDataSource.insertF1CalendarResultInDB(calendarResult)
+            AppLogger.d(message = "Success insertF1CalendarResultInDB with size ${calendarResult.size}")
+        }
+    }
+
+    private suspend fun getCalendarResultListFromDB(circuitId: String): List<F1CalendarRaceResult>? {
+        return withContext(Dispatchers.IO){
+            val calendarResult = localDataSource.getF1CalendarResultFromDB(circuitId = circuitId)
+            if(calendarResult.isEmpty()){
+                null
+            } else{
+                calendarResult
             }
         }
     }

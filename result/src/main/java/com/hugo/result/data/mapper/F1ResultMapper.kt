@@ -4,10 +4,12 @@ import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResults
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
+import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.result.data.remote.dto.QualifyingResult.ConstructorQualifyingResultDto
 import com.hugo.result.data.remote.dto.QualifyingResult.DriverQualifyingResultDto
 import com.hugo.result.data.remote.dto.RaceResult.ConstructorRaceResultDto
 import com.hugo.result.data.remote.dto.RaceResult.DriverRaceResultDto
+import com.hugo.result.data.remote.dto.RaceResult.F1CalendarResultDto
 
 fun ConstructorRaceResultDto.toConstructorRaceResultInfoList(): List<ConstructorRaceResultsInfo>{
     val total = mrData.total
@@ -35,6 +37,7 @@ fun ConstructorRaceResultDto.toConstructorRaceResultInfoList(): List<Constructor
                 grid = result.grid,
                 laps = result.laps,
                 time = result.time?.time ?: "",
+                millis = result.time?.millis ?: "",
                 fastestLap = result.fastestLap?.fastestLapTime?.time ?: "",
                 status = result.status
             )
@@ -70,6 +73,7 @@ fun DriverRaceResultDto.toDriverRaceResultInfoList(): List<DriverRaceResultsInfo
                 grid = result.grid,
                 laps = result.laps,
                 time = result.time?.time ?: "",
+                millis = result.time?.millis ?: "",
                 fastestLap = result.fastestLap?.fastestLapTime?.time ?: "",
                 status = result.status
             )
@@ -132,4 +136,38 @@ fun DriverQualifyingResultDto.toDriverQualifyingResultInfoList(): List<DriverQua
         }
     }
 
+}
+
+fun F1CalendarResultDto.toF1CalendarResultList(): List<F1CalendarRaceResult> {
+    val total = mrData.total.toString()
+
+    return mrData.raceTable.races.flatMap { race ->
+        race.results.map { result ->
+            F1CalendarRaceResult(
+                total = total,
+                driverNumber = result.number,
+                driverId = result.driver.driverId,
+                constructorId = result.constructor.constructorId,
+                constructorName = result.constructor.name,
+                driverCode = result.driver.code,
+                givenName = result.driver.givenName,
+                familyName = result.driver.familyName,
+                season = race.season,
+                round = race.round,
+                raceName = race.raceName,
+                circuitId = race.circuit.circuitId,
+                circuitName = race.circuit.circuitName,
+                country = race.circuit.location.country,
+                position = result.position,
+                positionText = result.positionText,
+                points = result.points,
+                grid = result.grid,
+                laps = result.laps,
+                time = result.time?.time ?: "",
+                millis = result.time?.millis ?: "",
+                fastestLap = result.fastestLap?.fastestLapTime?.time ?: "",
+                status = result.status
+            )
+        }
+    }
 }

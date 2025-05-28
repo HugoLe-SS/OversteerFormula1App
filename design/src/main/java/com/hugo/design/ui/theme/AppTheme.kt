@@ -39,12 +39,12 @@ private val typography = AppTypography(
     titleNormal =  TextStyle(
         fontFamily = F1Font,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontSize = 16.sp
     ),
     body =  TextStyle(
         fontFamily = EvaFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp
+        fontSize = 18.sp
     ),
     labelLarge =  TextStyle(
         fontFamily = F1Font,
@@ -60,6 +60,12 @@ private val typography = AppTypography(
         fontFamily = F1Font,
         fontWeight = FontWeight.Thin,
         fontSize = 12.sp
+    ),
+
+    labelMini =  TextStyle(
+        fontFamily = F1Font,
+        fontWeight = FontWeight.Thin,
+        fontSize = 10.sp
     )
 )
 

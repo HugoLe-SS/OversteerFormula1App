@@ -1,6 +1,8 @@
-package com.hugo.schedule.data.remote.dto
+package com.hugo.result.data.remote.dto.RaceResult
 
 import com.google.gson.annotations.SerializedName
+import com.hugo.result.data.remote.dto.Circuit
+import com.hugo.result.data.remote.dto.DriverInfo
 
 data class F1CalendarResultDto(
     @SerializedName("MRData")
@@ -54,17 +56,6 @@ data class DriverRaceResult(
     val time: RaceTime?,
     @SerializedName("FastestLap")
     val fastestLap: FastestLap?
-)
-
-data class DriverInfo(
-    val driverId: String,
-    val permanentNumber: String,
-    val code: String,
-    val url: String,
-    val givenName: String,
-    val familyName: String,
-    val dateOfBirth: String,
-    val nationality: String
 )
 
 data class ConstructorInfo(

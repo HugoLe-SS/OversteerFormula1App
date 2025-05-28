@@ -23,6 +23,7 @@ data class AppTypography(
     val labelLarge: TextStyle,
     val labelNormal: TextStyle,
     val labelSmall: TextStyle,
+    val labelMini: TextStyle
 )
 
 data class AppShape(
@@ -55,7 +56,8 @@ val LocalAppTypography = staticCompositionLocalOf {
         body = TextStyle.Default,
         labelLarge = TextStyle.Default,
         labelNormal = TextStyle.Default,
-        labelSmall = TextStyle.Default
+        labelSmall = TextStyle.Default,
+        labelMini = TextStyle.Default
     )
 }
 

@@ -14,4 +14,8 @@ data class F1CircuitDetails(
     val circuitDescription: String?= null,
     val circuitFacts: List<String>?= null,
     val circuitBasicInfo: List<String>?= null,
+    val circuitPodiums: List<String>?= null,
+    val fastestLaps: List<String>?= null,
+    val fastestPit: List<String>?= null,
+    val dotd: String?= null
 )
