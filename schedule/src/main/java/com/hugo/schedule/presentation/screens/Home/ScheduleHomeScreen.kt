@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,6 +21,7 @@ import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
+import com.hugo.design.components.ErrorDisplayComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.components.SegmentedButton
 import com.hugo.design.ui.theme.AppTheme
@@ -108,9 +108,12 @@ fun ScheduleHomeScreen(
 
                             state.error != null -> {
                                 item{
-                                    Text(
-                                        text = "Error: ${state.error}",
-                                        modifier = Modifier.padding(innerPadding)
+                                    ErrorDisplayComponent(
+                                        appError = state.error!!,
+                                        onRetry = {viewModel.onEvent(ToggleScheduleEvent.RetryFetch)},
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(innerPadding)
                                     )
                                 }
                             }

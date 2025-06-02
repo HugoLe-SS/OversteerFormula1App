@@ -81,7 +81,8 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            driverStandings = result.data ?: emptyList()
+                            driverStandings = result.data ?: emptyList(),
+                            error = null
                         )
                     }
                 }
@@ -123,6 +124,12 @@ class StandingsHomeViewModel @Inject constructor(
                 _state.value = _state.value.copy(currentType = event.type)
                 loadStandings()
             }
+
+            is ToggleStandingsEvent.RetryFetch -> {
+                AppLogger.d(message = "Retrying fetch for ${_state.value.currentType}")
+                loadStandings()
+            }
+
         }
     }
 

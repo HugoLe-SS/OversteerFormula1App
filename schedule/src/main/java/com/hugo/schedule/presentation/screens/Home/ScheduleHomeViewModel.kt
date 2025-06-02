@@ -162,7 +162,8 @@ class ScheduleHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            f1Calendar = resource.data ?: emptyList()
+                            f1Calendar = resource.data ?: emptyList(),
+                            error = null
                         )
                     }
                 }
@@ -187,6 +188,11 @@ class ScheduleHomeViewModel @Inject constructor(
                 AppLogger.d(message = "${state.value.currentType}")
             }
             is ToggleScheduleEvent.ToggleSchedule -> {
+                getF1Calendar(season = "current")
+            }
+
+            is ToggleScheduleEvent.RetryFetch -> {
+                AppLogger.d(message = "Retrying fetch in ScheduleHomeViewModel")
                 getF1Calendar(season = "current")
             }
 

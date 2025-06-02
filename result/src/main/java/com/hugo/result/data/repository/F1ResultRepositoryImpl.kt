@@ -32,7 +32,7 @@ class F1ResultRepositoryImpl @Inject constructor(
     override fun getConstructorRaceResults(season: String, constructorId: String)
     : Flow<Resource<List<ConstructorRaceResultsInfo>, AppError>> = flow {
         AppLogger.d(message = "inside getConstructorRaceResults")
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
 
         try {
             val constructorRaceListFromDB = getConstructorRaceListFromDB(constructorId)
@@ -75,7 +75,7 @@ class F1ResultRepositoryImpl @Inject constructor(
     override fun getConstructorQualifyingResults(season: String, constructorId: String)
     : Flow<Resource<List<ConstructorQualifyingResultsInfo>, AppError>> = flow {
         AppLogger.d(message = "inside getConstructorQualifyingResults")
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
 
         try {
             val constructorQualifyingListFromDB = getConstructorQualifyingListFromDB(constructorId)
@@ -117,7 +117,7 @@ class F1ResultRepositoryImpl @Inject constructor(
     override fun getDriverRaceResults(season: String, driverId: String)
     : Flow<Resource<List<DriverRaceResultsInfo>, AppError>> = flow {
         AppLogger.d(message = "inside getDriverRaceResults")
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
 
         try {
             val driverRaceListFromDB = getDriverRaceResultsListFromDB(driverId)
@@ -161,7 +161,7 @@ class F1ResultRepositoryImpl @Inject constructor(
     override fun getDriverQualifyingResults(season: String, driverId: String)
     : Flow<Resource<List<DriverQualifyingResultsInfo>, AppError>> = flow {
         AppLogger.d(message = "inside getDriverQualifyingResults")
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
 
         try {
             val driverQualifyingListFromDB = getDriverQualifyingResultsListFromDB(driverId)
@@ -203,7 +203,7 @@ class F1ResultRepositoryImpl @Inject constructor(
     override fun getF1CalendarResult(season: String, circuitId: String)
     : Flow<Resource<List<F1CalendarRaceResult>, AppError>> = flow {
         AppLogger.d(message = "Inside getF1CalendarResult")
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
         try {
             val calendarResultListFromDB = getCalendarResultListFromDB(circuitId)
 

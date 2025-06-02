@@ -42,7 +42,8 @@ class StandingsDetailsViewModel @Inject constructor(
                     AppLogger.d(message = "DriverDetailsViewModel Loading")
                     _state.update {
                         it.copy(
-                        isLoading = resource.isFetchingFromNetwork
+                            isLoading = resource.isFetchingFromNetwork,
+                            error = null
                         ) }
                 }
 
@@ -50,7 +51,8 @@ class StandingsDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            driverDetails = resource.data
+                            driverDetails = resource.data,
+                            error = null
                         )
                     }
                     AppLogger.d(message = "Success Getting Driver Details")
@@ -78,7 +80,8 @@ class StandingsDetailsViewModel @Inject constructor(
                     AppLogger.d(message = "ConstructorDetailsViewModel Loading")
                     _state.update {
                         it.copy(
-                            isLoading = resource.isFetchingFromNetwork
+                            isLoading = resource.isFetchingFromNetwork,
+                            error = null
                         )
                     }
                 }
@@ -87,7 +90,8 @@ class StandingsDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            constructorDetails = resource.data
+                            constructorDetails = resource.data,
+                            error = null
                         )
                     }
                     AppLogger.d(message = "Success getting constructor details")
@@ -106,6 +110,20 @@ class StandingsDetailsViewModel @Inject constructor(
                 else -> Unit
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: StandingsDetailsEvent) {
+        when (event) {
+            is StandingsDetailsEvent.RetryFetch -> {
+                AppLogger.d(message = "Retrying fetch in StandingsDetailsViewModel ${event.driverId ?: event.constructorId}")
+                event.driverId?.let { driverId ->
+                    getDriverDetails(driverId = driverId)
+                }
+                event.constructorId?.let { constructorId ->
+                    getConstructorDetails(constructorId = constructorId)
+                }
+            }
+        }
     }
 
 

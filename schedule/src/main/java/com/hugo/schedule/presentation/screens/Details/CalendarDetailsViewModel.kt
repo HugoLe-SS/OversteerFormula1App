@@ -24,6 +24,7 @@ class CalendarDetailsViewModel @Inject constructor(
 
     fun fetchCircuitDetails(circuitId: String) {
         getCircuitDetails(circuitId)
+
     }
 
 
@@ -42,7 +43,8 @@ class CalendarDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            f1CircuitDetails = result.data
+                            f1CircuitDetails = result.data,
+                            error = null
                         )
                     }
                     AppLogger.d(message = "Success getting circuit Details")
@@ -58,6 +60,15 @@ class CalendarDetailsViewModel @Inject constructor(
                 else -> Unit
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: CalendarDetailsEvent) {
+        when (event) {
+            is CalendarDetailsEvent.RetryFetch -> { // Assume RetryFetch carries circuitId now
+                AppLogger.d(message = "VM: RetryFetch for ${event.circuitId}")
+                fetchCircuitDetails(circuitId = event.circuitId)
+            }
+        }
     }
 
 }

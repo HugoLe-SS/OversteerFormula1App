@@ -39,16 +39,9 @@ object AppUtilities {
             }
             is com.google.gson.JsonSyntaxException, // Example for serialization error
             is kotlinx.serialization.SerializationException -> AppError.RemoteError.SERIALIZATION_ERROR
-            // Add more specific exception types here if needed
-            // is YourCustomApiException -> // map to AppError.ApiSpecificError(this.errorCode, this.errorMessage)
             else -> {
-                // For any other Exception, treat as unknown remote error if it's not caught before
-                // Or you could have a more generic AppError.UnknownAppError that isn't tied to Remote/Local
                 AppLogger.e(message = "Unhandled exception type mapped to UNKNOWN_ERROR: ${this::class.java.name}")
-                AppError.RemoteError.UNKNOWN_ERROR // Default to unknown remote if context is network call
-                // Or, more generally:
-                // object UnknownAppError : AppError // Define this in your AppError sealed interface
-                // UnknownAppError
+                AppError.RemoteError.UNKNOWN_ERROR
             }
         }
     }

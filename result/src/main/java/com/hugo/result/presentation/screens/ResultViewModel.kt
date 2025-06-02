@@ -141,7 +141,8 @@ class ResultViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            f1CalendarResult = resource.data ?: emptyList()
+                            f1CalendarResult = resource.data ?: emptyList(),
+                            error = null
                         )
                     }
                     AppLogger.d(message = "Success getting calendar results")
@@ -165,14 +166,18 @@ class ResultViewModel @Inject constructor(
                 when (resource) {
                     is Resource.Loading -> {
                         AppLogger.d(message = "DriverDetailsViewModel Loading")
-                        _state.update { it.copy(isLoading = true) }
+                        _state.update { it.copy(
+                            isLoading = true,
+                            error = null
+                        )}
                     }
 
                     is Resource.Success -> {
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                driverRaceResults = resource.data ?: emptyList()
+                                driverRaceResults = resource.data ?: emptyList(),
+                                error = null
                             )
                         }
                         AppLogger.d(message = "Success Getting Driver race results")
@@ -199,14 +204,18 @@ class ResultViewModel @Inject constructor(
                 when (resource) {
                     is Resource.Loading -> {
                         AppLogger.d(message = "DriverDetailsViewModel Loading")
-                        _state.update { it.copy(isLoading = true) }
+                        _state.update { it.copy(
+                            isLoading = true,
+                            error = null
+                        ) }
                     }
 
                     is Resource.Success -> {
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                driverQualifyingResults = resource.data ?: emptyList()
+                                driverQualifyingResults = resource.data ?: emptyList(),
+                                error = null
                             )
                         }
                         AppLogger.d(message = "Success Getting Driver Qualifying Results")
@@ -234,7 +243,8 @@ class ResultViewModel @Inject constructor(
                     AppLogger.d(message = "ConstructorDetailsViewModel Loading")
                     _state.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = true,
+                            error = null
                         )
                     }
                 }
@@ -242,7 +252,8 @@ class ResultViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            constructorRaceResults = resource.data ?: emptyList()
+                            constructorRaceResults = resource.data ?: emptyList(),
+                            error = null
                         )
                     }
                     AppLogger.d(message = "Success ${resource.data?.size}")
@@ -269,7 +280,8 @@ class ResultViewModel @Inject constructor(
                     AppLogger.d(message = "ConstructorDetailsViewModel Loading")
                     _state.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = true,
+                            error = null
                         )
                     }
                 }
@@ -277,7 +289,8 @@ class ResultViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            constructorQualifyingResults = resource.data ?: emptyList()
+                            constructorQualifyingResults = resource.data ?: emptyList(),
+                            error = null
                         )
                     }
                     AppLogger.d(message = "Success ${resource.data?.size}")
@@ -295,5 +308,32 @@ class ResultViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
+    }
+
+    fun onEvent(event: ResultEvent) {
+        when (event) {
+            is ResultEvent.RetryFetch -> {
+                AppLogger.d(message = "Retry Fetching Results")
+                event.driverId?.let {
+                    fetchDriverRaceResults(
+                        season = event.season,
+                        driverId = it
+                    )
+                }
+
+                event.constructorId?.let {
+                    fetchConstructorRaceResults(
+                        season = event.season,
+                        constructorId = it
+                    )
+                }
+                event.circuitId?.let {
+                    fetchF1CalendarResult(
+                        season = event.season,
+                        circuitId = it
+                    )
+                }
+            }
+        }
     }
 }
