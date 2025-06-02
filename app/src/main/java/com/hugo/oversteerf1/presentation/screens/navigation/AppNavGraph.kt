@@ -72,6 +72,10 @@ fun AppNavGraph() {
                 }
             ) {
                 ScheduleHomeScreen(
+                    viewScheduleButtonClicked = { clickInfo ->
+                        AppLogger.d(message = "ScheduleHomeScreen circuit: ${clickInfo.circuitId}")
+                        navController.navigate(Screen.CalendarDetailsScreen(clickInfo))
+                    },
                     cardClicked = { clickInfo ->
                         AppLogger.d(message = "ScheduleHomeScreen circuit: ${clickInfo.circuitId}")
                         navController.navigate(Screen.CalendarDetailsScreen(clickInfo))

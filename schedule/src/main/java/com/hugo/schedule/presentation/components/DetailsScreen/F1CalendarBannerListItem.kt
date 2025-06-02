@@ -7,21 +7,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
+import com.hugo.design.R.drawable
 import com.hugo.design.components.ScheduleDetailsBannerComponent
 import com.hugo.design.ui.theme.AppColors
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.design.utilities.Circuit
 import com.hugo.utilities.AppUtilities
+import java.time.Duration
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 
 @Composable
 fun F1CalendarBannerListItem(
-    circuitDetails: F1CircuitDetails,
-    calendarInfo: F1CalendarInfo,
-    viewResultButtonClicked:(F1CircuitDetails) -> Unit = {}
+    circuitDetails: F1CircuitDetails?= null,
+    calendarInfo: F1CalendarInfo?= null,
+    viewResultButtonClicked:(F1CircuitDetails) -> Unit = {},
 ){
-    val circuitColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
-    val mainRaceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
-    val fp1Date = AppUtilities.parseDate(calendarInfo.firstPractice?.date?:"")
+    val circuitColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo?.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
+    val circuitImg = Circuit.getCircuitImageRes(calendarInfo?.circuitId ?: "")
+    val mainRaceDate = AppUtilities.parseDate(calendarInfo?.mainRaceDate)
+
+    //Compare Time to return if the results button should be shown
+    val mainRaceZonedTime = AppUtilities.parseUtcRaceDateTimeToZoned(
+        mainRaceDate = calendarInfo?.mainRaceDate,
+        mainRaceTime = calendarInfo?.mainRaceTime
+    )
+    val showResultsButton = mainRaceZonedTime?.let { Duration.between(it, ZonedDateTime.now(
+        ZoneOffset.UTC)).toHours() >= 12 } ?: false
+
+    val fp1Date = AppUtilities.parseDate(calendarInfo?.firstPractice?.date?:"")
 
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(
@@ -35,6 +50,7 @@ fun F1CalendarBannerListItem(
         modifier = Modifier
             .background(brush = gradientBrush)
     ) {
+        if(calendarInfo != null && circuitDetails != null) {
             ScheduleDetailsBannerComponent(
                 round = calendarInfo.round,
                 raceName = calendarInfo.raceName ?: "",
@@ -46,7 +62,7 @@ fun F1CalendarBannerListItem(
                 topSpeed = circuitDetails.circuitBasicInfo?.getOrNull(3) ?: "",
                 elevation = circuitDetails.circuitBasicInfo?.getOrNull(4) ?: "",
                 circuitColor = circuitColor,
-                circuitImgUrl = circuitDetails.imageUrl ?: "",
+                circuitImgUrl = circuitImg ?: drawable.circuit_americas,
                 buttonClicked = {viewResultButtonClicked(
                     F1CircuitDetails(
                         circuitId = circuitDetails.circuitId,
@@ -60,8 +76,10 @@ fun F1CalendarBannerListItem(
                         dotd = circuitDetails.dotd
                     )
                 )
-                }
+                },
+                isPastRace = showResultsButton
             )
         }
+    }
 
 }

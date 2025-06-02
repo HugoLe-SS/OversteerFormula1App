@@ -20,8 +20,8 @@ class StandingsHomeViewModel @Inject constructor(
     private val getDriverStandingsUseCase: GetDriverStandingsUseCase
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(ConstructorStandingsHomeUiState())
-    val state: StateFlow<ConstructorStandingsHomeUiState> = _state
+    private val _state = MutableStateFlow(StandingsHomeUiState())
+    val state: StateFlow<StandingsHomeUiState> = _state
 
     init{
         AppLogger.d(message = "Inside StandingsHomeViewModel")
@@ -32,12 +32,12 @@ class StandingsHomeViewModel @Inject constructor(
 
 
     private fun constructorStandings(season: String){
-        getConstructorStandingsUseCase(season = season).onEach{ result ->
-            when(result){
+        getConstructorStandingsUseCase(season = season).onEach{ resource ->
+            when(resource){
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = true,
+                            isLoading = resource.isFetchingFromNetwork,
                             error = null
                         )
                     }
@@ -46,7 +46,7 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            constructorStandings = result.data ?: emptyList()
+                            constructorStandings = resource.data ?: emptyList()
                         )
                     }
                 }
@@ -54,7 +54,7 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.message
+                            error = resource.error
                         )
                     }
                 }
@@ -71,7 +71,7 @@ class StandingsHomeViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = true,
+                            isLoading = result.isFetchingFromNetwork,
                             error = null
                         )
                     }
@@ -89,7 +89,7 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.message
+                            error = result.error
                         )
                     }
                 }

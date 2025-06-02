@@ -5,13 +5,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
-import com.hugo.design.R
 import com.hugo.design.components.CardComponent
 import com.hugo.design.ui.theme.AppColors
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.design.utilities.Circuit
 import com.hugo.utilities.AppUtilities
 import com.hugo.utilities.AppUtilities.toShortGPFormat
 
@@ -22,7 +23,11 @@ fun F1CalendarListItem(
 ){
     val raceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
     val teamColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
+    val circuitImg = remember(calendarInfo.circuitId) {
+        Circuit.getCircuitImageRes(calendarInfo.circuitId ?: "")
+    }
     val raceName = calendarInfo.raceName.toShortGPFormat()
+
 
     CardComponent(
         cardOnClicked ={
@@ -34,7 +39,7 @@ fun F1CalendarListItem(
         firstColumnDetails = "${raceDate?.monthShort} ",
         secondColumnDescription = "$raceName ",
         secondColumnDetails = "${calendarInfo.locality} ",
-        circuitImage = R.drawable.flag_usa,
+        circuitImage = circuitImg,
         teamColor = teamColor,
     )
 

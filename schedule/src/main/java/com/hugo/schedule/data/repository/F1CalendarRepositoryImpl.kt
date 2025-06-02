@@ -6,15 +6,19 @@ import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.schedule.data.mapper.toF1CalendarInfoList
 import com.hugo.schedule.data.remote.F1ScheduleApi
 import com.hugo.schedule.domain.repository.IF1CalendarRepository
+import com.hugo.utilities.AppError
+import com.hugo.utilities.AppUtilities.toAppError
 import com.hugo.utilities.Resource
+import com.hugo.utilities.com.hugo.utilities.AppLaunchManager
 import com.hugo.utilities.logging.AppLogger
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
+import kotlinx.io.IOException
 import javax.inject.Inject
 
 class F1CalendarRepositoryImpl @Inject constructor(
@@ -23,75 +27,98 @@ class F1CalendarRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource
 ): IF1CalendarRepository {
 
-    override fun getF1Calendar(season: String): Flow<Resource<List<F1CalendarInfo>>> = flow {
+    override fun getF1Calendar(season: String): Flow<Resource<List<F1CalendarInfo>, AppError>> = flow {
         AppLogger.d(message = "Inside getF1Calendar")
 
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
+
         try {
-            val calendarInfoListFromDB = getCalendarInfoListFromDB()
-            calendarInfoListFromDB?.also {
-                emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting F1 Calendar from DB with size ${it.size}")
-            }
+            if(!AppLaunchManager.hasFetchedCalendar){
+                AppLogger.d(message = "Network fetch needed for getting F1 calendar.")
+                emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
 
-            val f1Calendar = f1ScheduleApi
-                .getF1Calendar(season)
-                .toF1CalendarInfoList()
-            if(f1Calendar != calendarInfoListFromDB){
-                emit(Resource.Success(f1Calendar))
-                AppLogger.d(message = "Success getting F1 Calendar ${f1Calendar.size}")
-                insertCalendarInfoListInDB(f1Calendar) // add to RoomDB
-            }
-            else{
-                AppLogger.d(message = "API data and DB data are identical; skipping update")
-            }
+                val f1Calendar = f1ScheduleApi
+                    .getF1Calendar(season)
+                    .toF1CalendarInfoList()
 
-
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            AppLogger.e(message = "Error getting F1 Calendar: ${e.localizedMessage}")
-        } catch (e: HttpException) {
-            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
-        }
-    }
-
-    // Supabase
-    override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitDetails?>> = flow {
-        AppLogger.d(message = "Inside getF1CircuitDetails")
-        emit(Resource.Loading())
-        try {
-            val circuitDetailsFromDB = getCalendarDetailsFromDB(circuitId)
-            circuitDetailsFromDB?.also {
-                emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting F1 Circuit details from DB with circuitID: ${it.circuitId}")
-            }
-
-            val result = supabaseClient
-                .postgrest["CircuitDetails"]
-                .select {
-                    filter{
-                        eq("circuitId", circuitId)
-                    }
+                if(f1Calendar.isNotEmpty()){
+                    AppLaunchManager.hasFetchedCalendar = true
+                    insertCalendarInfoListInDB(f1Calendar) // add to RoomDB
+                    AppLogger.d(message = "Success saving Calendar Info to DB")
                 }
 
-            val f1Circuit = result.decodeSingleOrNull<F1CircuitDetails>()
-
-            if(f1Circuit != circuitDetailsFromDB){
-                emit(Resource.Success(f1Circuit))
-                AppLogger.d(message = "Success getting F1 Circuit Info ${f1Circuit?.circuitId}")
-                insertCalendarDetailsInDB(f1Circuit!!) // add to RoomDB
+                emit(Resource.Success(f1Calendar))
+                AppLogger.d(message = "Success getting Calendar Info with size ${f1Calendar.size}")
             }
+
             else{
-                AppLogger.d(message = "API data and DB data are identical; skipping update")
+                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                val calendarInfoListFromDB = getCalendarInfoListFromDB()
+                if(!calendarInfoListFromDB.isNullOrEmpty()){
+                    emit(Resource.Success(calendarInfoListFromDB))
+                    AppLogger.d(message = "Success getting Calendar from DB with size ${calendarInfoListFromDB.size}")
+                }
             }
 
+
+        } catch (e: IOException) {
+            // Handle IOException specifically for network issues
+            emit(Resource.Error(e.toAppError()))
+        } catch (e: retrofit2.HttpException) {
+            // Handle HttpException for HTTP errors for Retrofit
+            emit(Resource.Error(e.toAppError()))
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            AppLogger.e(message = "Error getting F1 Circuit info: ${e.localizedMessage}")
-        } catch (e: HttpException) {
-            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
+            // Handle any other exceptions
+            emit(Resource.Error(e.toAppError()))
         }
-    }
+    }.flowOn(Dispatchers.IO)
+
+    // Supabase
+    override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitDetails?, AppError>> = flow {
+        AppLogger.d(message = "Inside getF1CircuitDetails")
+        emit(Resource.Loading())
+
+        try {
+
+            if (!AppLaunchManager.fetchedCircuitDetails.contains(circuitId)) {
+                AppLogger.d(message = "Network fetch needed for getting F1 circuit details.")
+                emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
+
+                val result = supabaseClient
+                    .postgrest["CircuitDetails"]
+                    .select {
+                        filter { eq("circuitId", circuitId) }
+                    }
+
+                val f1Circuit = result.decodeSingleOrNull<F1CircuitDetails>()
+
+                if (f1Circuit != null) {
+                    insertCalendarDetailsInDB(f1Circuit)
+                    AppLaunchManager.fetchedCircuitDetails.add(circuitId)
+                }
+
+                emit(Resource.Success(f1Circuit))
+            } else {
+                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                val circuitDetailsFromDB = getCalendarDetailsFromDB(circuitId)
+                emit(Resource.Success(circuitDetailsFromDB))
+                AppLogger.d(message = "Success getting driver details from DB")
+            }
+
+
+        } catch (e: IOException) {
+            // Handle IOException specifically for network issues
+            emit(Resource.Error(e.toAppError()))
+        } catch (e: retrofit2.HttpException) {
+            // Handle HttpException for HTTP errors for Retrofit
+            emit(Resource.Error(e.toAppError()))
+        } catch (e: Exception) {
+            // Handle any other exceptions
+            emit(Resource.Error(e.toAppError()))
+        }
+    }.flowOn(Dispatchers.IO)
 
     //Calendar Schedule Info
     private suspend fun insertCalendarInfoListInDB(calendarInfo: List<F1CalendarInfo>) {

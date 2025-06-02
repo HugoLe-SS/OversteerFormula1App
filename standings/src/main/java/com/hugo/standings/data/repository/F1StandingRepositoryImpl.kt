@@ -9,15 +9,19 @@ import com.hugo.standings.data.mapper.toConstructorInfoList
 import com.hugo.standings.data.mapper.toDriverStandingsInfoList
 import com.hugo.standings.data.remote.F1StandingsApi
 import com.hugo.standings.domain.repository.IF1StandingsRepository
+import com.hugo.utilities.AppError
+import com.hugo.utilities.AppUtilities.toAppError
 import com.hugo.utilities.Resource
+import com.hugo.utilities.com.hugo.utilities.AppLaunchManager
 import com.hugo.utilities.logging.AppLogger
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
+import kotlinx.io.IOException
 import javax.inject.Inject
 
 
@@ -27,168 +31,191 @@ class F1StandingRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource
 
 ): IF1StandingsRepository {
-    override fun getConstructorStandings(season: String): Flow<Resource<List<ConstructorStandingsInfo>>> = flow {
 
-        AppLogger.d(message="Inside getConstructorStandings")
-        emit(Resource.Loading())
-        try {
+    override fun getConstructorStandings(season: String): Flow<Resource<List<ConstructorStandingsInfo>, AppError>> =
+        flow {
 
-            val constructorStandingsListFromDB = getConstructorStandingsListFromDB()
+            AppLogger.d(message = "Inside getConstructorStandings")
+            try {
 
-            if(!constructorStandingsListFromDB.isNullOrEmpty()){
-                emit(Resource.Success(constructorStandingsListFromDB))
-                AppLogger.d(message = "Success getting constructor standings from DB with size ${constructorStandingsListFromDB.size}")
-            }
-            else{
-                val constructorStandings = f1StandingsApi
-                    .getConstructorStandings(season)
-                    .toConstructorInfoList()
+                if (!AppLaunchManager.hasFetchedConstructorStandings) {
+                    AppLogger.d(message = "Network fetch needed for constructor standings.")
+                    emit(Resource.Loading(isFetchingFromNetwork = true)) // network fetch so that it can show loading indicator
 
-                insertConstructorStandingsListInDB(constructorStandings) // add to RoomDB
-                AppLogger.d(message = "Success saving constructor standings to DB")
+                    val constructorStandings = f1StandingsApi
+                        .getConstructorStandings(season)
+                        .toConstructorInfoList()
 
-                emit(Resource.Success(constructorStandings))
-                AppLogger.d(message = "Success getting constructor standings ${constructorStandings.size}")
 
-            }
+                    if (constructorStandings.isNotEmpty()) {
+                        AppLaunchManager.hasFetchedConstructorStandings = true
+                        insertConstructorStandingsListInDB(constructorStandings) // add to RoomDB
+                        AppLogger.d(message = "Success saving constructor standings to DB")
+                    }
 
-        }catch (e:Exception){
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            AppLogger.e(message = "Error getting Constructor standings: ${e.localizedMessage}")
-        }
-        catch (e:HttpException)
-        {
-            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
-        }
-    }
-
-    override fun getF1ConstructorDetails(constructorId: String): Flow<Resource<ConstructorDetails?>> = flow {
-        AppLogger.d(message = "inside getF1ConstructorDetail")
-        emit(Resource.Loading())
-
-        try {
-            val constructorDetailsFromDB = getConstructorDetailsFromDB(constructorId)
-
-            constructorDetailsFromDB?.also {
-                emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting constructor details from DB ${it.constructorId}")
-            }
-
-            val result = supabaseClient
-                .postgrest["ConstructorDetails"]
-                .select {
-                    filter{
-                        eq("constructorId", constructorId)
+                    emit(Resource.Success(constructorStandings))
+                    AppLogger.d(message = "Success getting constructor standings ${constructorStandings.size}")
+                } else {
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+                    val constructorStandingsListFromDB = getConstructorStandingsListFromDB()
+                    if (!constructorStandingsListFromDB.isNullOrEmpty()) {
+                        emit(Resource.Success(constructorStandingsListFromDB))
+                        AppLogger.d(message = "Success getting constructor standings from DB with size ${constructorStandingsListFromDB.size}")
                     }
                 }
 
-            val constructorDetails = result.decodeSingleOrNull<ConstructorDetails>()
-
-            if(constructorDetails != constructorDetailsFromDB){
-                AppLogger.d(message = "Success getting F1 constructor details ${constructorDetails?.constructorId}")
-                emit(Resource.Success(constructorDetails))
-                insertConstructorDetailsInDB(constructorDetails!!) // add to RoomDB
+            } catch (e: IOException) {
+                // Handle IOException specifically for network issues
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: retrofit2.HttpException) {
+                // Handle HttpException for HTTP errors for Retrofit
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: Exception) {
+                // Handle any other exceptions
+                emit(Resource.Error(e.toAppError()))
             }
-            else{
-                AppLogger.d(message = "API data and DB data are identical; skipping update")
-            }
+        }.flowOn(Dispatchers.IO)
 
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            AppLogger.e(message = "Error getting F1 constructor details: ${e.localizedMessage}")
-        } catch (e: HttpException) {
-            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
-        }
+    override fun getDriverStandings(season: String): Flow<Resource<List<DriverStandingsInfo>, AppError>> =
+        flow {
+            AppLogger.d(message = "Inside getDriverStandings")
+            //emit(Resource.Loading())
+            try {
+                if (!AppLaunchManager.hasFetchedDriverStandings) {
+                    AppLogger.d(message = "Network fetch needed for driver standings.")
+                    emit(Resource.Loading(isFetchingFromNetwork = true)) // network fetch so that it can show loading indicator
 
-    }
+                    val driverStandings = f1StandingsApi
+                        .getDriverStandings(season)
+                        .toDriverStandingsInfoList()
 
-    override fun getDriverStandings(season: String): Flow<Resource<List<DriverStandingsInfo>>> = flow {
-        AppLogger.d(message = "Inside getDriverStandings")
-        emit(Resource.Loading())
-        try {
-            val driverStandingsListFromDB = getDriverStandingsListFromDB()
+                    if (driverStandings.isNotEmpty()) {
+                        insertDriverStandingsListInDB(driverStandings) // add to RoomDB
+                        AppLogger.d(message = "Success saving driver standings to DB")
+                        AppLaunchManager.hasFetchedDriverStandings = true
+                    }
 
-            if(!driverStandingsListFromDB.isNullOrEmpty()){
-                emit(Resource.Success(driverStandingsListFromDB))
-                AppLogger.d(message = "Success getting driver standings from DB with size ${driverStandingsListFromDB.size}")
-            }
-            else{
-                val driverStandings = f1StandingsApi
-                    .getDriverStandings(season)
-                    .toDriverStandingsInfoList()
+                    emit(Resource.Success(driverStandings))
+                    AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
+                } else {
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
 
-                insertDriverStandingsListInDB(driverStandings) // add to RoomDB
-                AppLogger.d(message = "Success saving driver standings to DB")
-
-                emit(Resource.Success(driverStandings))
-                AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
-            }
-
-            //            driverStandingsListFromDB?.also {
-//                emit(Resource.Success(it))
-//                AppLogger.d(message = "Success getting driver standings from DB with size ${it.size}")
-//            }
-//            if(driverStandings != driverStandingsListFromDB)
-//            {
-//                emit(Resource.Success(driverStandings))
-//                AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
-//                insertDriverStandingsListInDB(driverStandings) // add to RoomDB
-//            }
-//            else{
-//                AppLogger.d(message = "API data and DB data are identical; skipping update")
-//            }
-
-
-        }catch (e:Exception){
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            AppLogger.e(message = "Error getting Constructor standings: ${e.localizedMessage}")
-        }
-        catch (e:HttpException)
-        {
-            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
-        }
-    }
-
-    override fun getF1DriverDetails(driverId: String): Flow<Resource<DriverDetails?>> = flow {
-        AppLogger.d(message = "inside getF1DriverDetails")
-        emit(Resource.Loading())
-
-        try {
-            val driverDetailsFromDB = getDriverDetailsFromDB(driverId)
-
-            driverDetailsFromDB?.also {
-                emit(Resource.Success(it))
-                AppLogger.d(message = "Success getting driver details from DB ${it.driverId}")
-            }
-
-            val result = supabaseClient
-                .postgrest["DriverDetails"]
-                .select {
-                    filter{
-                        eq("driverId", driverId)
+                    val driverStandingsListFromDB = getDriverStandingsListFromDB()
+                    if (!driverStandingsListFromDB.isNullOrEmpty()) {
+                        emit(Resource.Success(driverStandingsListFromDB))
+                        AppLogger.d(message = "Success getting driver standings from DB with size ${driverStandingsListFromDB.size}")
                     }
                 }
 
-            val driverDetails = result.decodeSingleOrNull<DriverDetails>()
 
-            if(driverDetails != driverDetailsFromDB){
-                AppLogger.d(message = "Success getting F1 driver details ${driverDetails?.driverId}")
-                emit(Resource.Success(driverDetails))
-                insertDriverDetailsInDB(driverDetails!!) // add to RoomDB
+            } catch (e: IOException) {
+                // Handle IOException specifically for network issues
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: retrofit2.HttpException) {
+                // Handle HttpException for HTTP errors for Retrofit
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: Exception) {
+                // Handle any other exceptions
+                emit(Resource.Error(e.toAppError()))
             }
-            else{
-                AppLogger.d(message = "API data and DB data are identical; skipping update")
+        }.flowOn(Dispatchers.IO)
+
+    override fun getF1ConstructorDetails(constructorId: String): Flow<Resource<ConstructorDetails?, AppError>> =
+        flow{
+            AppLogger.d(message = "inside getF1ConstructorDetail")
+            //emit(Resource.Loading())
+            try {
+
+                if (!AppLaunchManager.fetchedConstructorDetails.contains(constructorId)) {
+                    AppLogger.d(message = "Network fetch needed for constructor Details.")
+                    emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
+
+                    val result = supabaseClient
+                        .postgrest["ConstructorDetails"]
+                        .select {
+                            filter {
+                                eq("constructorId", constructorId)
+                            }
+                        }
+
+                    val constructorDetails = result.decodeSingleOrNull<ConstructorDetails>()
+
+                    if (constructorDetails != null) {
+                        insertConstructorDetailsInDB(constructorDetails) // add to RoomDB
+                        AppLogger.d(message = "Success getting F1 constructor details ${constructorDetails.constructorId}")
+                        AppLaunchManager.fetchedConstructorDetails.add(constructorId)
+                    }
+
+                    emit(Resource.Success(constructorDetails))
+                } else {
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                    val constructorDetailsFromDB = getConstructorDetailsFromDB(constructorId)
+                    emit(Resource.Success(constructorDetailsFromDB))
+                    AppLogger.d(message = "Success getting constructor details from DB")
+                }
+
+
+            } catch (e: IOException) {
+                // Handle IOException specifically for network issues
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: retrofit2.HttpException) {
+                // Handle HttpException for HTTP errors for Retrofit
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: Exception) {
+                // Handle any other exceptions
+                emit(Resource.Error(e.toAppError()))
             }
+    }.flowOn(Dispatchers.IO)
 
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            AppLogger.e(message = "Error getting F1 Driver details: ${e.localizedMessage}")
-        } catch (e: HttpException) {
-            emit(Resource.Error("Couldn't reach the servers, check your Internet connection"))
-        }
+    override fun getF1DriverDetails(driverId: String): Flow<Resource<DriverDetails?, AppError>> =
+        flow {
+            AppLogger.d(message = "inside getF1DriverDetails")
+            //emit(Resource.Loading())
 
-    }
+            try {
+                if (!AppLaunchManager.fetchedDriverDetails.contains(driverId)) {
+                    AppLogger.d(message = "Network fetch needed for driver details.")
+                    emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
 
+                    val result = supabaseClient
+                        .postgrest["DriverDetails"]
+                        .select {
+                            filter {
+                                eq("driverId", driverId)
+                            }
+                        }
+
+                    val driverDetails = result.decodeSingleOrNull<DriverDetails>()
+
+                    if (driverDetails != null) {
+                        AppLogger.d(message = "Success getting F1 driver details ${driverDetails.driverId}")
+                        insertDriverDetailsInDB(driverDetails) // add to RoomDB
+                        AppLaunchManager.fetchedCircuitDetails.add(driverId)
+                    }
+
+                    emit(Resource.Success(driverDetails))
+
+                } else {
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                    val driverDetailsFromDB = getDriverDetailsFromDB(driverId)
+                    emit(Resource.Success(driverDetailsFromDB))
+                    AppLogger.d(message = "Success getting driver details from DB")
+                }
+
+
+            } catch (e: IOException) {
+                // Handle IOException specifically for network issues
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: retrofit2.HttpException) {
+                // Handle HttpException for HTTP errors for Retrofit
+                emit(Resource.Error(e.toAppError()))
+            } catch (e: Exception) {
+                // Handle any other exceptions
+                emit(Resource.Error(e.toAppError()))
+            }
+        }.flowOn(Dispatchers.IO)
 
     //Constructor
     private suspend fun insertConstructorStandingsListInDB(constructorStandingsList: List<ConstructorStandingsInfo>) {
@@ -253,6 +280,5 @@ class F1StandingRepositoryImpl @Inject constructor(
             localDataSource.getDriverDetailsFromDB(driverId)
         }
     }
-
 
 }

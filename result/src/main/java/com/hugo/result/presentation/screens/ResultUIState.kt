@@ -5,10 +5,11 @@ import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
+import com.hugo.utilities.AppError
 
 data class ResultUIState(
     val isLoading: Boolean = true,
-    val error: String? = null,
+    val error: AppError? = null,
 
     val driverRaceResults: List<DriverRaceResultsInfo> = emptyList(),
     val driverQualifyingResults: List<DriverQualifyingResultsInfo> = emptyList(),

@@ -39,7 +39,7 @@ fun RaceResultListItem(
                 points = driverRaceResult.points,
                 grid = driverRaceResult.grid,
                 teamColor = circuitColor,
-//                interval = "_"  , //
+                interval = interval,
                 gapToLeader = driverRaceResult.time, // If you are the Leader then it will displays the Time it takes to finished the race
                 fastestLap = driverRaceResult.fastestLap,
                 status = driverRaceResult.status

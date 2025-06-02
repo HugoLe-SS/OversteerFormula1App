@@ -1,6 +1,7 @@
 package com.hugo.standings.presentation.screens.Details
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.design.components.AppToolbar
+import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.presentation.components.StandingsDetailScreen.ConstructorBioList
 import com.hugo.standings.presentation.components.StandingsDetailScreen.DriverBioList
@@ -55,63 +58,74 @@ fun StandingsDetailsScreen(
         },
     )
     {
-        padding->
-
-        when{
-            state.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        //.padding(innerPadding)
-                        .size(24.dp),
-                    color = AppTheme.colorScheme.onSecondary
-                )
-            }
-            state.error != null -> {
-                Text(text = "Error: ${state.error}")
-            }
-            else -> {
+            innerPadding ->
                 LazyColumn (
                     modifier = Modifier
                         .fillMaxSize()
                         .background(AppTheme.colorScheme.background)
-                        .padding(padding)
+                        .padding(innerPadding)
                 ){
-
-                    constructorClickInfo?.let {
-                        item{
-                            StandingsBannerListItem(
-                                constructorDetails = state.constructorDetails,
-                                constructorClickInfo = constructorClickInfo,
-                                buttonClicked = viewResultButtonClicked
-                            )
+                    when{
+                        state.isLoading -> {
+                            item{
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(innerPadding),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        LoadingIndicatorComponent(
+                                            padding = innerPadding
+                                        )
+                                    }
+                                }
+                            }
                         }
-                        item {
-                            ConstructorBioList(
-                                constructorDetails = state.constructorDetails?: return@item,
-                            )
+                        state.error != null -> {
+                            item{
+                                Text(text = "Error: ${state.error}")
+                            }
+                        }
+                        else-> {
+                            constructorClickInfo?.let {
+                                item{
+                                    StandingsBannerListItem(
+                                        constructorDetails = state.constructorDetails,
+                                        constructorClickInfo = constructorClickInfo,
+                                        buttonClicked = viewResultButtonClicked
+                                    )
+                                }
+                                item {
+                                    ConstructorBioList(
+                                        constructorDetails = state.constructorDetails?: return@item,
+                                    )
+                                }
+                            }
+
+                            driverClickInfo?.let {
+                                item{
+                                    StandingsBannerListItem(
+                                        driverDetails = state.driverDetails,
+                                        driverClickInfo = driverClickInfo,
+                                        buttonClicked = viewResultButtonClicked
+                                    )
+                                }
+                                item {
+                                    DriverBioList(
+                                        driverDetails = state.driverDetails?: return@item,
+                                    )
+                                }
+                            }
                         }
                     }
-
-                    driverClickInfo?.let {
-                        item{
-                            StandingsBannerListItem(
-                                driverDetails = state.driverDetails,
-                                driverClickInfo = driverClickInfo,
-                                buttonClicked = viewResultButtonClicked
-                            )
-                        }
-                        item {
-                            DriverBioList(
-                                driverDetails = state.driverDetails?: return@item,
-                            )
-                        }
-                    }
-
-                }
 
             }
-        }
 
     }
 }

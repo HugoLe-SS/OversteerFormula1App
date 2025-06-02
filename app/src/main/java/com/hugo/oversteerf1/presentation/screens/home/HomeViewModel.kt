@@ -28,8 +28,8 @@ class HomeViewModel @Inject constructor(
     private fun getF1News(){
         AppLogger.d(message = "GetF1News function run without crashing")
 
-        getF1NewsUseCase().onEach { result ->
-            when(result){
+        getF1NewsUseCase().onEach { resource ->
+            when(resource){
                 is Resource.Loading -> {
                     _state.value = HomeUiState(
                         isLoading = true
@@ -38,14 +38,14 @@ class HomeViewModel @Inject constructor(
                 }
                 is Resource.Success -> {
                     _state.value = HomeUiState(
-                        news = result.data,
+                        news = resource.data,
                         isLoading = false
                     )
                     AppLogger.d(message = "Success for Home Screen ")
                 }
                 is Resource.Error -> {
                     _state.value = HomeUiState(
-                        error = result.message,
+                        error = resource.error,
                         isLoading = false
                     )
                     AppLogger.e(message = "Error Loading Home Screen")

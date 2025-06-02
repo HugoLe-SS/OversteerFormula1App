@@ -61,6 +61,21 @@ class ScheduleHomeViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
+    val trimmedFilteredEvents = filteredEvents
+        .map { list ->
+            val state = _state.value
+            when (state.currentType) {
+                ScheduleType.UPCOMING -> {
+                    if (list.size > 1) list.drop(1) else emptyList()
+                }
+                ScheduleType.PAST -> {
+                    if (list.size > 1) list.drop(1) else emptyList()
+                }
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+
     init {
         getF1Calendar(season = "current")
     }
@@ -133,12 +148,12 @@ class ScheduleHomeViewModel @Inject constructor(
 
 
     private fun getF1Calendar(season: String) {
-        getF1CalendarUseCase(season).onEach { result ->
-            when (result) {
+        getF1CalendarUseCase(season).onEach { resource ->
+            when (resource) {
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = true,
+                            isLoading = resource.isFetchingFromNetwork,
                             error = null
                         )
                     }
@@ -147,7 +162,7 @@ class ScheduleHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            f1Calendar = result.data ?: emptyList()
+                            f1Calendar = resource.data ?: emptyList()
                         )
                     }
                 }
@@ -155,7 +170,7 @@ class ScheduleHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.message
+                            error = resource.error
                         )
                     }
                 }

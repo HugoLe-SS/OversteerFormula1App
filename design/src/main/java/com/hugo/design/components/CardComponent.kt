@@ -170,6 +170,7 @@ fun CardDetails(
             ) {
                 if(circuitImage != null){
                     ImageComponent(
+                        modifier = Modifier.size(40.dp),
                         contentScale = ContentScale.Fit,
                         imageResourceValue = circuitImage,
                         contentDescription = "Circuit Image",

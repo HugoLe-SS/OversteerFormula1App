@@ -42,7 +42,7 @@ data class DriverRaceResultRace(
 
 data class DriverRaceResult(
     val number: String,
-    val position: String,
+    val position: Int,
     val positionText: String,
     val points: String,
     @SerializedName("Driver")

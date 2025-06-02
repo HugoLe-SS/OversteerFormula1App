@@ -37,7 +37,7 @@ fun ResultCardComponent(
     color: CardColors = CardDefaults.cardColors(
         containerColor = AppTheme.colorScheme.background
     ),
-    position: String,
+    position: Int,
     grid: String,
     driverName: String?= null,
     raceName: String?= null,
@@ -77,7 +77,7 @@ fun ResultCardComponent(
 
 @Composable
 fun ResultCardDetails(
-    position: String,
+    position: Int,
     grid: String? = "",
     driverName: String? = "",
     raceName: String? = "",
@@ -118,7 +118,7 @@ fun ResultCardDetails(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = position ?: "",
+                        text = position.toString() ?: "",
                         style = AppTheme.typography.labelNormal,
                         color = AppTheme.colorScheme.onSecondary,
                     )
@@ -129,7 +129,7 @@ fun ResultCardDetails(
                 ) {
                     DriverPositionChange(
                         grid = grid ?: "",
-                        position = position
+                        position = position.toString()
                     )
                 }
             }
@@ -181,30 +181,6 @@ fun ResultCardDetails(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-//                Box(
-//                    modifier = Modifier
-//                        .weight(1f),
-//                ){
-//                    Text(
-//                        textAlign = TextAlign.Center,
-//                        text = points ?: "",
-//                        style = AppTheme.typography.titleNormal,
-//                        color = AppTheme.colorScheme.onSecondary,
-//                    )
-//                }
-//
-//                Box(
-//                    modifier = Modifier
-//                        .weight(1f),
-//                    contentAlignment = Alignment.BottomStart
-//                ){
-//                    Text(
-//                        textAlign = TextAlign.Center,
-//                        text = "PTS",
-//                        style = AppTheme.typography.titleNormal,
-//                        color = AppTheme.colorScheme.onSecondary,
-//                    )
-//                }
                 DriverStatusComponent(
                     driverStatus = DriverStatus.fromString(status),
                     points = points,
@@ -250,7 +226,7 @@ fun ResultCardDetails(
                     ){
                         RaceTimeComponent(
                             time = gapToLeader,
-                            description = if(position == "1") stringResource(R.string.time) else stringResource(R.string.gap_to_leader),
+                            description = if(position == 1) stringResource(R.string.time) else stringResource(R.string.gap_to_leader),
                             icon = R.drawable.ic_gap)
                     }
                 } else{
@@ -544,7 +520,7 @@ fun DriverStatusComponent(
 fun ResultCardComponentPreview() {
     AppTheme(isDarkTheme = true) {
         ResultCardComponent(
-            position = "1",
+            position = 1,
             grid = "4",
             driverName = "Lando Norris",
             constructorName = "McLaren",

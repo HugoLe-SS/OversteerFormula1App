@@ -1,6 +1,7 @@
 package com.hugo.result.presentation.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,15 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.design.components.AppToolbar
+import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.result.presentation.components.CircuitResultBannerComponent
 import com.hugo.result.presentation.components.RaceResultListItem
-import com.hugo.result.presentation.components.calculateIntervals
 import com.hugo.utilities.logging.AppLogger
 
 @Composable
@@ -33,6 +35,7 @@ fun ResultScreen(
     circuitDetails: F1CircuitDetails? = null
 ){
     val state by viewModel.state.collectAsState()
+    val intervals by viewModel.raceIntervals.collectAsState()
 
     LaunchedEffect(key1 = raceId, key2 = circuitDetails){
         AppLogger.d(message = "LaunchedEffect - raceId: $raceId")
@@ -62,66 +65,73 @@ fun ResultScreen(
                 backButtonClicked = backButtonClicked
             )
         },
-    ) { padding ->
+    ) { innerPadding ->
 
-        when {
-            state.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        //.padding(innerPadding)
-                        .size(24.dp),
-                    color = AppTheme.colorScheme.onSecondary
-                )
-            }
 
-            state.error != null -> {
-                Text(text = "Error: ${state.error}")
-            }
-
-            else -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(AppTheme.colorScheme.background)
-                        .padding(padding)
+                        .padding(innerPadding)
                 ) {
-                    item{
-                        CircuitResultBannerComponent(
-                            f1CalendarResult = state.f1CalendarResult,
-                            circuitDetails = circuitDetails,
-                        )
-                    }
+                    when {
+                        state.isLoading -> {
+                            item{
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingIndicatorComponent(
+                                        padding = innerPadding
+                                    )
+                                }
+                            }
+                        }
 
-                    state.driverRaceResults?.let{
-                        items(state.driverRaceResults) { raceResult ->
-                            RaceResultListItem(
-                                driverRaceResult = raceResult
-                            )
+                        state.error != null -> {
+                            item{
+                                Text(text = "Error: ${state.error}")
+                            }
+                        }
+
+                        else -> {
+                            item{
+                                CircuitResultBannerComponent(
+                                    f1CalendarResult = state.f1CalendarResult,
+                                    circuitDetails = circuitDetails,
+                                )
+                            }
+
+                            state.driverRaceResults?.let{
+                                items(state.driverRaceResults) { raceResult ->
+                                    RaceResultListItem(
+                                        driverRaceResult = raceResult
+                                    )
+                                }
+                            }
+
+                            state.constructorRaceResults?.let{
+                                items(state.constructorRaceResults) { raceResult ->
+                                    RaceResultListItem(
+                                        constructorRaceResult = raceResult
+                                    )
+                                }
+                            }
+
+                            state.f1CalendarResult?.let { results ->
+                                //val intervals = calculateIntervals(results = results)
+                                itemsIndexed(results) { index, raceResult ->
+                                    RaceResultListItem(
+                                        circuitRaceResult = raceResult,
+                                        interval = intervals.getOrNull(index) ?: "Leader" // Use "Leader" for the first item
+                                    )
+                                }
+                            }
+
                         }
                     }
-
-                    state.constructorRaceResults?.let{
-                        items(state.constructorRaceResults) { raceResult ->
-                            RaceResultListItem(
-                                constructorRaceResult = raceResult
-                            )
-                        }
-                    }
-
-                    state.f1CalendarResult?.let { results ->
-                        val intervals = calculateIntervals(results = results)
-                        itemsIndexed(results) { index, raceResult ->
-                            RaceResultListItem(
-                                circuitRaceResult = raceResult,
-                                interval = intervals[index] ?: "Leader" // Use "Leader" for the first item
-                            )
-                        }
-                    }
-
-
                 }
-            }
-        }
     }
 }

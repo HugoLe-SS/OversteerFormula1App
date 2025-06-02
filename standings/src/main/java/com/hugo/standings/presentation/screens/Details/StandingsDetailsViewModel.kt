@@ -36,18 +36,21 @@ class StandingsDetailsViewModel @Inject constructor(
     }
 
     private fun getDriverDetails(driverId: String){
-        getDriverDetailsUseCase(driverId = driverId).onEach { result ->
-            when (result) {
+        getDriverDetailsUseCase(driverId = driverId).onEach { resource ->
+            when (resource) {
                 is Resource.Loading -> {
                     AppLogger.d(message = "DriverDetailsViewModel Loading")
-                    _state.update { it.copy(isLoading = true) }
+                    _state.update {
+                        it.copy(
+                        isLoading = resource.isFetchingFromNetwork
+                        ) }
                 }
 
                 is Resource.Success -> {
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            driverDetails = result.data
+                            driverDetails = resource.data
                         )
                     }
                     AppLogger.d(message = "Success Getting Driver Details")
@@ -58,7 +61,7 @@ class StandingsDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.message
+                            error = resource.error
                         )
                     }
                 }
@@ -69,13 +72,13 @@ class StandingsDetailsViewModel @Inject constructor(
     }
 
     private fun getConstructorDetails(constructorId: String){
-        getConstructorDetailsUseCase(constructorId).onEach { result ->
-            when(result){
+        getConstructorDetailsUseCase(constructorId).onEach { resource ->
+            when(resource){
                 is Resource.Loading -> {
                     AppLogger.d(message = "ConstructorDetailsViewModel Loading")
                     _state.update {
                         it.copy(
-                            isLoading = true
+                            isLoading = resource.isFetchingFromNetwork
                         )
                     }
                 }
@@ -84,7 +87,7 @@ class StandingsDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            constructorDetails = result.data
+                            constructorDetails = resource.data
                         )
                     }
                     AppLogger.d(message = "Success getting constructor details")
@@ -95,7 +98,7 @@ class StandingsDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.message
+                            error = resource.error
                         )
                     }
                 }

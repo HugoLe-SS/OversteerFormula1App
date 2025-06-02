@@ -1,12 +1,12 @@
 package com.hugo.datasource.local.entity.Driver
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.hugo.datasource.local.TableConstants
 
-@Entity(tableName = TableConstants.DRIVER_RACE_LIST)
+@Entity(tableName = TableConstants.DRIVER_RACE_LIST,
+    primaryKeys = ["driverId", "round"])
 data class DriverRaceResultsInfo(
-    @PrimaryKey(autoGenerate = false)
+    //@PrimaryKey(autoGenerate = false)
     val driverId: String,
     val total: String,
     val driverNumber: String,
@@ -18,12 +18,12 @@ data class DriverRaceResultsInfo(
     val dateOfBirth: String,
     val nationality: String,
     val season: String,
-    val round: String,
+    val round: Int,
     val raceName: String,
     val circuitId: String,
     val circuitName: String,
     val country: String,
-    val position: String,
+    val position: Int,
     val positionText: String,
     val points: String,
     val grid: String,

@@ -1,15 +1,18 @@
 package com.hugo.utilities
 
 import android.annotation.SuppressLint
-import android.content.Context
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.CountDownInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DateInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.Session
+import com.hugo.utilities.logging.AppLogger
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
@@ -17,6 +20,39 @@ import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 object AppUtilities {
+    // --- Reusable Error Mapping Function ---
+    fun Throwable.toAppError(): AppError {
+        AppLogger.e(message = "Mapping Throwable to AppError: ${this::class.java.simpleName} - ${this.localizedMessage}")
+        return when (this) {
+            is IOException -> AppError.RemoteError.NO_INTERNET_ERROR // Covers UnknownHostException, SocketTimeoutException etc.
+            is retrofit2.HttpException -> { // Or your specific HTTP client's exception
+                val specificErrorType = when (this.code()) {
+                    400 -> AppError.RemoteError.CLIENT_ERROR // Bad Request
+                    401 -> AppError.RemoteError.CLIENT_ERROR // Unauthorized - you might want a more specific AppError.AuthError here
+                    403 -> AppError.RemoteError.CLIENT_ERROR // Forbidden
+                    404 -> AppError.RemoteError.CLIENT_ERROR // Not Found - or AppError.NotFoundError
+                    429 -> AppError.RemoteError.TOO_MANY_REQUESTS_ERROR
+                    in 500..599 -> AppError.RemoteError.SERVER_ERROR
+                    else -> AppError.RemoteError.UNKNOWN_ERROR
+                }
+                RemoteErrorWithCode(specificErrorType, this.code(), this.message())
+            }
+            is com.google.gson.JsonSyntaxException, // Example for serialization error
+            is kotlinx.serialization.SerializationException -> AppError.RemoteError.SERIALIZATION_ERROR
+            // Add more specific exception types here if needed
+            // is YourCustomApiException -> // map to AppError.ApiSpecificError(this.errorCode, this.errorMessage)
+            else -> {
+                // For any other Exception, treat as unknown remote error if it's not caught before
+                // Or you could have a more generic AppError.UnknownAppError that isn't tied to Remote/Local
+                AppLogger.e(message = "Unhandled exception type mapped to UNKNOWN_ERROR: ${this::class.java.name}")
+                AppError.RemoteError.UNKNOWN_ERROR // Default to unknown remote if context is network call
+                // Or, more generally:
+                // object UnknownAppError : AppError // Define this in your AppError sealed interface
+                // UnknownAppError
+            }
+        }
+    }
+
     fun calculatePositionChange(grid: String, position: String): String {
         val gridValue = grid.toInt()
         val positionValue = position.toInt()
@@ -28,10 +64,6 @@ object AppUtilities {
             "${difference}"
         }
     }
-
-
-
-
 
     // Readable Date
     fun parseDate(dateString: String?): DateInfo? {
@@ -66,6 +98,20 @@ object AppUtilities {
             localTime.format(DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault()))
         } catch (e: Exception) {
             "Invalid Time"
+        }
+    }
+
+    // Parse UTC date and time to ZonedDateTime
+    fun parseUtcRaceDateTimeToZoned(mainRaceDate: String?, mainRaceTime: String?): ZonedDateTime? {
+        if (mainRaceDate.isNullOrBlank() || mainRaceTime.isNullOrBlank()) return null
+
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneOffset.UTC)
+            val dateTimeStr = "$mainRaceDate ${mainRaceTime.removeSuffix("Z")}"
+            val localDateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            localDateTime.atZone(ZoneOffset.UTC)
+        } catch (e: Exception) {
+            null
         }
     }
 
@@ -171,17 +217,6 @@ object AppUtilities {
         }
     }
 
-
-    fun String.toFlagName(): Int {
-        return "R.drawable.flag_${this.lowercase()}".toInt()
-    }
-
-
-    fun getFlagResId(context: Context, countryCode: String): Int {
-        val flagName = "flag_${countryCode.lowercase()}"
-        val flagResId = context.resources.getIdentifier(flagName, "drawable", context.packageName)
-        return flagResId
-    }
 
 
 

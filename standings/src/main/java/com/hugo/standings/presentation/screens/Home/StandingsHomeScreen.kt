@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
+import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.components.SegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
@@ -78,106 +77,113 @@ fun StandingsHomeScreen(
             )
         }
     ) { innerPadding ->
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = AppTheme.colorScheme.onSecondary
-                    )
-                }
-            }
-
-            state.error != null -> {
-                Text(
-                    text = "Error: ${state.error}",
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
-
-            else -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                         .background(AppTheme.colorScheme.background)
                 ) {
-                    when (state.currentType) {
-                        StandingsType.CONSTRUCTOR -> {
-                            // Constructor Standings
-                            state.constructorStandings.let{ constructors ->
-                                item{
-                                    StandingsBannerComponent(
-                                        constructorInfo = constructors[0],
-                                        imageUrl = R.drawable.mclaren
+                    when{
+                        state.isLoading -> {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingIndicatorComponent(
+                                        padding = innerPadding
                                     )
                                 }
-                            }
-
-                            items(state.constructorStandings) { constructors ->
-                                ConstructorListItem(
-                                    constructors,
-                                    constructorCardClicked = { info ->
-                                        constructorCardClicked(
-                                            ConstructorClickInfo(
-                                                constructorId = info.constructorId,
-                                                constructorName = info.constructorName,
-                                                season = info.season,
-                                                nationality = info.nationality,
-                                                position = info.position,
-                                                points = info.points,
-                                                wins = info.wins
-                                            )
-                                        )
-                                    }
-                                )
                             }
                         }
 
-                        StandingsType.DRIVER -> {
-                            // Driver Standings
-                            state.driverStandings.let{
-                                item{
-                                    StandingsBannerComponent(
-                                        driverInfo = it[0],
-                                        imageUrl = R.drawable.lando
-                                    )
-                                }
+                        state.error != null -> {
+                            item{
+                                Text(
+                                    text = "Error: ${state.error}",
+                                    modifier = Modifier.padding(innerPadding)
+                                )
                             }
+                        }
+                        else -> {
+                            when (state.currentType) {
+                                StandingsType.CONSTRUCTOR -> {
+                                    // Constructor Standings
+                                    state.constructorStandings.let{ constructors ->
+                                        if (constructors.isNotEmpty()) {
+                                            item {
+                                                StandingsBannerComponent(
+                                                    constructorInfo = constructors[0],
+                                                    imageUrl = R.drawable.mclaren
+                                                )
+                                            }
+                                        }
+                                    }
 
-
-                            items(state.driverStandings) { drivers ->
-                                DriverListItem(
-                                    drivers,
-                                    driverCardClicked = { info ->
-                                        driverCardClicked(
-                                            DriverClickInfo(
-                                                driverId = info.driverId,
-                                                constructorName = info.constructorName,
-                                                constructorId = info.constructorId,
-                                                season = info.season,
-                                                givenName = info.givenName,
-                                                familyName = info.familyName,
-                                                driverNumber = info.driverNumber,
-                                                driverCode = info.driverCode,
-                                                position = info.position,
-                                                points = info.points,
-                                                wins = info.wins
-                                            )
+                                    items(state.constructorStandings) { constructors ->
+                                        ConstructorListItem(
+                                            constructors,
+                                            constructorCardClicked = { info ->
+                                                constructorCardClicked(
+                                                    ConstructorClickInfo(
+                                                        constructorId = info.constructorId,
+                                                        constructorName = info.constructorName,
+                                                        season = info.season,
+                                                        nationality = info.nationality,
+                                                        position = info.position,
+                                                        points = info.points,
+                                                        wins = info.wins
+                                                    )
+                                                )
+                                            }
                                         )
                                     }
-                                )
+                                }
+
+                                StandingsType.DRIVER -> {
+                                    // Driver Standings
+                                    state.driverStandings.let{ drivers ->
+                                        if (drivers.isNotEmpty()) {
+                                            item {
+                                                StandingsBannerComponent(
+                                                    driverInfo = drivers[0],
+                                                    imageUrl = R.drawable.lando
+                                                )
+                                            }
+                                        }
+                                    }
+
+
+                                    items(state.driverStandings) { drivers ->
+                                        DriverListItem(
+                                            drivers,
+                                            driverCardClicked = { info ->
+                                                driverCardClicked(
+                                                    DriverClickInfo(
+                                                        driverId = info.driverId,
+                                                        constructorName = info.constructorName,
+                                                        constructorId = info.constructorId,
+                                                        season = info.season,
+                                                        givenName = info.givenName,
+                                                        familyName = info.familyName,
+                                                        driverNumber = info.driverNumber,
+                                                        driverCode = info.driverCode,
+                                                        position = info.position,
+                                                        points = info.points,
+                                                        wins = info.wins
+                                                    )
+                                                )
+                                            }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
+
                 }
-            }
-        }
     }
 }
 

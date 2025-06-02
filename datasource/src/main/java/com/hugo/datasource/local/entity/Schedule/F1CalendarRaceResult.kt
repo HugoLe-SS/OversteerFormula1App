@@ -1,14 +1,15 @@
 package com.hugo.datasource.local.entity.Schedule
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.hugo.datasource.local.TableConstants
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity(tableName = TableConstants.F1_CALENDAR_RESULT_LIST)
+@Entity(tableName = TableConstants.F1_CALENDAR_RESULT_LIST,
+        primaryKeys = ["circuitId", "position"]
+)
 data class F1CalendarRaceResult(
-    @PrimaryKey(autoGenerate = false)
+    //@PrimaryKey(autoGenerate = false)
     val circuitId: String,
     val constructorId: String,
     val total: String,
@@ -23,7 +24,7 @@ data class F1CalendarRaceResult(
     val raceName: String,
     val circuitName: String,
     val country: String,
-    val position: String,
+    val position: Int,
     val positionText: String,
     val points: String,
     val grid: String,
@@ -31,5 +32,8 @@ data class F1CalendarRaceResult(
     val time: String, // 1st place interval
     val millis: String?, // Milliseconds of the 1st place interval
     val fastestLap: String,
-    val status: String
+    val status: String,
+
+
+    val interval: String? = null // This is computed value, does not exist in the database
 )

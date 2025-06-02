@@ -33,7 +33,7 @@ class CalendarDetailsViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = true,
+                            isLoading = result.isFetchingFromNetwork,
                             error = null
                         )
                     }
@@ -51,7 +51,7 @@ class CalendarDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.message
+                            error = result.error
                         )
                     }
                 }

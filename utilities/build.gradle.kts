@@ -67,6 +67,10 @@ dependencies {
     //implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
     implementation(libs.navigation.compose)
 
+    //retrofit + okhttp3 for API fetching
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+
     ksp(libs.hilt.compiler)
 
 }

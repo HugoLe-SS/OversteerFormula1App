@@ -31,6 +31,7 @@ import com.hugo.utilities.AppUtilities
             .padding(12.dp),
         verticalArrangement = Arrangement.Center
     ){
+
         val raceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
         val fp1Date = AppUtilities.parseDate(calendarInfo.firstPractice?.date?:"")
         val fp2Date = AppUtilities.parseDate(calendarInfo.secondPractice?.date?:"")

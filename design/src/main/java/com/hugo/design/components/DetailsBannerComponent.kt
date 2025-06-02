@@ -1,6 +1,7 @@
 package com.hugo.design.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -200,10 +201,10 @@ fun ScheduleDetailsBannerComponent(
     topSpeed: String,
     elevation: String,
     circuitColor: Color,
-    circuitImgUrl: String,
-    buttonClicked: () -> Unit = {}
-
-)
+    circuitImgUrl: Int,
+    buttonClicked: () -> Unit = {},
+    isPastRace: Boolean = false
+    )
 {
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -275,7 +276,7 @@ fun ScheduleDetailsBannerComponent(
             ){
                 ImageComponent(
                     modifier = Modifier.weight(2f),
-                    imageUrl = circuitImgUrl,
+                    imageResourceValue = circuitImgUrl,
                     contentDescription = "Banner",
                     contentScale = ContentScale.Fit
                 )
@@ -333,13 +334,20 @@ fun ScheduleDetailsBannerComponent(
             }
         }
 
-        ButtonComponent(
+        if(isPastRace){
+            ButtonComponent(
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.End),
             text = stringResource(R.string.view_results),
             buttonClicked = buttonClicked
-        )
+            )
+        }
+        else{
+            Box(modifier = Modifier
+                .weight(1f)
+                .align(Alignment.End))
+        }
 
     }
 
@@ -400,6 +408,6 @@ fun StandingsDetailsBannerComponentPreview(){
         topSpeed = "330",
         elevation = "0",
         circuitColor = AppTheme.colorScheme.onSecondary,
-        circuitImgUrl = "",
+        circuitImgUrl = R.drawable.circuit_imola,
     )
 }

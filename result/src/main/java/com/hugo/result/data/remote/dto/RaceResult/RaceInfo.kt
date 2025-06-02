@@ -5,7 +5,7 @@ import com.hugo.result.data.remote.dto.Circuit
 
 data class RaceInfo(
     val season: String,
-    val round: String,
+    val round: Int,
     val url: String,
     val raceName: String,
     @SerializedName("Circuit")
