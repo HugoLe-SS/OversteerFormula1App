@@ -73,7 +73,7 @@ fun HomeScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             LoadingIndicatorComponent(
-                                padding = innerPadding
+                                paddingValues = innerPadding,
                             )
                         }
                     }

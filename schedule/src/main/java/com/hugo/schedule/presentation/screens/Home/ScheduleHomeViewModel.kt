@@ -7,6 +7,7 @@ import com.hugo.schedule.domain.usecase.GetF1CalendarUseCase
 import com.hugo.utilities.AppUtilities
 import com.hugo.utilities.AppUtilities.getNextUpcomingSession
 import com.hugo.utilities.Resource
+import com.hugo.utilities.com.hugo.utilities.AppLaunchManager
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.CountDownInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.Session
 import com.hugo.utilities.logging.AppLogger
@@ -77,7 +78,7 @@ class ScheduleHomeViewModel @Inject constructor(
 
 
     init {
-        getF1Calendar(season = "current")
+        getF1Calendar(season = "current", isRefresh = false)
     }
 
     private fun startCountdown(session: Session?) {
@@ -147,13 +148,14 @@ class ScheduleHomeViewModel @Inject constructor(
     }
 
 
-    private fun getF1Calendar(season: String) {
+    private fun getF1Calendar(season: String, isRefresh: Boolean) {
         getF1CalendarUseCase(season).onEach { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = resource.isFetchingFromNetwork,
+                            isLoading = if (isRefresh) it.isLoading else resource.isFetchingFromNetwork,
+                            isRefreshing = if (isRefresh) resource.isFetchingFromNetwork else it.isRefreshing,
                             error = null
                         )
                     }
@@ -162,6 +164,7 @@ class ScheduleHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             f1Calendar = resource.data ?: emptyList(),
                             error = null
                         )
@@ -171,6 +174,7 @@ class ScheduleHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             error = resource.error
                         )
                     }
@@ -181,21 +185,31 @@ class ScheduleHomeViewModel @Inject constructor(
     }
 
 
-    fun onEvent(event: ToggleScheduleEvent) {
+    fun onEvent(event: ScheduleEvent) {
         when (event) {
-            is ToggleScheduleEvent.SetScheduleType -> {
+            is ScheduleEvent.SetScheduleType -> {
                 _state.update { it.copy(currentType = event.type) }
                 AppLogger.d(message = "${state.value.currentType}")
             }
-            is ToggleScheduleEvent.ToggleSchedule -> {
-                getF1Calendar(season = "current")
+            is ScheduleEvent.ToggleSchedule -> {
+                getF1Calendar(season = "current", isRefresh = false)
             }
 
-            is ToggleScheduleEvent.RetryFetch -> {
+            is ScheduleEvent.RetryFetch -> {
                 AppLogger.d(message = "Retrying fetch in ScheduleHomeViewModel")
-                getF1Calendar(season = "current")
+                getF1Calendar(season = "current", isRefresh = false)
             }
 
+            ScheduleEvent.Refresh -> {
+                _state.update {
+                    it.copy(
+                        isRefreshing = true,
+                        f1Calendar = emptyList()
+                    )
+                }
+                AppLaunchManager.hasFetchedCalendar = false
+                getF1Calendar(season = "current", isRefresh = true)
+            }
         }
     }
 

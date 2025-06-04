@@ -9,4 +9,8 @@ object AppLaunchManager {
     var hasFetchedCalendar = false
     val fetchedCircuitDetails = mutableSetOf<String>()
 
+    var hasFetchedConstructorResults = mutableSetOf<String>()
+    var hasFetchedDriverResults = mutableSetOf<String>()
+    var hasFetchedCalendarResults = mutableSetOf<String>()
+
 }

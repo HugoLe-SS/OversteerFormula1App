@@ -81,8 +81,8 @@ fun ResultScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     LoadingIndicatorComponent(
-                                        padding = innerPadding
-                                    )
+                                        paddingValues = innerPadding,
+                                        )
                                 }
                             }
                         }

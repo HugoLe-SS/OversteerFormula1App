@@ -16,6 +16,7 @@ import com.hugo.result.domain.repository.IF1ResultRepository
 import com.hugo.utilities.AppError
 import com.hugo.utilities.AppUtilities.toAppError
 import com.hugo.utilities.Resource
+import com.hugo.utilities.com.hugo.utilities.AppLaunchManager
 import com.hugo.utilities.logging.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -35,15 +36,7 @@ class F1ResultRepositoryImpl @Inject constructor(
         //emit(Resource.Loading())
 
         try {
-            val constructorRaceListFromDB = getConstructorRaceListFromDB(constructorId)
-
-            if(!constructorRaceListFromDB.isNullOrEmpty()){
-                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
-
-                emit(Resource.Success(constructorRaceListFromDB))
-                AppLogger.d(message = "Success getting Race Result from DB with size ${constructorRaceListFromDB.size}")
-            }
-            else{
+            if(!AppLaunchManager.hasFetchedConstructorResults.contains(constructorId)){
                 AppLogger.d(message = "Network fetch needed for getting F1 constructor Race Result.")
                 emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
 
@@ -51,12 +44,25 @@ class F1ResultRepositoryImpl @Inject constructor(
                     .getConstructorRaceResult(season = season, constructorId = constructorId)
                     .toConstructorRaceResultInfoList()
 
-                insertConstructorRaceListInDB(constructorRaceResults) // add to RoomDB
-                AppLogger.d(message = "Success saving constructor race results to DB")
+                if(constructorRaceResults.isNotEmpty()){
+                    AppLaunchManager.hasFetchedConstructorResults.add(constructorId)
+                    insertConstructorRaceListInDB(constructorRaceResults) // add to RoomDB
+                    AppLogger.d(message = "Success saving constructor race results to DB")
+
+                }
 
                 emit(Resource.Success(constructorRaceResults))
                 AppLogger.d(message = "Success getting constructor race results ${constructorRaceResults.size}")
+            }
+            else{
+                val constructorRaceListFromDB = getConstructorRaceListFromDB(constructorId)
 
+                if(!constructorRaceListFromDB.isNullOrEmpty()){
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                    emit(Resource.Success(constructorRaceListFromDB))
+                    AppLogger.d(message = "Success getting Race Result from DB with size ${constructorRaceListFromDB.size}")
+                }
             }
 
         } catch (e: IOException) {
@@ -120,15 +126,7 @@ class F1ResultRepositoryImpl @Inject constructor(
         //emit(Resource.Loading())
 
         try {
-            val driverRaceListFromDB = getDriverRaceResultsListFromDB(driverId)
-
-            if(!driverRaceListFromDB.isNullOrEmpty()){
-                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
-
-                emit(Resource.Success(driverRaceListFromDB))
-                AppLogger.d(message = "Success getting Race Result from DB with size ${driverRaceListFromDB.size}")
-            }
-            else{
+            if(!AppLaunchManager.hasFetchedDriverResults.contains(driverId)){
                 AppLogger.d(message = "Network fetch needed for getting F1 driver Race Result.")
                 emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
 
@@ -136,12 +134,26 @@ class F1ResultRepositoryImpl @Inject constructor(
                     .getDriverRaceResult(season = season, driverId = driverId)
                     .toDriverRaceResultInfoList()
 
-                insertDriverRaceResultsListInDB(driverRaceResult) // add to RoomDB
-                AppLogger.d(message = "Success saving driver Race results to DB")
+                if(driverRaceResult.isNotEmpty()){
+                    AppLaunchManager.hasFetchedDriverResults.add(driverId)
+                    insertDriverRaceResultsListInDB(driverRaceResult) // add to RoomDB
+                    AppLogger.d(message = "Success saving driver Race results to DB")
+                }
+
 
                 emit(Resource.Success(driverRaceResult))
                 AppLogger.d(message = "Success getting driver Race results ${driverRaceResult.size}")
+            }
 
+            else{
+                val driverRaceListFromDB = getDriverRaceResultsListFromDB(driverId)
+
+                if(!driverRaceListFromDB.isNullOrEmpty()){
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                    emit(Resource.Success(driverRaceListFromDB))
+                    AppLogger.d(message = "Success getting Race Result from DB with size ${driverRaceListFromDB.size}")
+                }
             }
 
 
@@ -205,28 +217,32 @@ class F1ResultRepositoryImpl @Inject constructor(
         AppLogger.d(message = "Inside getF1CalendarResult")
         //emit(Resource.Loading())
         try {
-            val calendarResultListFromDB = getCalendarResultListFromDB(circuitId)
-
-            if(!calendarResultListFromDB.isNullOrEmpty()){
-                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
-
-                emit(Resource.Success(calendarResultListFromDB))
-                AppLogger.d(message = "Success getting Race Result from DB with size ${calendarResultListFromDB.size}")
-            }
-            else{
+            if(!AppLaunchManager.hasFetchedCalendarResults.contains(circuitId)){
                 AppLogger.d(message = "Network fetch needed for getting F1 calendar Race Result.")
                 emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
 
                 val calenderRaceResult = f1ResultApi
                     .getF1CalendarResults(season = season, circuitId = circuitId)
                     .toF1CalendarResultList()
+                if(calenderRaceResult.isNotEmpty()){
+                    AppLaunchManager.hasFetchedCalendarResults.add(circuitId)
+                    insertCalendarResultListInDB(calenderRaceResult) // add to RoomDB
+                    AppLogger.d(message = "Success saving Calendar race results to DB with size ${calenderRaceResult.size}")
+                }
 
-                insertCalendarResultListInDB(calenderRaceResult) // add to RoomDB
-                AppLogger.d(message = "Success saving Calendar race results to DB with size ${calenderRaceResult.size}")
 
                 emit(Resource.Success(calenderRaceResult))
                 AppLogger.d(message = "Success getting Calendar race results ${calenderRaceResult.size}")
+            }
+            else{
+                val calendarResultListFromDB = getCalendarResultListFromDB(circuitId)
 
+                if(!calendarResultListFromDB.isNullOrEmpty()){
+                    emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+
+                    emit(Resource.Success(calendarResultListFromDB))
+                    AppLogger.d(message = "Success getting Race Result from DB with size ${calendarResultListFromDB.size}")
+                }
             }
 
         } catch (e: IOException) {

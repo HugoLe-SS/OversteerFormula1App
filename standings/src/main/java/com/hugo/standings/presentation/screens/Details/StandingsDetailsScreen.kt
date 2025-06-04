@@ -78,7 +78,7 @@ fun StandingsDetailsScreen(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         LoadingIndicatorComponent(
-                                            padding = innerPadding
+                                            paddingValues = innerPadding,
                                         )
                                     }
                                 }

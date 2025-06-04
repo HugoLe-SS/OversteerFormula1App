@@ -6,6 +6,7 @@ import com.hugo.utilities.AppError
 
 data class StandingsHomeUiState(
     val isLoading: Boolean = true,
+    val isRefreshing: Boolean = false,
     val error: AppError? = null,
     val constructorStandings: List<ConstructorStandingsInfo> = emptyList(),
     val driverStandings: List<DriverStandingsInfo> = emptyList(),

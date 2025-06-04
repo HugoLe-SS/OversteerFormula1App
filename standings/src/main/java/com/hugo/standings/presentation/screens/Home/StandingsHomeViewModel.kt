@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugo.standings.domain.usecase.GetConstructorStandingsUseCase
 import com.hugo.standings.domain.usecase.GetDriverStandingsUseCase
 import com.hugo.utilities.Resource
+import com.hugo.utilities.com.hugo.utilities.AppLaunchManager
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,19 +26,20 @@ class StandingsHomeViewModel @Inject constructor(
 
     init{
         AppLogger.d(message = "Inside StandingsHomeViewModel")
-        constructorStandings(season = "current")
+        constructorStandings(season = "current", isRefresh = false)
 //        getDriverStandings(season = "current")
     }
 
 
 
-    private fun constructorStandings(season: String){
+    private fun constructorStandings(season: String, isRefresh: Boolean) {
         getConstructorStandingsUseCase(season = season).onEach{ resource ->
             when(resource){
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = resource.isFetchingFromNetwork,
+                            isLoading = if (isRefresh) it.isLoading else resource.isFetchingFromNetwork,
+                            isRefreshing = if (isRefresh) resource.isFetchingFromNetwork else it.isRefreshing,
                             error = null
                         )
                     }
@@ -46,6 +48,7 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             constructorStandings = resource.data ?: emptyList()
                         )
                     }
@@ -54,6 +57,7 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             error = resource.error
                         )
                     }
@@ -65,13 +69,14 @@ class StandingsHomeViewModel @Inject constructor(
     }
 
 
-    private fun getDriverStandings(season: String) {
-        getDriverStandingsUseCase(season = season).onEach{result ->
-            when(result){
+    private fun getDriverStandings(season: String, isRefresh: Boolean) {
+        getDriverStandingsUseCase(season = season).onEach{ resource ->
+            when(resource){
                 is Resource.Loading -> {
                     _state.update {
                         it.copy(
-                            isLoading = result.isFetchingFromNetwork,
+                            isLoading = if (isRefresh) it.isLoading else resource.isFetchingFromNetwork,
+                            isRefreshing = if (isRefresh) resource.isFetchingFromNetwork else it.isRefreshing,
                             error = null
                         )
                     }
@@ -81,7 +86,8 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            driverStandings = result.data ?: emptyList(),
+                            isRefreshing = false,
+                            driverStandings = resource.data ?: emptyList(),
                             error = null
                         )
                     }
@@ -90,7 +96,8 @@ class StandingsHomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            error = result.error
+                            isRefreshing = false,
+                            error = resource.error
                         )
                     }
                 }
@@ -100,17 +107,17 @@ class StandingsHomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun loadStandings() {
+    private fun loadStandings(isRefresh: Boolean) {
         when (_state.value.currentType) {
-            StandingsType.CONSTRUCTOR -> constructorStandings(season = "current")
-            StandingsType.DRIVER -> getDriverStandings(season = "current")
+            StandingsType.CONSTRUCTOR -> constructorStandings(season = "current", isRefresh = isRefresh)
+            StandingsType.DRIVER -> getDriverStandings(season = "current", isRefresh = isRefresh)
         }
     }
 
 
-    fun onEvent(event: ToggleStandingsEvent) {
+    fun onEvent(event: StandingsEvent) {
         when (event) {
-            is ToggleStandingsEvent.ToggleStandingsType -> {
+            is StandingsEvent.ToggleStandingsType -> {
                 _state.value = _state.value.copy(
                     currentType = when (_state.value.currentType) {
                         StandingsType.CONSTRUCTOR -> StandingsType.DRIVER
@@ -120,16 +127,41 @@ class StandingsHomeViewModel @Inject constructor(
                 AppLogger.d(message = "${_state.value.currentType}")
             }
 
-            is ToggleStandingsEvent.SetStandingsType -> {
+            is StandingsEvent.SetStandingsType -> {
                 _state.value = _state.value.copy(currentType = event.type)
-                loadStandings()
+                loadStandings(isRefresh = false)
             }
 
-            is ToggleStandingsEvent.RetryFetch -> {
+            is StandingsEvent.RetryFetch -> {
                 AppLogger.d(message = "Retrying fetch for ${_state.value.currentType}")
-                loadStandings()
+                loadStandings(isRefresh = false)
             }
 
+            is StandingsEvent.Refresh -> {
+                AppLogger.d(message = "Refreshing standings for ${_state.value.currentType}")
+                if ( !_state.value.isLoading) {
+                    if(_state.value.currentType == StandingsType.CONSTRUCTOR) {
+                        _state.update {
+                            it.copy(
+                                isRefreshing = true,
+                                constructorStandings = emptyList(),
+                            )
+                        }
+                        AppLaunchManager.hasFetchedConstructorStandings = false
+                    }
+                    else{
+                        _state.update {
+                            it.copy(
+                                isRefreshing = true,
+                                driverStandings = emptyList()
+                            )
+                        }
+                        AppLaunchManager.hasFetchedDriverStandings = false
+                    }
+
+                    loadStandings(isRefresh = true)
+                }
+            }
         }
     }
 

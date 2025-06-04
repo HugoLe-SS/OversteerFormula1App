@@ -6,21 +6,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
+import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
 import com.hugo.design.components.LoadingIndicatorComponent
+import com.hugo.design.components.PullToRefreshLazyColumn
 import com.hugo.design.components.SegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
@@ -60,7 +62,7 @@ fun StandingsHomeScreen(
                     selectedIndex = selectedIndex,
                     onOptionSelected = { index ->
                         viewModel.onEvent(
-                            ToggleStandingsEvent.SetStandingsType(
+                            StandingsEvent.SetStandingsType(
                                 if (index == 0) StandingsType.CONSTRUCTOR else StandingsType.DRIVER
                             )
                         )
@@ -77,118 +79,242 @@ fun StandingsHomeScreen(
             )
         }
     ) { innerPadding ->
-                LazyColumn(
+        when{
+            state.isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    LoadingIndicatorComponent(
+                        paddingValues = innerPadding,
+                    )
+                }
+            }
+
+            state.error != null -> {
+                ErrorDisplayComponent(
+                    appError = state.error!!,
+                    onRetry = {viewModel.onEvent(StandingsEvent.RetryFetch)},
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                         .background(AppTheme.colorScheme.background)
-                ) {
-                    when{
-                        state.isLoading -> {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(innerPadding),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    LoadingIndicatorComponent(
-                                        padding = innerPadding
-                                    )
-                                }
-                            }
-                        }
+                )
+            }
 
-                        state.error != null -> {
-                            item{
-                                ErrorDisplayComponent(
-                                    appError = state.error!!,
-                                    onRetry = {viewModel.onEvent(ToggleStandingsEvent.RetryFetch)},
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(innerPadding)
-                                        .padding(16.dp)
-                                )
-                            }
-                        }
-                        else -> {
-                            when (state.currentType) {
-                                StandingsType.CONSTRUCTOR -> {
-                                    // Constructor Standings
-                                    state.constructorStandings.let{ constructors ->
-                                        if (constructors.isNotEmpty()) {
-                                            item {
-                                                StandingsBannerComponent(
-                                                    constructorInfo = constructors[0],
-                                                    imageUrl = R.drawable.mclaren
-                                                )
-                                            }
-                                        }
-                                    }
-
-                                    items(state.constructorStandings) { constructors ->
-                                        ConstructorListItem(
-                                            constructors,
-                                            constructorCardClicked = { info ->
-                                                constructorCardClicked(
-                                                    ConstructorClickInfo(
-                                                        constructorId = info.constructorId,
-                                                        constructorName = info.constructorName,
-                                                        season = info.season,
-                                                        nationality = info.nationality,
-                                                        position = info.position,
-                                                        points = info.points,
-                                                        wins = info.wins
-                                                    )
-                                                )
-                                            }
+            else -> {
+                val (currentItems: List<Any>, bannerComposable: (@Composable () -> Unit)?) =
+                    remember(state.currentType, state.constructorStandings, state.driverStandings) {
+                        when (state.currentType) {
+                            StandingsType.CONSTRUCTOR -> {
+                                val constructors = state.constructorStandings
+                                val itemsToDisplay = constructors
+                                val banner: (@Composable () -> Unit)? = if (constructors.isNotEmpty()) {
+                                    @Composable {
+                                        StandingsBannerComponent(
+                                            constructorInfo = constructors[0],
+                                            imageUrl = R.drawable.mclaren
                                         )
                                     }
+                                } else {
+                                    null // No banner if the list is empty
                                 }
-
-                                StandingsType.DRIVER -> {
-                                    // Driver Standings
-                                    state.driverStandings.let{ drivers ->
-                                        if (drivers.isNotEmpty()) {
-                                            item {
-                                                StandingsBannerComponent(
-                                                    driverInfo = drivers[0],
-                                                    imageUrl = R.drawable.lando
-                                                )
-                                            }
-                                        }
-                                    }
-
-
-                                    items(state.driverStandings) { drivers ->
-                                        DriverListItem(
-                                            drivers,
-                                            driverCardClicked = { info ->
-                                                driverCardClicked(
-                                                    DriverClickInfo(
-                                                        driverId = info.driverId,
-                                                        constructorName = info.constructorName,
-                                                        constructorId = info.constructorId,
-                                                        season = info.season,
-                                                        givenName = info.givenName,
-                                                        familyName = info.familyName,
-                                                        driverNumber = info.driverNumber,
-                                                        driverCode = info.driverCode,
-                                                        position = info.position,
-                                                        points = info.points,
-                                                        wins = info.wins
-                                                    )
-                                                )
-                                            }
+                                Pair(itemsToDisplay, banner)
+                            }
+                            StandingsType.DRIVER -> {
+                                val drivers = state.driverStandings
+                                val itemsToDisplay = drivers
+                                val banner: (@Composable () -> Unit)? = if (drivers.isNotEmpty()) {
+                                    {
+                                        StandingsBannerComponent(
+                                            driverInfo = drivers[0],
+                                            imageUrl = R.drawable.mclaren
                                         )
                                     }
+                                } else {
+                                    null
                                 }
+                                Pair(itemsToDisplay, banner)
                             }
                         }
                     }
 
-                }
+
+                PullToRefreshLazyColumn(
+                    items = currentItems,
+                    isRefreshing = state.isRefreshing,
+                    onRefresh = { viewModel.onEvent(StandingsEvent.Refresh) },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(AppTheme.colorScheme.background),
+                    header = bannerComposable,
+                    itemContent = { itemData ->
+
+                        when (itemData) {
+                            is ConstructorStandingsInfo -> ConstructorListItem(
+                                constructor = itemData,
+                                constructorCardClicked = { info ->
+                                    constructorCardClicked(
+                                        ConstructorClickInfo(
+                                            constructorId = info.constructorId,
+                                            constructorName = info.constructorName,
+                                            season = info.season,
+                                            nationality = info.nationality,
+                                            position = info.position,
+                                            points = info.points,
+                                            wins = info.wins
+                                        )
+                                    )
+                                }
+                            )
+                            is DriverStandingsInfo -> DriverListItem(
+                                driver = itemData,
+                                driverCardClicked = { info ->
+                                    driverCardClicked(
+                                        DriverClickInfo(
+                                            driverId = info.driverId,
+                                            constructorName = info.constructorName,
+                                            constructorId = info.constructorId,
+                                            season = info.season,
+                                            givenName = info.givenName,
+                                            familyName = info.familyName,
+                                            driverNumber = info.driverNumber,
+                                            driverCode = info.driverCode,
+                                            position = info.position,
+                                            points = info.points,
+                                            wins = info.wins
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    }
+                )
+            }
+
+        }
+
     }
+
 }
 
 
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(innerPadding)
+//                        .background(AppTheme.colorScheme.background)
+//                ) {
+//                    when{
+//                        state.isLoading -> {
+//                            item {
+//                                Box(
+//                                    modifier = Modifier
+//                                        .fillMaxSize()
+//                                        .padding(innerPadding),
+//                                    contentAlignment = Alignment.Center
+//                                ) {
+//                                    LoadingIndicatorComponent(
+//                                        padding = innerPadding
+//                                    )
+//                                }
+//                            }
+//                        }
+//
+//                        state.error != null -> {
+//                            item{
+//                                ErrorDisplayComponent(
+//                                    appError = state.error!!,
+//                                    onRetry = {viewModel.onEvent(ToggleStandingsEvent.RetryFetch)},
+//                                    modifier = Modifier
+//                                        .fillMaxSize()
+//                                        .padding(innerPadding)
+//                                        .padding(16.dp)
+//                                )
+//                            }
+//                        }
+//                        else -> {
+//                            when (state.currentType) {
+//                                StandingsType.CONSTRUCTOR -> {
+//                                    // Constructor Standings
+//                                    state.constructorStandings.let{ constructors ->
+//                                        if (constructors.isNotEmpty()) {
+//                                            item {
+//                                                StandingsBannerComponent(
+//                                                    constructorInfo = constructors[0],
+//                                                    imageUrl = R.drawable.mclaren
+//                                                )
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    items(state.constructorStandings) { constructors ->
+//                                        ConstructorListItem(
+//                                            constructors,
+//                                            constructorCardClicked = { info ->
+//                                                constructorCardClicked(
+//                                                    ConstructorClickInfo(
+//                                                        constructorId = info.constructorId,
+//                                                        constructorName = info.constructorName,
+//                                                        season = info.season,
+//                                                        nationality = info.nationality,
+//                                                        position = info.position,
+//                                                        points = info.points,
+//                                                        wins = info.wins
+//                                                    )
+//                                                )
+//                                            }
+//                                        )
+//                                    }
+//                                }
+//
+//                                StandingsType.DRIVER -> {
+//                                    // Driver Standings
+//                                    state.driverStandings.let{ drivers ->
+//                                        if (drivers.isNotEmpty()) {
+//                                            item {
+//                                                StandingsBannerComponent(
+//                                                    driverInfo = drivers[0],
+//                                                    imageUrl = R.drawable.lando
+//                                                )
+//                                            }
+//                                        }
+//                                    }
+//
+//
+//                                    items(state.driverStandings) { drivers ->
+//                                        DriverListItem(
+//                                            drivers,
+//                                            driverCardClicked = { info ->
+//                                                driverCardClicked(
+//                                                    DriverClickInfo(
+//                                                        driverId = info.driverId,
+//                                                        constructorName = info.constructorName,
+//                                                        constructorId = info.constructorId,
+//                                                        season = info.season,
+//                                                        givenName = info.givenName,
+//                                                        familyName = info.familyName,
+//                                                        driverNumber = info.driverNumber,
+//                                                        driverCode = info.driverCode,
+//                                                        position = info.position,
+//                                                        points = info.points,
+//                                                        wins = info.wins
+//                                                    )
+//                                                )
+//                                            }
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                }
+
+//        val itemsToShow: List<Any> = when (state.currentType) {
+//            StandingsType.CONSTRUCTOR -> state.constructorStandings
+//            StandingsType.DRIVER -> state.driverStandings
+//        }

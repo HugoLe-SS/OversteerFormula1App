@@ -60,8 +60,8 @@ fun CalendarDetailsScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     LoadingIndicatorComponent(
-                                        padding = innerPadding
-                                    )
+                                        paddingValues = innerPadding,
+                                        )
                                 }
                             }
 

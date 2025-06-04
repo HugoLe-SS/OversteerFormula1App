@@ -79,7 +79,7 @@ class F1StandingRepositoryImpl @Inject constructor(
     override fun getDriverStandings(season: String): Flow<Resource<List<DriverStandingsInfo>, AppError>> =
         flow {
             AppLogger.d(message = "Inside getDriverStandings")
-            //emit(Resource.Loading())
+
             try {
                 if (!AppLaunchManager.hasFetchedDriverStandings) {
                     AppLogger.d(message = "Network fetch needed for driver standings.")
@@ -97,7 +97,9 @@ class F1StandingRepositoryImpl @Inject constructor(
 
                     emit(Resource.Success(driverStandings))
                     AppLogger.d(message = "Success getting driver standings ${driverStandings.size}")
-                } else {
+                }
+
+                else {
                     emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
 
                     val driverStandingsListFromDB = getDriverStandingsListFromDB()
