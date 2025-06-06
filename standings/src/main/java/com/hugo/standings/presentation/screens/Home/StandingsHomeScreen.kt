@@ -26,7 +26,7 @@ import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.components.PullToRefreshLazyColumn
-import com.hugo.design.components.SegmentedButton
+import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.R
 import com.hugo.standings.presentation.components.Driver.StandingsBannerComponent
@@ -68,7 +68,7 @@ fun StandingsHomeScreen(
                         )
                     }
                 )
-                SegmentedButton(
+                SingleChoiceSegmentedButton(
                     options = options,
                     selectedIndex = selectedIndex,
                     onOptionSelected = { index ->

@@ -1,6 +1,7 @@
 package com.hugo.schedule.presentation.screens.Home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
@@ -25,7 +25,7 @@ import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.components.PullToRefreshLazyColumn
-import com.hugo.design.components.SegmentedButton
+import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.HomeScreen.F1CalendarListItem
 import com.hugo.schedule.presentation.components.HomeScreen.ScheduleBannerComponent
@@ -61,7 +61,9 @@ fun ScheduleHomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(AppTheme.colorScheme.background)
+                    .background(AppTheme.colorScheme.background),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AppToolbar(
                     title = {
@@ -71,7 +73,7 @@ fun ScheduleHomeScreen(
                         )
                     }
                 )
-                SegmentedButton(
+                SingleChoiceSegmentedButton(
                     options = options,
                     selectedIndex = selectedIndex,
                     onOptionSelected = { index ->
@@ -83,7 +85,6 @@ fun ScheduleHomeScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
                 )
             }
         },
