@@ -3,4 +3,5 @@
     <string name="schedule">Schedule</string>
     <string name="standings">Standings</string>
     <string name="view_results">\nView Result\n</string>
+    <string name="home">Home</string>
 </resources>

@@ -43,8 +43,8 @@ fun SingleChoiceSegmentedButton(
                 colors = SegmentedButtonDefaults.colors(
                     activeContainerColor = AppTheme.colorScheme.onSecondary,
                     activeContentColor = AppTheme.colorScheme.background,
-                    inactiveContainerColor = AppTheme.colorScheme.onBackground,
-                    inactiveContentColor = AppTheme.colorScheme.secondary,
+                    inactiveContainerColor = AppTheme.colorScheme.background,
+                    inactiveContentColor = AppTheme.colorScheme.onSecondary,
                 ),
                 icon = {null}
             )
