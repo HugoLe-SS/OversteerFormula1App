@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
+import com.hugo.design.R.*
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
@@ -33,6 +36,7 @@ import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickIn
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandingsHomeScreen(
     navController: NavHostController,
@@ -56,7 +60,14 @@ fun StandingsHomeScreen(
                     .fillMaxWidth()
                     .background(AppTheme.colorScheme.background)
             ) {
-                AppToolbar(isStandingsPage = true)
+                AppToolbar(
+                    title = {
+                        Text(
+                            text = "Standings",
+                            style = AppTheme.typography.titleNormal,
+                        )
+                    }
+                )
                 SegmentedButton(
                     options = options,
                     selectedIndex = selectedIndex,

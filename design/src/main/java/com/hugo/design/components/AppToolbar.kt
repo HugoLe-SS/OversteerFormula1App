@@ -1,170 +1,63 @@
 package com.hugo.design.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.hugo.design.R
 import com.hugo.design.ui.theme.AppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppToolbar(
-    title: String? = null,
-    isBackButtonVisible: Boolean = false,
-    isHomepage: Boolean = false,
-    isSchedulePage: Boolean = false,
-    isStandingsPage: Boolean = false,
-    backButtonClicked: () -> Unit = {},
-    backgroundColor : Color = Color.Black
+    modifier: Modifier = Modifier,
+    title: (@Composable () -> Unit)? = null,
+    navigationIcon: @Composable (() -> Unit)? = null, //Back button...
+    actions: @Composable (RowScope.() -> Unit)? = null, // notification icon, settings icon,...
+    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = AppTheme.colorScheme.background,
+        titleContentColor = AppTheme.colorScheme.onSecondary,
+        navigationIconContentColor = AppTheme.colorScheme.onSecondary,
+        actionIconContentColor = AppTheme.colorScheme.onSecondary
+    )
 ){
-    Column(
-        modifier = Modifier
-            .height(90.dp)
-            .fillMaxSize()
-            .systemBarsPadding()
-            .background(backgroundColor),
-        verticalArrangement = Arrangement.Center
-    ){
-        Row(
-            modifier = Modifier
-                .background(backgroundColor)
-                .fillMaxWidth()
-                .padding(12.dp),
-
-        ){
-            if(isBackButtonVisible){
-                Icon(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable { backButtonClicked() },
-                    painter = painterResource(id = R.drawable.ic_back_button),
-                    contentDescription = "Back Button",
-                    tint = Color.White
-                )
+    CenterAlignedTopAppBar( // Or TopAppBar, MediumTopAppBar
+        title = {
+            title?.invoke()
+        },
+        modifier = modifier, // .systemBarsPadding() is often handled by Scaffold or applied here
+        navigationIcon = {
+            navigationIcon?.invoke()
+        },
+        actions = {
+            if (actions != null) {
+                actions()
             }
-            else if(isHomepage) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_person),
-                    contentDescription = "User Icon",
-                    tint = Color.White
-                )
-
-                Spacer(Modifier.weight(1f))
-
-                Icon(
-                    modifier = Modifier
-                        .size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_noti),
-                    contentDescription = "Notification Icon",
-                    tint = Color.White
-                )
-
-            }
-            else if(isSchedulePage){
-                Column (
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ){
-                    Text(
-                        text = stringResource(R.string.schedule),
-                        textAlign = TextAlign.Center,
-                        style = AppTheme.typography.body,
-                        color = AppTheme.colorScheme.onPrimary,
-                    )
-                    Surface(
-                        shape = RoundedCornerShape(16.dp),
-                        color = AppTheme.colorScheme.onBackground,
-                        //tonalElevation = 6.dp,
-                    ) {
-                        Row(
-                        ) {
-                            ButtonComponent(
-                                text = "Upcoming",
-                                buttonColor = Color.Transparent,
-                            )
-                            ButtonComponent(
-                                text = "Past",
-                                buttonColor = Color.Transparent
-                            )
-                        }
-                    }
-
-
-                }
-
-
-            }
-            else if(isStandingsPage){
-                Column (
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ){
-                    Text(
-                        text = stringResource(R.string.standings),
-                        textAlign = TextAlign.Center,
-                        style = AppTheme.typography.body,
-                        color = AppTheme.colorScheme.onPrimary,
-                    )
-                    Surface(
-                        shape = RoundedCornerShape(16.dp),
-                        color = AppTheme.colorScheme.onBackground,
-                        //tonalElevation = 6.dp,
-                    ) {
-                        Row(
-                        ) {
-                            ButtonComponent(
-                                text = "Upcoming",
-                                buttonColor = Color.Transparent,
-                            )
-                            ButtonComponent(
-                                text = "Past",
-                                buttonColor = Color.Transparent
-                            )
-                        }
-                    }
-
-
-                }
-
-
-            }
-        }
-    }
-
+        },
+        colors = colors
+    )
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun AppToolbarPreview() {
-    AppTheme{
+    AppTheme(isDarkTheme = true){
         AppToolbar(
-            title = "Title",
-            isBackButtonVisible = true,
-            //isSchedulePage = true,
-            isHomepage = false,
-            backButtonClicked = {}
+            title = {
+                Text("My App")
+            },
+            navigationIcon = {
+                    ImageComponent(
+                        imageResourceValue = R.drawable.ic_back,
+                    )
+
+            },
         )
     }
 

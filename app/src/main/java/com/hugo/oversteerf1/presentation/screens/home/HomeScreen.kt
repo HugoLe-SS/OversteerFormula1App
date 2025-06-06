@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.oversteerf1.presentation.components.NewsListItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
@@ -48,7 +50,14 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .background(AppTheme.colorScheme.background)
             ) {
-                AppToolbar(isStandingsPage = true)
+                AppToolbar(
+                    title = {
+                        Text(
+                            text = "Home",
+                            style = AppTheme.typography.titleNormal,
+                        )
+                    }
+                )
             }
         },
         bottomBar = {

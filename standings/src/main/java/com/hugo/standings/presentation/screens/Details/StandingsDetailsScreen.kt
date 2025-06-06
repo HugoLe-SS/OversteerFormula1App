@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ErrorDisplayComponent
+import com.hugo.design.components.ImageComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.presentation.components.StandingsDetailScreen.ConstructorBioList
@@ -24,6 +27,7 @@ import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickIn
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import com.hugo.utilities.logging.AppLogger
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandingsDetailsScreen(
     constructorClickInfo: ConstructorClickInfo? = null,
@@ -49,8 +53,17 @@ fun StandingsDetailsScreen(
     Scaffold (
         topBar = {
             AppToolbar(
-                isBackButtonVisible = true,
-                backButtonClicked = backButtonClicked
+                navigationIcon = {
+                    IconButton(
+                        onClick = {backButtonClicked()}
+                    ) {
+                        ImageComponent(
+                            imageResourceValue = com.hugo.design.R.drawable.ic_back,
+                            contentDescription = "Back Button",
+                        )
+                    }
+
+                },
             )
         },
     )

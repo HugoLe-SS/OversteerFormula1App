@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +30,7 @@ import com.hugo.design.ui.theme.AppTheme
 import com.hugo.schedule.presentation.components.HomeScreen.F1CalendarListItem
 import com.hugo.schedule.presentation.components.HomeScreen.ScheduleBannerComponent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleHomeScreen(
     navController: NavHostController,
@@ -60,7 +63,14 @@ fun ScheduleHomeScreen(
                     .fillMaxWidth()
                     .background(AppTheme.colorScheme.background)
             ) {
-                AppToolbar(isStandingsPage = true)
+                AppToolbar(
+                    title = {
+                        Text(
+                            text = "Schedule",
+                            style = AppTheme.typography.titleNormal,
+                        )
+                    }
+                )
                 SegmentedButton(
                     options = options,
                     selectedIndex = selectedIndex,

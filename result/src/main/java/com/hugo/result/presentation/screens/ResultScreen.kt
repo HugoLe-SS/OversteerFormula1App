@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,12 +20,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ErrorDisplayComponent
+import com.hugo.design.components.ImageComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.result.presentation.components.CircuitResultBannerComponent
 import com.hugo.result.presentation.components.RaceResultListItem
 import com.hugo.utilities.logging.AppLogger
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultScreen(
     viewModel: ResultViewModel = hiltViewModel(),
@@ -58,8 +62,16 @@ fun ResultScreen(
     Scaffold (
         topBar = {
             AppToolbar(
-                isBackButtonVisible = true,
-                backButtonClicked = backButtonClicked
+                navigationIcon = {
+                    IconButton(
+                        onClick = {backButtonClicked()}
+                    ) {
+                        ImageComponent(
+                            imageResourceValue = com.hugo.design.R.drawable.ic_back,
+                            contentDescription = "Back Button",
+                        )
+                    }
+                },
             )
         },
     ) { innerPadding ->
