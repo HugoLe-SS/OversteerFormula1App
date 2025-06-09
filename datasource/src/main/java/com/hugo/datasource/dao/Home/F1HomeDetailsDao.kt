@@ -11,10 +11,10 @@ import com.hugo.datasource.local.entity.F1HomeDetails
 @Dao
 interface F1HomeDetailsDao: BaseDao<F1HomeDetails> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertF1HomeDetailsInDB(homeDetails: F1HomeDetails)
+    fun insertF1HomeDetailsInDB(homeDetails: List<F1HomeDetails>)
 
     @Query("SELECT * FROM ${TableConstants.F1_HOME_DETAILS}")
-    fun getF1HomeDetailsFromDB(): F1HomeDetails?
+    fun getF1HomeDetailsFromDB(): List<F1HomeDetails>?
 
     @Query("DELETE FROM ${TableConstants.F1_HOME_DETAILS}")
     fun deleteAllF1HomeDetailsFromDB()

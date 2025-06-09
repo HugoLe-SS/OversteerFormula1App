@@ -24,9 +24,9 @@ import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
-import com.hugo.design.components.HorizontalPager
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.oversteerf1.presentation.components.HorizontalPagerItem
 import com.hugo.oversteerf1.presentation.components.NewsListItem
 import com.hugo.oversteerf1.presentation.components.UpcomingRaceCardItem
 
@@ -36,19 +36,14 @@ fun HomeScreen(
     navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel(),
     cardOnClicked: () -> Unit = {},
+    bannerOnClicked: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
     val countdown by viewModel.countdown.collectAsState()
-    
-    val imageUrls = listOf(
-        "https://mclaren.bloomreach.io/cdn-cgi/image/width=1024,quality=80,format=webp/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_lando_team_pic_02.jpg",
-        "https://mclaren.bloomreach.io/cdn-cgi/image/width=1024,quality=80,format=webp/delivery/resources/content/gallery/mclaren-racing/formula-1/2025/nsr/f1-75-live-m/web/2025_oscar_team_pic_02.jpg",
-        "https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/hamilton",
-        "https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/leclerc"
-    )
+    val upcomingRaceDetail by viewModel.upcomingRaceDetail.collectAsState()
 
     LaunchedEffect(key1 = state.f1HomeDetails) {
-        state.f1HomeDetails?.let {
+        upcomingRaceDetail?.let {
             viewModel.updateCountdownFromSessions(it)
         }
     }
@@ -114,11 +109,15 @@ fun HomeScreen(
                     }
                 }
                 else -> {
-                    item {
-                        HorizontalPager(imageUrls = imageUrls)
-                    }
 
-                    state.f1HomeDetails?.let {
+                    upcomingRaceDetail?.let {
+                        item {
+                            HorizontalPagerItem(
+                                f1HomeDetails = it,
+                                onClicked = bannerOnClicked
+                            )
+                        }
+
                         item{
                             UpcomingRaceCardItem(
                                 cardOnClicked = cardOnClicked,

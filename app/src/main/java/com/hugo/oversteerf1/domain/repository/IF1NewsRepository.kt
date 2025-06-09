@@ -11,6 +11,6 @@ interface IF1NewsRepository {
     fun getF1News(): Flow<Resource<List<F1News>, AppError>>
 
     //Supabase
-    fun getF1HomeDetails(): Flow<Resource<F1HomeDetails?, AppError>>
+    fun getF1HomeDetails(): Flow<Resource<List<F1HomeDetails>?, AppError>>
 
 }

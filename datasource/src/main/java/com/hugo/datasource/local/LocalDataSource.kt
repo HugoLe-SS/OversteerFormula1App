@@ -16,8 +16,8 @@ import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 interface LocalDataSource {
 
     //F1 Home
-    fun insertF1HomeDetailsInDB(f1CalendarInfo: F1HomeDetails)
-    fun getF1HomeDetailsFromDB(): F1HomeDetails?
+    fun insertF1HomeDetailsInDB(f1CalendarInfo: List<F1HomeDetails>)
+    fun getF1HomeDetailsFromDB(): List<F1HomeDetails>?
     fun deleteAllF1HomeDetailsFromDB()
 
     //F1 Calendar

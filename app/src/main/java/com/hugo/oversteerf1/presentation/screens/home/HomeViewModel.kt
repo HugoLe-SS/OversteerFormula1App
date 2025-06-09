@@ -14,9 +14,12 @@ import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -33,6 +36,33 @@ class HomeViewModel @Inject constructor(
 
     private val _countdown = MutableStateFlow<CountDownInfo?>(null)
     val countdown: StateFlow<CountDownInfo?> = _countdown
+
+    val upcomingRaceDetail: StateFlow<F1HomeDetails?> = _state
+        .map { uiState ->
+            uiState.f1HomeDetails?.let { detailsList ->
+                val currentTime = System.currentTimeMillis()
+                detailsList
+                    .filter { detail -> // Filter for upcoming races
+                        val eventDateTime = AppUtilities.convertToMillis(
+                            date = detail.raceDate ?: "",
+                            time = detail.raceTime ?: ""
+                        )
+                        eventDateTime > currentTime && eventDateTime != 0L
+                    }
+                    .minByOrNull { detail ->
+                        AppUtilities.convertToMillis(
+                            date = detail.raceDate ?: "",
+                            time = detail.raceTime ?: ""
+                        )
+                    }
+            }
+
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = null
+        )
 
     private fun startCountdown(session: Session?) {
         viewModelScope.launch {

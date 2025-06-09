@@ -61,6 +61,26 @@ fun AppNavGraph() {
                             launchSingleTop = true
                             restoreState = true
                         }
+                    },
+                    bannerOnClicked = { index ->
+                        when(index){
+                            0,2,3 ->  navController.navigate(Screen.StandingsScreen) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+
+                            1 ->  navController.navigate(Screen.ScheduleScreen) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+
                     }
                 )
             }
@@ -129,6 +149,7 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.CalendarDetailsScreen = backStackEntry.toRoute()
                 CalendarDetailsScreen(
+                    backButtonClicked = {navController.popBackStack()},
                     calendarInfo = screen.info,
                     viewResultButtonClicked = { f1CircuitDetails ->
                         AppLogger.d(message = "CircuitID: ${f1CircuitDetails.circuitId}")
@@ -146,6 +167,7 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.StandingsDetailsScreen = backStackEntry.toRoute()
                 StandingsDetailsScreen(
+                    backButtonClicked = {navController.popBackStack()},
                     constructorClickInfo = screen.constructorClickInfo,
                     driverClickInfo = screen.driverClickInfo,
                     viewResultButtonClicked = { id ->
@@ -175,6 +197,7 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.ResultScreen = backStackEntry.toRoute()
                 ResultScreen(
+                    backButtonClicked = {navController.popBackStack()},
                     raceId = screen.driverId?: screen.constructorId,
                     circuitDetails = screen.circuitDetails
                 )

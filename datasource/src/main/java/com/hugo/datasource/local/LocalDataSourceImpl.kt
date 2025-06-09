@@ -21,11 +21,11 @@ class LocalDataSourceImpl(
 
     private val appDB: AppDB = AppDB.getDatabase(context)
 
-    override fun insertF1HomeDetailsInDB(f1HomeDetails: F1HomeDetails) {
+    override fun insertF1HomeDetailsInDB(f1HomeDetails: List<F1HomeDetails>) {
         appDB.getF1HomeDetailsDao().insertF1HomeDetailsInDB(f1HomeDetails)
     }
 
-    override fun getF1HomeDetailsFromDB(): F1HomeDetails? {
+    override fun getF1HomeDetailsFromDB(): List<F1HomeDetails>? {
        return appDB.getF1HomeDetailsDao().getF1HomeDetailsFromDB()
     }
 

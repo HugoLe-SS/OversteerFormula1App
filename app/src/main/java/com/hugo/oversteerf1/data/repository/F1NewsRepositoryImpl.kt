@@ -46,7 +46,7 @@ class F1NewsRepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getF1HomeDetails(): Flow<Resource<F1HomeDetails?, AppError>> = flow {
+    override fun getF1HomeDetails(): Flow<Resource<List<F1HomeDetails>?, AppError>> = flow {
         AppLogger.d(message = "Inside getF1HomeDetails")
         try {
 
@@ -56,9 +56,9 @@ class F1NewsRepositoryImpl @Inject constructor(
 
                 val result = supabaseClient.postgrest["HomeDetails"].select()
 
-                val f1HomeDetails = result.decodeSingleOrNull<F1HomeDetails>()
+                val f1HomeDetails = result.decodeList<F1HomeDetails>()
 
-                if (f1HomeDetails != null) {
+                if (f1HomeDetails.isNotEmpty()) {
                     AppLogger.d(message = "F1 Home Details saved to DB")
                     insertF1HomeDetails(f1HomeDetails)
                     AppLaunchManager.hasFetchedHomeDetails = true
@@ -87,14 +87,14 @@ class F1NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun insertF1HomeDetails(f1HomeDetails: F1HomeDetails){
+    private suspend fun insertF1HomeDetails(f1HomeDetails: List<F1HomeDetails>){
         withContext(Dispatchers.IO){
             localDataSource.insertF1HomeDetailsInDB(f1HomeDetails)
-            AppLogger.d(message = "Success insertF1HomeDetails with circuitID:  ${f1HomeDetails.circuitId}")
+            AppLogger.d(message = "Success insertF1HomeDetails with size:  ${f1HomeDetails.size}")
         }
     }
 
-    private suspend fun getF1HomeDetailsFromDB(): F1HomeDetails? {
+    private suspend fun getF1HomeDetailsFromDB(): List<F1HomeDetails>? {
         return withContext(Dispatchers.IO){
             localDataSource.getF1HomeDetailsFromDB()
         }

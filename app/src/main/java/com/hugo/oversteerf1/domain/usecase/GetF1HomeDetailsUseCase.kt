@@ -10,5 +10,5 @@ import javax.inject.Inject
 class GetF1HomeDetailsUseCase @Inject constructor(
     private val repository: IF1NewsRepository
 ) {
-    operator fun invoke(): Flow<Resource<F1HomeDetails?, AppError>> = repository.getF1HomeDetails()
+    operator fun invoke(): Flow<Resource<List<F1HomeDetails>?, AppError>> = repository.getF1HomeDetails()
 }

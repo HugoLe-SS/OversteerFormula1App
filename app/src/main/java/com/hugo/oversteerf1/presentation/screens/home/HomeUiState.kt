@@ -7,6 +7,6 @@ import com.hugo.utilities.AppError
 data class HomeUiState(
     val isLoading: Boolean = true,
     val error: AppError? = null,
-    val f1HomeDetails: F1HomeDetails?= null,
+    val f1HomeDetails: List<F1HomeDetails>?= null,
     val news: List<F1News>? = emptyList()
 )

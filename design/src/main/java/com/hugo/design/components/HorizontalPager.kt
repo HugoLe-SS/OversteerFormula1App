@@ -1,6 +1,5 @@
 package com.hugo.design.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,9 +14,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -42,8 +41,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun HorizontalPager(
     modifier: Modifier = Modifier,
-    imageUrls: List<String>,
+    imageUrls: List<String?>,
     autoScroll: Boolean = true,
+    onClicked: (Int) -> Unit = {}
     //itemCount: Int = 4
 ) {
     val pagerState = rememberPagerState(pageCount = {imageUrls.size})
@@ -80,7 +80,9 @@ fun HorizontalPager(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp),
+                .heightIn(min = 550.dp)
+                //.aspectRatio(16/9f),
+            ,
             pageSize = PageSize.Fill
         ) { page ->
             AsyncImage(
@@ -96,10 +98,10 @@ fun HorizontalPager(
                         indication = LocalIndication.current
                     ){
                         // Handle page click
-
+                        onClicked(page)
                     }
                     .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Fit
             )
         }
 

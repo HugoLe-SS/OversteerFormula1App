@@ -13,9 +13,11 @@ data class F1HomeDetails(
     val raceName: String?= null,
     val raceDate: String?= null,
     val raceTime: String?= null,
-    val topDriversStandings: List<String>?= null,
-    val topConstructorsStandings: List<String>?= null,
     val lastRaceName: String?= null,
-    val lastRacePodiums: List<String>?= null
+    val lastRacePodiums: List<String>?= null,
+    val driverImg: String?= null,
+    val raceImg: String?= null,
+    val driverStandingsImg: String?= null,
+    val constructorStandingsImg: String?= null,
 
 )
