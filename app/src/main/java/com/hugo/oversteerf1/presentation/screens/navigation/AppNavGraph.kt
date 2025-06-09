@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,7 +20,6 @@ import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
 import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
 import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType
-//import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType.CalendarClickInfoNavType
 import com.hugo.utilities.com.hugo.utilities.Navigation.Screen
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
@@ -52,7 +52,16 @@ fun AppNavGraph() {
                 }
             ) {
                 HomeScreen(
-                    navController = navController
+                    navController = navController,
+                    cardOnClicked = {
+                        navController.navigate(Screen.ScheduleScreen) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
                 )
             }
 
@@ -120,7 +129,6 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.CalendarDetailsScreen = backStackEntry.toRoute()
                 CalendarDetailsScreen(
-                    backButtonClicked = { navController.popBackStack() },
                     calendarInfo = screen.info,
                     viewResultButtonClicked = { f1CircuitDetails ->
                         AppLogger.d(message = "CircuitID: ${f1CircuitDetails.circuitId}")
@@ -138,7 +146,6 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.StandingsDetailsScreen = backStackEntry.toRoute()
                 StandingsDetailsScreen(
-                    backButtonClicked = { navController.popBackStack() },
                     constructorClickInfo = screen.constructorClickInfo,
                     driverClickInfo = screen.driverClickInfo,
                     viewResultButtonClicked = { id ->
@@ -168,7 +175,6 @@ fun AppNavGraph() {
             ) { backStackEntry ->
                 val screen: Screen.ResultScreen = backStackEntry.toRoute()
                 ResultScreen(
-                    backButtonClicked = { navController.popBackStack() },
                     raceId = screen.driverId?: screen.constructorId,
                     circuitDetails = screen.circuitDetails
                 )

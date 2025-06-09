@@ -8,11 +8,17 @@ import com.hugo.datasource.local.entity.Driver.DriverDetails
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
+import com.hugo.datasource.local.entity.F1HomeDetails
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 
 interface LocalDataSource {
+
+    //F1 Home
+    fun insertF1HomeDetailsInDB(f1CalendarInfo: F1HomeDetails)
+    fun getF1HomeDetailsFromDB(): F1HomeDetails?
+    fun deleteAllF1HomeDetailsFromDB()
 
     //F1 Calendar
     fun insertF1CalendarInDB(f1CalendarInfo: List<F1CalendarInfo>)

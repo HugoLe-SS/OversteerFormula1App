@@ -66,3 +66,24 @@ enum class Flag(val country: String, val imageRes: Int){
     }
 
 }
+
+enum class Driver(val driverName: String, val imageRes: Int){
+    HAMILTON(driverName = "hamilton", R.drawable.hamilton ),
+    LECLERC(driverName = "leclerc", R.drawable.leclerc ),
+    VERSTAPPEN(driverName = "verstappen", R.drawable.max ),
+    PIASTRI(driverName = "piastri", R.drawable.oscar ),
+    NORRIS(driverName = "norris", R.drawable.lando ),
+    RUSSELL(driverName = "russell", R.drawable.george ),
+    ANTONELLI(driverName = "antonelli", R.drawable.kimi ),
+    TSUNODA(driverName = "tsunoda", R.drawable.tsunoda );
+
+    companion object {
+        fun getDriverImageRes(driverName: String): Int? {
+            return Driver.entries.find { it.name.equals(driverName, ignoreCase = true) }?.imageRes
+        }
+    }
+}
+
+//enum class Constructor(val country: String, val imageRes: Int{
+//
+//}

@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+
 import io.github.jan.supabase.SupabaseClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

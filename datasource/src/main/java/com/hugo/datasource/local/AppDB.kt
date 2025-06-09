@@ -13,6 +13,7 @@ import com.hugo.datasource.dao.Driver.DriverDetailsDao
 import com.hugo.datasource.dao.Driver.DriverQualifyingResultsDao
 import com.hugo.datasource.dao.Driver.DriverRaceResultsDao
 import com.hugo.datasource.dao.Driver.DriverStandingsDao
+import com.hugo.datasource.dao.Home.F1HomeDetailsDao
 import com.hugo.datasource.dao.Schedule.F1CalendarDao
 import com.hugo.datasource.dao.Schedule.F1CalendarResult
 import com.hugo.datasource.dao.Schedule.F1CircuitDetailsDao
@@ -25,6 +26,7 @@ import com.hugo.datasource.local.entity.Driver.DriverDetails
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
+import com.hugo.datasource.local.entity.F1HomeDetails
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
@@ -32,7 +34,7 @@ import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 @Database(entities =
 
 [
-    F1CalendarInfo::class, F1CircuitDetails::class, F1CalendarRaceResult::class,
+    F1HomeDetails::class ,F1CalendarInfo::class, F1CircuitDetails::class, F1CalendarRaceResult::class,
     ConstructorStandingsInfo::class, ConstructorDetails::class, ConstructorQualifyingResultsInfo::class,
     ConstructorRaceResultsInfo:: class, DriverStandingsInfo::class, DriverDetails::class,
     DriverRaceResultsInfo::class, DriverQualifyingResultsInfo::class
@@ -41,6 +43,8 @@ import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
     exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDB : RoomDatabase() {
+
+    abstract fun getF1HomeDetailsDao(): F1HomeDetailsDao
 
     abstract fun getF1CalendarDao(): F1CalendarDao
 
@@ -95,6 +99,8 @@ abstract class AppDB : RoomDatabase() {
 
 object TableConstants {
     const val APP_DB_NAME = "OVERSTEER_Database"
+
+    const val F1_HOME_DETAILS = "F1_Home_Details"
 
     const val F1_CALENDAR_INFO_LIST = "F1_Calendar_Info_List"
     const val F1_CIRCUIT_DETAILS = "F1_Circuit_Details"

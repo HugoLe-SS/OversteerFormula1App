@@ -1,6 +1,9 @@
 package com.hugo.utilities.com.hugo.utilities
 
 object AppLaunchManager {
+
+    var hasFetchedHomeDetails = false
+
     var hasFetchedDriverStandings = false
     var hasFetchedConstructorStandings = false
     val fetchedDriverDetails = mutableSetOf<String>()

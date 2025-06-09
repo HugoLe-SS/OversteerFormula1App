@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -26,15 +27,18 @@ import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppColors
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.design.utilities.Driver
 import com.hugo.standings.R
 
 @Composable
 fun StandingsBannerComponent(
     driverInfo: DriverStandingsInfo? = null,
     constructorInfo: ConstructorStandingsInfo? = null,
-    imageUrl: Int,
 ){
     val teamColor = AppColors.Teams.colors[driverInfo?.constructorId ?:constructorInfo?.constructorId] ?: AppTheme.colorScheme.onSecondary
+    val driverImage = remember(driverInfo?.driverId) {
+        Driver.getDriverImageRes(driverName = driverInfo?.driverId?: "")
+    }
 
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(
@@ -146,12 +150,24 @@ fun StandingsBannerComponent(
                     }
                 }
 
-                ImageComponent(
-                    modifier = Modifier.weight(1f),
-                    imageResourceValue = imageUrl,
-                    contentDescription = "Banner",
-                    contentScale = ContentScale.Fit
-            )
+                driverInfo?.let {
+                    ImageComponent(
+                        modifier = Modifier.weight(1f),
+                        imageResourceValue = driverImage,
+                        contentDescription = "Banner",
+                        contentScale = ContentScale.Fit
+                    )
+                }
+
+                constructorInfo?.let {
+                    ImageComponent(
+                        modifier = Modifier.weight(1f),
+                        imageResourceValue = R.drawable.mclaren,
+                        contentDescription = "Banner",
+                        contentScale = ContentScale.Fit
+                    )
+                }
+
         }
     }
 
@@ -165,7 +181,6 @@ fun StandingsBannerComponent(
 fun DriverBannerComponentPreview() {
     AppTheme(isDarkTheme = true){
         StandingsBannerComponent(
-            imageUrl = R.drawable.mclaren
         )
     }
 

@@ -1,5 +1,6 @@
 package com.hugo.oversteerf1.di
 
+import com.hugo.datasource.local.LocalDataSource
 import com.hugo.oversteerf1.BuildConfig
 import com.hugo.oversteerf1.data.remote.F1NewsApi
 import com.hugo.oversteerf1.data.repository.F1NewsRepositoryImpl
@@ -9,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.github.jan.supabase.SupabaseClient
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -51,7 +53,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsRepository (api: F1NewsApi) : IF1NewsRepository {
-        return F1NewsRepositoryImpl(api)
+    fun provideNewsRepository (api: F1NewsApi, supabase: SupabaseClient, localDataSouce: LocalDataSource) : IF1NewsRepository {
+        return F1NewsRepositoryImpl(api, supabase, localDataSouce)
     }
 }

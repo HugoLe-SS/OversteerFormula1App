@@ -36,7 +36,7 @@ class ScheduleHomeViewModel @Inject constructor(
     private val _countdown = MutableStateFlow<CountDownInfo?>(null)
     val countdown: StateFlow<CountDownInfo?> = _countdown
 
-    private val _nextSession = MutableStateFlow<Session?>(null)
+    //private val _nextSession = MutableStateFlow<Session?>(null)
     //val nextSession: StateFlow<AppUtilities.Session?> = _nextSession
 
     val filteredEvents = _state
@@ -142,7 +142,7 @@ class ScheduleHomeViewModel @Inject constructor(
         )
 
         val next = getNextUpcomingSession(sessions)
-        _nextSession.value = next
+        //_nextSession.value = next
 
         startCountdown(next)
     }

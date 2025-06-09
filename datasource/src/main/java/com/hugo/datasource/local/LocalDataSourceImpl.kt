@@ -9,6 +9,7 @@ import com.hugo.datasource.local.entity.Driver.DriverDetails
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
+import com.hugo.datasource.local.entity.F1HomeDetails
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
@@ -19,6 +20,19 @@ class LocalDataSourceImpl(
 ) : LocalDataSource {
 
     private val appDB: AppDB = AppDB.getDatabase(context)
+
+    override fun insertF1HomeDetailsInDB(f1HomeDetails: F1HomeDetails) {
+        appDB.getF1HomeDetailsDao().insertF1HomeDetailsInDB(f1HomeDetails)
+    }
+
+    override fun getF1HomeDetailsFromDB(): F1HomeDetails? {
+       return appDB.getF1HomeDetailsDao().getF1HomeDetailsFromDB()
+    }
+
+    override fun deleteAllF1HomeDetailsFromDB() {
+        appDB.getF1HomeDetailsDao().deleteAllF1HomeDetailsFromDB()
+    }
+
     override fun insertF1CalendarInDB(f1CalendarInfo: List<F1CalendarInfo>) {
         appDB.getF1CalendarDao().insertF1CalendarInDB(f1CalendarInfo)
     }

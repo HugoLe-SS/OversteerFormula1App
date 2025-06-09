@@ -26,19 +26,15 @@ data class BottomNavItem(
     val screen: Screen,
 )
 
-
 @Composable
-fun BottomNavBar(
-    navController: NavHostController,
-
-) {
+fun BottomNavBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
 
     val bottomNavItems = listOf(
         BottomNavItem(label = stringResource(R.string.home), icon = R.drawable.ic_home, screen = Screen.HomeScreen),
-        BottomNavItem(label = stringResource(R.string.standings), icon = R.drawable.ic_calendar, screen =  Screen.ScheduleScreen),
-        BottomNavItem(label = stringResource(R.string.schedule), icon = R.drawable.ic_trophy, screen =  Screen.StandingsScreen)
+        BottomNavItem(label = stringResource(R.string.schedule), icon = R.drawable.ic_calendar, screen =  Screen.ScheduleScreen),
+        BottomNavItem(label = stringResource(R.string.standings), icon = R.drawable.ic_trophy, screen =  Screen.StandingsScreen)
     )
 
     NavigationBar(
@@ -63,7 +59,6 @@ fun BottomNavBar(
                         restoreState = true
                     }
                 },
-
                 icon = {
                     Icon(
                         painter = painterResource(item.icon),
@@ -91,5 +86,3 @@ fun BottomNavBar(
         }
     }
 }
-
-

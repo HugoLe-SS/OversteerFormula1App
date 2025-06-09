@@ -28,7 +28,6 @@ import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.components.PullToRefreshLazyColumn
 import com.hugo.design.components.SingleChoiceSegmentedButton
 import com.hugo.design.ui.theme.AppTheme
-import com.hugo.standings.R
 import com.hugo.standings.presentation.components.Driver.StandingsBannerComponent
 import com.hugo.standings.presentation.components.StandingsHomeScreen.ConstructorListItem
 import com.hugo.standings.presentation.components.StandingsHomeScreen.DriverListItem
@@ -126,7 +125,6 @@ fun StandingsHomeScreen(
                                     @Composable {
                                         StandingsBannerComponent(
                                             constructorInfo = constructors[0],
-                                            imageUrl = R.drawable.mclaren
                                         )
                                     }
                                 } else {
@@ -141,7 +139,6 @@ fun StandingsHomeScreen(
                                     {
                                         StandingsBannerComponent(
                                             driverInfo = drivers[0],
-                                            imageUrl = R.drawable.mclaren
                                         )
                                     }
                                 } else {

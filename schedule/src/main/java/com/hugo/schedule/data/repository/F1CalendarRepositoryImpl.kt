@@ -77,7 +77,7 @@ class F1CalendarRepositoryImpl @Inject constructor(
     // Supabase
     override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitDetails?, AppError>> = flow {
         AppLogger.d(message = "Inside getF1CircuitDetails")
-        emit(Resource.Loading())
+        //emit(Resource.Loading())
 
         try {
 
