@@ -22,7 +22,7 @@ import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.standings.presentation.components.StandingsDetailScreen.ConstructorBioList
 import com.hugo.standings.presentation.components.StandingsDetailScreen.DriverBioList
-import com.hugo.standings.presentation.components.StandingsDetailScreen.StandingsBannerListItem
+import com.hugo.standings.presentation.components.StandingsDetailScreen.StandingsDetailsBannerListItem
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
 import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
 import com.hugo.utilities.logging.AppLogger
@@ -33,7 +33,7 @@ fun StandingsDetailsScreen(
     constructorClickInfo: ConstructorClickInfo? = null,
     driverClickInfo: DriverClickInfo? = null,
     backButtonClicked : () -> Unit = {},
-    viewResultButtonClicked: (String) -> Unit = {},
+    viewResultButtonClicked: (driverId: String?, constructorId: String?) -> Unit = { _, _ -> },
     viewModel: StandingsDetailsViewModel = hiltViewModel()
 ){
     val state by viewModel.state.collectAsState()
@@ -114,10 +114,12 @@ fun StandingsDetailsScreen(
                         else-> {
                             constructorClickInfo?.let {
                                 item{
-                                    StandingsBannerListItem(
+                                    StandingsDetailsBannerListItem(
                                         constructorDetails = state.constructorDetails,
                                         constructorClickInfo = constructorClickInfo,
-                                        buttonClicked = viewResultButtonClicked
+                                        viewResultButtonClicked = {
+                                            viewResultButtonClicked(null, constructorClickInfo.constructorId)
+                                        }
                                     )
                                 }
                                 item {
@@ -129,10 +131,14 @@ fun StandingsDetailsScreen(
 
                             driverClickInfo?.let {
                                 item{
-                                    StandingsBannerListItem(
+                                    StandingsDetailsBannerListItem(
                                         driverDetails = state.driverDetails,
                                         driverClickInfo = driverClickInfo,
-                                        buttonClicked = viewResultButtonClicked
+                                        viewResultButtonClicked = {
+                                            viewResultButtonClicked(
+                                                driverClickInfo.driverId, null
+                                            )
+                                        }
                                     )
                                 }
                                 item {

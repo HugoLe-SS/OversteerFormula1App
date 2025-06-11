@@ -193,7 +193,7 @@ class F1StandingRepositoryImpl @Inject constructor(
                     if (driverDetails != null) {
                         AppLogger.d(message = "Success getting F1 driver details ${driverDetails.driverId}")
                         insertDriverDetailsInDB(driverDetails) // add to RoomDB
-                        AppLaunchManager.fetchedCircuitDetails.add(driverId)
+                        AppLaunchManager.fetchedDriverDetails.add(driverId)
                     }
 
                     emit(Resource.Success(driverDetails))

@@ -32,28 +32,35 @@ import com.hugo.utilities.logging.AppLogger
 fun ResultScreen(
     viewModel: ResultViewModel = hiltViewModel(),
     backButtonClicked : () -> Unit = {},
-    raceId: String? = null,
+    driverId: String? = null,
+    constructorId: String?= null,
     circuitDetails: F1CircuitDetails? = null
 ){
     val state by viewModel.state.collectAsState()
     val intervals by viewModel.raceIntervals.collectAsState()
 
-    LaunchedEffect(key1 = raceId, key2 = circuitDetails){
-        AppLogger.d(message = "LaunchedEffect - raceId: $raceId")
-        raceId?.let {
+    LaunchedEffect(key1 = driverId, key2 = constructorId, key3 = circuitDetails){
+
+        if(driverId != null){
             viewModel.fetchDriverRaceResults(
                 season = "current",
-                driverId = raceId
+                driverId = driverId
             )
-            viewModel.fetchConstructorRaceResults(
-                season = "current",
-                constructorId = raceId
-            )
+            AppLogger.d(message = "LaunchedEffect - driverId: $driverId")
         }
 
-        AppLogger.d(message = "LaunchedEffect - circuitId: ${circuitDetails?.circuitId}")
+       if(constructorId != null)
+       {
+           viewModel.fetchConstructorRaceResults(
+               season = "current",
+               constructorId = constructorId
+           )
+           AppLogger.d(message = "LaunchedEffect - constructorId: $constructorId")
+       }
+
         circuitDetails?.circuitId?.let {
             viewModel.fetchF1CalendarResult(season = "current", circuitId = circuitDetails.circuitId)
+            AppLogger.d(message = "LaunchedEffect - circuitId: ${circuitDetails?.circuitId}")
         }
 
     }
@@ -105,8 +112,8 @@ fun ResultScreen(
                                     appError = state.error!!,
                                     onRetry = {viewModel.onEvent(ResultEvent.RetryFetch(
                                         season = "current",
-                                        driverId = raceId,
-                                        constructorId = raceId,
+                                        driverId = driverId,
+                                        constructorId = constructorId,
                                         circuitId = circuitDetails?.circuitId
                                     ))},
                                     modifier = Modifier

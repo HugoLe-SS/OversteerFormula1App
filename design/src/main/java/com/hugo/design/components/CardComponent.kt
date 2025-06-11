@@ -223,7 +223,6 @@ fun CardDetails(
         }
     }
 
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)

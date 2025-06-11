@@ -80,7 +80,6 @@ class F1CalendarRepositoryImpl @Inject constructor(
         //emit(Resource.Loading())
 
         try {
-
             if (!AppLaunchManager.fetchedCircuitDetails.contains(circuitId)) {
                 AppLogger.d(message = "Network fetch needed for getting F1 circuit details.")
                 emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch

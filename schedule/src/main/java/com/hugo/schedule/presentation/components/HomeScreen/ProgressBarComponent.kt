@@ -1,5 +1,6 @@
 package com.hugo.schedule.presentation.components.HomeScreen
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,7 +30,10 @@ fun ProgressBarComponent(
     color: Color
 ) {
     if (countdown?.status == "Live") {
-        val progress = countdown.progress.coerceIn(0f, 1f)
+        //val progress = countdown.progress.coerceIn(0f, 1f)
+        val progress by animateFloatAsState(
+            targetValue = countdown.progress.coerceIn(0f, 1f)
+        )
         val logoSize = 32.dp
         val progressBarHeight = 8.dp
 

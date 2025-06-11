@@ -10,7 +10,7 @@ object AppLaunchManager {
     var fetchedConstructorDetails = mutableSetOf<String>()
 
     var hasFetchedCalendar = false
-    val fetchedCircuitDetails = mutableSetOf<String>()
+    var fetchedCircuitDetails = mutableSetOf<String>()
 
     var hasFetchedConstructorResults = mutableSetOf<String>()
     var hasFetchedDriverResults = mutableSetOf<String>()

@@ -1,7 +1,8 @@
 package com.hugo.oversteerf1.presentation.screens.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -29,6 +30,8 @@ import kotlin.reflect.typeOf
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
+    //val animationSpec = tween<IntOffset>(durationMillis = 300)
+    val fadeSpec = tween<Float>(durationMillis = 500)
 
     Surface(modifier = Modifier.fillMaxSize()) {
         NavHost(
@@ -38,18 +41,10 @@ fun AppNavGraph() {
 
             // App Home Screen
             composable<Screen.HomeScreen>(
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(200)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        tween(200)
-                    )
-                }
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
                 HomeScreen(
                     navController = navController,
@@ -87,18 +82,10 @@ fun AppNavGraph() {
 
             // Schedule Home Screen
             composable<Screen.ScheduleScreen>(
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        tween(200)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(200)
-                    )
-                }
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
                 ScheduleHomeScreen(
                     viewScheduleButtonClicked = { clickInfo ->
@@ -115,18 +102,10 @@ fun AppNavGraph() {
 
             // Standings Home Screen
             composable<Screen.StandingsScreen>(
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        tween(200)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(200)
-                    )
-                }
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
                 StandingsHomeScreen(
                     navController = navController,
@@ -145,7 +124,11 @@ fun AppNavGraph() {
             composable<Screen.CalendarDetailsScreen>(
                 typeMap = mapOf(
                     typeOf<F1CalendarInfo>() to CustomNavType.CalendarClickInfoNavType
-                )
+                ),
+                enterTransition = NavTransitions.slideInFromRight(),
+                exitTransition = NavTransitions.slideOutToLeft(),
+                popEnterTransition = NavTransitions.slideInFromLeft(),
+                popExitTransition = NavTransitions.slideOutToRight()
             ) { backStackEntry ->
                 val screen: Screen.CalendarDetailsScreen = backStackEntry.toRoute()
                 CalendarDetailsScreen(
@@ -163,16 +146,20 @@ fun AppNavGraph() {
                 typeMap = mapOf(
                     typeOf<ConstructorClickInfo?>() to CustomNavType.ConstructorClickInfoNavType,
                     typeOf<DriverClickInfo?>() to CustomNavType.DriverClickInfoNavType
-                )
+                ),
+                enterTransition = NavTransitions.slideInFromRight(),
+                exitTransition = NavTransitions.slideOutToLeft(),
+                popEnterTransition = NavTransitions.slideInFromLeft(),
+                popExitTransition = NavTransitions.slideOutToRight()
             ) { backStackEntry ->
                 val screen: Screen.StandingsDetailsScreen = backStackEntry.toRoute()
                 StandingsDetailsScreen(
                     backButtonClicked = {navController.popBackStack()},
                     constructorClickInfo = screen.constructorClickInfo,
                     driverClickInfo = screen.driverClickInfo,
-                    viewResultButtonClicked = { id ->
-                        AppLogger.d(message = "View Result Button Clicked: $id")
-                        navController.navigate(Screen.ResultScreen(id))
+                    viewResultButtonClicked = { driverId, constructorId ->
+                        AppLogger.d(message = "View Result Button Clicked: ${driverId?: constructorId} ")
+                        navController.navigate(Screen.ResultScreen(driverId = driverId, constructorId = constructorId))
                     },
                 )
             }
@@ -182,23 +169,16 @@ fun AppNavGraph() {
                 typeMap = mapOf(
                     typeOf<F1CircuitDetails?>() to CustomNavType.CircuitDetailsNavType
                 ),
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        tween(200)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(200)
-                    )
-                }
+                enterTransition = NavTransitions.slideInFromRight(),
+                exitTransition = NavTransitions.slideOutToLeft(),
+                popEnterTransition = NavTransitions.slideInFromLeft(),
+                popExitTransition = NavTransitions.slideOutToRight()
             ) { backStackEntry ->
                 val screen: Screen.ResultScreen = backStackEntry.toRoute()
                 ResultScreen(
                     backButtonClicked = {navController.popBackStack()},
-                    raceId = screen.driverId?: screen.constructorId,
+                    driverId = screen.driverId,
+                    constructorId = screen.constructorId,
                     circuitDetails = screen.circuitDetails
                 )
             }
