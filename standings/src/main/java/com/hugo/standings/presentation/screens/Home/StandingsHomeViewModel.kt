@@ -8,6 +8,7 @@ import com.hugo.utilities.Resource
 import com.hugo.utilities.com.hugo.utilities.AppLaunchManager
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -24,6 +25,8 @@ class StandingsHomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(StandingsHomeUiState())
     val state: StateFlow<StandingsHomeUiState> = _state
 
+    private var currentDataFetchJob: Job? = null
+
     init{
         AppLogger.d(message = "Inside StandingsHomeViewModel")
         constructorStandings(season = "current", isRefresh = false)
@@ -33,7 +36,7 @@ class StandingsHomeViewModel @Inject constructor(
 
 
     private fun constructorStandings(season: String, isRefresh: Boolean) {
-        getConstructorStandingsUseCase(season = season).onEach{ resource ->
+        currentDataFetchJob = getConstructorStandingsUseCase(season = season).onEach{ resource ->
             when(resource){
                 is Resource.Loading -> {
                     _state.update {
@@ -70,7 +73,7 @@ class StandingsHomeViewModel @Inject constructor(
 
 
     private fun getDriverStandings(season: String, isRefresh: Boolean) {
-        getDriverStandingsUseCase(season = season).onEach{ resource ->
+        currentDataFetchJob = getDriverStandingsUseCase(season = season).onEach{ resource ->
             when(resource){
                 is Resource.Loading -> {
                     _state.update {
@@ -108,6 +111,8 @@ class StandingsHomeViewModel @Inject constructor(
     }
 
     private fun loadStandings(isRefresh: Boolean) {
+        currentDataFetchJob?.cancel()
+
         when (_state.value.currentType) {
             StandingsType.CONSTRUCTOR -> constructorStandings(season = "current", isRefresh = isRefresh)
             StandingsType.DRIVER -> getDriverStandings(season = "current", isRefresh = isRefresh)
