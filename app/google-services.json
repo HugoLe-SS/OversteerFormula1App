@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "334414381687",
+    "project_id": "oversteerf1app",
+    "storage_bucket": "oversteerf1app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334414381687:android:9cebac86720dbe7392bc72",
+        "android_client_info": {
+          "package_name": "com.hugo.oversteerf1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDutUOFsMllY8N3X3F8ha3NmLYNSHoMN7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
