@@ -1,0 +1,50 @@
+# ========== Node.js Dependencies ==========
+node_modules/
+functions/node_modules/
+
+# ========== Environment / Secrets ==========
+.env
+.env.*
+*.local
+google-services.json
+firebase.json
+.firebaserc
+functions/config/*.json
+
+# ========== Build Output ==========
+build/
+*/build/
+dist/
+functions/dist/
+functions/lib/
+lib/**/*.js
+lib/**/*.js.map
+*.tsbuildinfo
+functions/*.tsbuildinfo
+
+# ========== TypeScript ==========
+typings/
+tsconfig.tsbuildinfo
+
+# ========== Logs ==========
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+firebase-debug.log
+firestore-debug.log
+
+# ========== Testing ==========
+coverage/
+.nyc_output/
+
+# ========== IDE / Editor ==========
+.vscode/
+.vscode/launch.json
+.idea/
+*.iml
+
+# ========== OS-specific ==========
+.DS_Store
+Thumbs.db
