@@ -1,4 +1,4 @@
-package com.hugo.oversteerf1.notifications
+package com.hugo.oversteerf1.notifications.Local
 
 import android.app.AlarmManager
 import android.app.PendingIntent
