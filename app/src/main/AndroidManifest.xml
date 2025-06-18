@@ -4,6 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- For Android 13 (API 33) and above, this is a runtime permission -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" /> <!-- For exact alarms on Android 12 (API 31) and above -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Optional: To restart alarms on boot -->
+
+
+
     <application
         android:name=".OversteerF1Application"
         android:allowBackup="true"
@@ -15,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/SplashScreenTheme"
         tools:targetApi="31">
+
         <activity
             android:name=".presentation.activity.MainActivity"
             android:exported="true"
@@ -22,10 +29,44 @@
             android:theme="@style/Theme.OversteerF1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".notifications.Local.RaceNotificationReceiver" android:enabled="true" />
+        <!-- If you want to reschedule on boot -->
+        <receiver android:name=".notifications.Local.BootReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.hugo.oversteerf1.notifications.Remote.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_noti" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/secondaryColor" />
+        <!--(Optional) From Android 8.0 (API level 26) and higher, notification channels are supported and recommended.
+            FCM provides a default notification channel with basic settings.-->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
     </application>
+
+
 
 </manifest>

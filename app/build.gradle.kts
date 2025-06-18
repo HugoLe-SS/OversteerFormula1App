@@ -9,6 +9,7 @@ plugins {
 
     // Kotlin serialization plugin for type safe routes and navigation arguments
     kotlin("plugin.serialization") version "2.1.10"
+    alias(libs.plugins.google.gms.google.services)// push noti
 
 }
 
@@ -134,6 +135,10 @@ dependencies {
     implementation(platform(libs.supabase.bom))
     implementation(libs.postgrest.kt)
     implementation(libs.ktor.client.android)
+
+    //push noti
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.messaging)
 
 
 }

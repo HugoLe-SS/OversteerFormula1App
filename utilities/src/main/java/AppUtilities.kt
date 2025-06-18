@@ -169,8 +169,6 @@ object AppUtilities {
         )
     }
 
-
-
     fun getNextUpcomingSession(sessions: List<Session>): Session? {
         val now = System.currentTimeMillis()
 
@@ -209,9 +207,6 @@ object AppUtilities {
             String.format("%2d.%03d", seconds, milliseconds)
         }
     }
-
-
-
 
 
 }
