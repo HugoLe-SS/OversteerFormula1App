@@ -1,7 +1,6 @@
 package com.hugo.oversteerf1.presentation.activity
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -51,14 +50,11 @@ class MainActivity () : ComponentActivity() {
         if (isGranted) {
             AppLogger.d(message = "Notification permission GRANTED")
             //storeFcmToken(permissionGranted = true)
-
         } else {
             AppLogger.d(message = "Notification permission DENIED")
             //storeFcmToken(permissionGranted = false)
         }
     }
-
-
 
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -68,59 +64,59 @@ class MainActivity () : ComponentActivity() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     AppLogger.d(message = "Notification permission already granted")
-                    //storeFcmToken(permissionGranted = true)
+                    return
                 }
-
-                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-                    showNotificationExplanationDialog()
-                }
-
                 else -> {
-                    showNotificationExplanationDialog()
+                    // Request permission directly with system dialog
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         } else {
+            AppLogger.d(message = "Notification permission not required for this Android version")
             //storeFcmToken(permissionGranted = true)
-            AppLogger.d(message = "Notification permission already granted")
         }
     }
 
-    private fun showNotificationExplanationDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Enable Notifications?")
-            .setMessage("We use notifications to alert you about race schedules, results, and updates.")
-            .setPositiveButton("Allow") { _, _ ->
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                //dialog.dismiss()
-                //storeFcmToken(permissionGranted = true)
-            }
-            .setNegativeButton("No thanks") { dialog, _ ->
-                dialog.dismiss()
-                //storeFcmToken(permissionGranted = false)
-            }
-            .show()
-    }
 
-
-//    Snackbar.make(findViewById(android.R.id.content), "Notifications are off", Snackbar.LENGTH_LONG)
-//    .setAction("Enable") {
-//        openNotificationSettings()
+//    private fun showNotificationExplanationDialog() {
+//        AlertDialog.Builder(this)
+//            .setTitle("Enable Notifications?")
+//            .setMessage("We use notifications to alert you about race schedules, results, and updates.")
+//            .setPositiveButton("Allow") { _, _ ->
+//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+//            }
+//            .setNegativeButton("No thanks") { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//            .setCancelable(false)
+//            .show()
 //    }
-//    .show()
 
-//    private fun storeFcmToken(permissionGranted: Boolean) {
-//        lifecycleScope.launch {
-//            NotificationUtils.ensureAnonymousUser(supabaseClient)
-//            val userId = supabaseClient.auth.currentUserOrNull()?.id
-//            AppLogger.d(message = "Storing token. Permission: $permissionGranted UserID: $userId")
-//            FirebaseTokenManager.fetchAndStoreToken(
-//                supabaseClient = supabaseClient,
-//                userId = userId,
-//                notificationPermissionGranted = permissionGranted
-//            )
+
+    //    private fun askNotificationPermission() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            when {
+//                ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.POST_NOTIFICATIONS
+//                ) == PackageManager.PERMISSION_GRANTED -> {
+//                    AppLogger.d(message = "Notification permission already granted")
+//                    //storeFcmToken(permissionGranted = true)
+//                }
+//
+//                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+//                    showNotificationExplanationDialog()
+//                }
+//
+//                else -> {
+//                    showNotificationExplanationDialog()
+//                }
+//            }
+//        } else {
+//            //storeFcmToken(permissionGranted = true)
+//            AppLogger.d(message = "Notification permission already granted")
 //        }
 //    }
-
 
 }
 
