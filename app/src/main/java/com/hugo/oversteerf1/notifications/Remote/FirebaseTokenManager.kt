@@ -71,24 +71,3 @@ object FirebaseTokenManager {
 
 }
 
-
-//                        try {
-//                            supabaseClient.postgrest["DeviceToken"]
-//                                .upsert(
-//                                    DeviceToken(
-//                                        user_id = userId,
-//                                        fcm_token = token
-//                                    ),
-//                                    {onConflict = "fcm_token"}
-//                                )
-////                            val result: PostgrestResult = supabaseClient.postgrest
-////                                .from("DeviceToken")
-////                                .upsert(
-////                                    values = listOf(DeviceToken),
-////                                    {onConflict = "fcm_token"}
-////                                )
-//
-//                            Log.d("FCM", "Token inserted to Supabase")
-//                        } catch (e: Exception) {
-//                            Log.e("FCM", "Insert failed", e)
-//                        }

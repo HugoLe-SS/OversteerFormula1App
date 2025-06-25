@@ -1,5 +1,15 @@
 {
   "name": "functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
@@ -10,23 +20,18 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "engines": {
-    "node": "22"
-  },
-  "main": "lib/index.js",
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
     "firebase-admin": "^12.7.0",
     "firebase-functions": "^6.0.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
-    "@typescript-eslint/parser": "^5.12.0",
-    "eslint": "^8.9.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.25.4",
     "firebase-functions-test": "^3.1.0",
     "typescript": "^5.7.3"
   },
-  "private": true
+  "engines": {
+    "node": "22"
+  }
 }

@@ -1,26 +1,25 @@
+
 # ========== Node.js Dependencies ==========
 node_modules/
-functions/node_modules/
 
 # ========== Environment / Secrets ==========
 .env
 .env.*
 *.local
-google-services.json
-firebase.json
-.firebaserc
-functions/config/*.json
+# Firebase private keys
+config/*.json
+functions/.runtimeconfig.json
 
 # ========== Build Output ==========
-build/
-*/build/
 dist/
-functions/dist/
-functions/lib/
+build/
 lib/**/*.js
 lib/**/*.js.map
 *.tsbuildinfo
-functions/*.tsbuildinfo
+
+# Firebase Functions build artifacts
+functions/lib/
+functions/dist/
 
 # ========== TypeScript ==========
 typings/
@@ -43,8 +42,9 @@ coverage/
 .vscode/
 .vscode/launch.json
 .idea/
-*.iml
 
 # ========== OS-specific ==========
 .DS_Store
 Thumbs.db
+
+
