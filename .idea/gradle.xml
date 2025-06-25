@@ -10,6 +10,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Authentication" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/datasource" />
             <option value="$PROJECT_DIR$/design" />
