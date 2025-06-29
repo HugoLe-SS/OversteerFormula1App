@@ -1,5 +1,7 @@
 package com.hugo.design.components
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
@@ -45,6 +47,52 @@ fun ButtonComponent(
         )
     }
 }
+
+
+@Composable
+fun ButtonWithIconComponent(
+    text: String = "Button",
+    buttonColor: Color = AppTheme.colorScheme.background,
+    textColor: Color = AppTheme.colorScheme.onSecondary,
+    buttonClicked: () -> Unit = {},
+    icon: Int,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = buttonClicked,
+        modifier = modifier
+            //.width(120.dp)
+            .wrapContentWidth()
+            .wrapContentHeight(),
+        enabled = true,
+        shape = AppTheme.shape.button,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = buttonColor,
+            contentColor = textColor
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 8.dp,
+            hoveredElevation = 6.dp,
+            focusedElevation = 6.dp
+        ),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ){
+            ImageComponent(
+                imageResourceValue = icon,
+                contentDescription = "icon"
+            )
+            Text(
+                text = text,
+                style = AppTheme.typography.labelNormal,
+            )
+        }
+
+    }
+}
+
 
 @Preview
 @Composable

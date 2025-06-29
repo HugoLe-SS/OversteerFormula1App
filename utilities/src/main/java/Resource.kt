@@ -22,4 +22,3 @@ sealed class Resource<D, out E : AppError>(
         data: D? = null
     ) : Resource<D, E>(data = data, error = null)
 }
-

@@ -12,7 +12,20 @@
           "package_name": "com.hugo.oversteerf1"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "334414381687-vbdf3um595qbii5kmmq4prhk6jjcdjmr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hugo.oversteerf1",
+            "certificate_hash": "d3b1ce000424686650cb5fc13f0764f34bd1adc5"
+          }
+        },
+        {
+          "client_id": "334414381687-pb6tthcibsd7apvv9okqbpalgs2hs44d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDutUOFsMllY8N3X3F8ha3NmLYNSHoMN7Q"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "334414381687-pb6tthcibsd7apvv9okqbpalgs2hs44d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

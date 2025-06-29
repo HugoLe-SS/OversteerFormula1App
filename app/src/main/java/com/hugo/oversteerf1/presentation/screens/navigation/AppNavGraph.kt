@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.hugo.authentication.presentation.screens.AuthScreen
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
@@ -36,7 +37,8 @@ fun AppNavGraph() {
     Surface(modifier = Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
-            startDestination = Screen.HomeScreen
+            //startDestination = Screen.HomeScreen
+            startDestination = Screen.AuthScreen
         ) {
 
             // App Home Screen
@@ -78,6 +80,16 @@ fun AppNavGraph() {
 
                     }
                 )
+            }
+
+            // Auth Screen
+            composable<Screen.AuthScreen>(
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
+            ) {
+                AuthScreen()
             }
 
             // Schedule Home Screen

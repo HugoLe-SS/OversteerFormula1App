@@ -18,6 +18,9 @@ sealed interface Screen {
     data object StandingsScreen : Screen
 
     @Serializable
+    data object AuthScreen : Screen
+
+    @Serializable
     data class CalendarDetailsScreen(val info: F1CalendarInfo) : Screen
 
     @Serializable
