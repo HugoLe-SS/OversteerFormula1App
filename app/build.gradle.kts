@@ -85,6 +85,7 @@ dependencies {
     implementation(project(":schedule"))
     implementation(project(":standings"))
     implementation(project(":result"))
+    implementation(project(":authentication"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

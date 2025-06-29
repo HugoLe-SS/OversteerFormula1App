@@ -11,4 +11,8 @@ object AppConstants {
 
     // Supabase
     const val SUPABASE_URL = "https://zoxsiqaduuyrnewuvmyw.supabase.co"
+
+    // Google Sign In -- Web Client ID get from Firebase Console
+    const val WEB_CLIENT_ID = "334414381687-pb6tthcibsd7apvv9okqbpalgs2hs44d.apps.googleusercontent.com"
+
 }
