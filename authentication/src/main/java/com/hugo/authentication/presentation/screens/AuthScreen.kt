@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,9 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.authentication.R
 import com.hugo.authentication.domain.model.GoogleSignInResult
+import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     viewModel: AuthViewModel = hiltViewModel()
@@ -52,91 +56,74 @@ fun AuthScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppTheme.colorScheme.background)
-            .padding(12.dp)
-    ){
-        Column(
-            Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Box(
+    Scaffold(
+        topBar = {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
-                contentAlignment = Alignment.TopEnd
-            ){
-              Text(
-                  text = stringResource(R.string.skip),
-                  style = AppTheme.typography.labelNormal,
-                  color = AppTheme.colorScheme.onSecondary
-              )
-            }
-
-            ImageComponent(
-                //imageResourceValue = R.drawable.f1banner,
-                //imageResourceValue = R.drawable.formula1,
-            )
-
-            if (state.isSignedIn && state.userInfo != null) {
-                // Signed in UI
-                SignedInContent(
-                    userInfo = state.userInfo!!,
-                    onSignOut = { viewModel.signOut(context) }
-                )
-            } else {
-                // Sign in UI
-                SignInContent(
-                    isLoading = state.isLoading,
-                    errorMessage = state.errorMessage,
-                    onSignIn = { viewModel.signInWithGoogle(context) },
-                    onClearError = { viewModel.clearError() }
+                    .background(AppTheme.colorScheme.background),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AppToolbar(
+                    title = {
+                        Text(
+                            text = "Settings",
+                            style = AppTheme.typography.titleNormal,
+                        )
+                    }
                 )
             }
-
-        }
-    }
-}
-
-@Composable
-fun GoogleSignInButton(
-    isLoading: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = onClick,
-            enabled = !isLoading,
+        },
+    ) { innerPadding ->
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-                .height(48.dp)
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    color = AppTheme.colorScheme.onPrimary
+                .fillMaxSize()
+                .background(AppTheme.colorScheme.background)
+                .padding(innerPadding)
+        ){
+            Column(
+                Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    contentAlignment = Alignment.TopEnd
+                ){
+                    Text(
+                        text = stringResource(R.string.skip),
+                        style = AppTheme.typography.labelNormal,
+                        color = AppTheme.colorScheme.onSecondary
+                    )
+                }
+
+                ImageComponent(
+                    //imageResourceValue = R.drawable.f1banner,
+                    //imageResourceValue = R.drawable.formula1,
                 )
-            } else {
-                Text("Sign in with Google")
+
+                if (state.isSignedIn && state.userInfo != null) {
+                    // Signed in UI
+                    SignedInContent(
+                        userInfo = state.userInfo!!,
+                        onSignOut = { viewModel.signOut(context) }
+                    )
+                } else {
+                    // Sign in UI
+                    SignInContent(
+                        isLoading = state.isLoading,
+                        errorMessage = state.errorMessage,
+                        onSignIn = { viewModel.signInWithGoogle(context) },
+                        onClearError = { viewModel.clearError() }
+                    )
+                }
+
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "By signing up, you agree to our Terms of Service",
-            style = AppTheme.typography.labelMini,
-            color = AppTheme.colorScheme.onSecondary,
-        )
     }
 }
 

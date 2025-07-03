@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.hugo.account.presentation.components.ProfileCardType
+import com.hugo.account.presentation.screens.ProfileHomeScreen
 import com.hugo.authentication.presentation.screens.AuthScreen
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
@@ -37,8 +39,7 @@ fun AppNavGraph() {
     Surface(modifier = Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
-            //startDestination = Screen.HomeScreen
-            startDestination = Screen.AuthScreen
+            startDestination = Screen.HomeScreen
         ) {
 
             // App Home Screen
@@ -78,6 +79,41 @@ fun AppNavGraph() {
                             }
                         }
 
+                    },
+                    onProfileCliclked = {
+                        navController.navigate(Screen.ProfileScreen) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+
+            // Profile Screen
+            composable<Screen.ProfileScreen>(
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
+            ) {
+                ProfileHomeScreen(
+                    cardOnClicked = { card ->
+                        when(card){
+                            ProfileCardType.MyAccount -> navController.navigate(Screen.AuthScreen) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                            ProfileCardType.Notifications -> TODO()
+                            ProfileCardType.AppSettings -> TODO()
+                            ProfileCardType.Feedback -> TODO()
+                            ProfileCardType.LegalPrivacy -> TODO()
+                        }
                     }
                 )
             }

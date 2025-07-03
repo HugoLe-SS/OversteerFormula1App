@@ -2,6 +2,7 @@
 agp = "8.8.0"
 authKt = "3.1.4"
 credentials = "1.5.0"
+datastorePreferences = "1.1.7"
 googleid = "1.1.1"
 kotlin = "2.1.20"
 coreKtx = "1.15.0"
@@ -27,6 +28,7 @@ okhttp = "5.0.0-alpha.2"
 navVersion = "2.9.0"
 composeRuntimeVersion = "1.8.3"
 storage = "1.5.0"
+storageKt = "3.1.4"
 supabaseBomVersion = "3.1.2"
 ktorVersion = "3.1.1"
 ksp-version = "2.1.20-1.0.31"
@@ -77,7 +79,10 @@ androidx-credentials = { module = "androidx.credentials:credentials", version.re
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 
+
+storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "storageKt" }
 supabase-bom = {group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabaseBomVersion"}
 postgrest-kt = {module = "io.github.jan-tennert.supabase:postgrest-kt"}
 auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "authKt" }

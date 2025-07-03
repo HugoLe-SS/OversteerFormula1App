@@ -86,6 +86,7 @@ dependencies {
     implementation(project(":standings"))
     implementation(project(":result"))
     implementation(project(":authentication"))
+    implementation(project(":profile"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

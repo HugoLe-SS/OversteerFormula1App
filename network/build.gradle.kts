@@ -77,7 +77,10 @@ dependencies {
     //Supabase
     implementation(platform(libs.supabase.bom))
     implementation(libs.postgrest.kt)
+    implementation(libs.storage.kt)
+    implementation(libs.auth.kt)
     implementation(libs.ktor.client.android)
+
 
     //hilt
     implementation(libs.corountine.android)

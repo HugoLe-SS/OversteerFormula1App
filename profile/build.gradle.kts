@@ -2,14 +2,12 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp) //use ksp to replace kapt
 
-    kotlin("plugin.serialization") version "2.1.10" // to use supabase
 }
 
 android {
-    namespace = "com.hugo.authentication"
+    namespace = "com.hugo.profile"
     compileSdk = 35
 
     defaultConfig {
@@ -52,10 +50,7 @@ android {
 }
 
 dependencies {
-
     implementation(project(":design"))
-    implementation(project(":utilities"))
-    implementation(project(":network"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -65,39 +60,17 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.ui.graphics)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(libs.corountine.android)
-    implementation(libs.hilt)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
-
     implementation(libs.androidx.compose.runtime)
 
     // Navigation
     implementation(libs.navigation.compose)
-
-
-    //Supabase
-    implementation(platform(libs.supabase.bom))
-    implementation(libs.postgrest.kt)
-    implementation(libs.auth.kt)
-    implementation(libs.storage.kt)
-    implementation(libs.ktor.client.android)
-
-    //Google Sign In
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
-    implementation (libs.googleid)
-
-    // Datastore for storing user data
-    implementation(libs.androidx.datastore.preferences)
 
 }
