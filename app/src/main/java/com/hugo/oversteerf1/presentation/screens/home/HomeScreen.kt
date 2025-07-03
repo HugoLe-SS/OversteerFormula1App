@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.navigation.NavHostController
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
+import com.hugo.design.components.ImageComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.oversteerf1.presentation.components.HorizontalPagerItem
@@ -36,7 +38,8 @@ fun HomeScreen(
     navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel(),
     cardOnClicked: () -> Unit = {},
-    bannerOnClicked: (Int) -> Unit = {}
+    bannerOnClicked: (Int) -> Unit = {},
+    onProfileCliclked: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
     val countdown by viewModel.countdown.collectAsState()
@@ -64,7 +67,17 @@ fun HomeScreen(
                             text = "Home",
                             style = AppTheme.typography.titleNormal,
                         )
-                    }
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = onProfileCliclked
+                        ) {
+                            ImageComponent(
+                                imageResourceValue = com.hugo.profile.R.drawable.ic_person
+                            )
+                        }
+                    },
+
                 )
             }
         },
