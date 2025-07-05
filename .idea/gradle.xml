@@ -15,9 +15,9 @@
             <option value="$PROJECT_DIR$/datasource" />
             <option value="$PROJECT_DIR$/design" />
             <option value="$PROJECT_DIR$/network" />
-            <option value="$PROJECT_DIR$/profile" />
             <option value="$PROJECT_DIR$/result" />
             <option value="$PROJECT_DIR$/schedule" />
+            <option value="$PROJECT_DIR$/settings" />
             <option value="$PROJECT_DIR$/standings" />
             <option value="$PROJECT_DIR$/utilities" />
           </set>

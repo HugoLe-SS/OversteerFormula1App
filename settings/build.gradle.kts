@@ -2,7 +2,10 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp) //use ksp to replace kapt
+
+    kotlin("plugin.serialization") version "2.1.10" // to use supabase
 
 }
 
@@ -51,6 +54,7 @@ android {
 
 dependencies {
     implementation(project(":design"))
+    implementation(project(":authentication"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -69,6 +73,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.compose.runtime)
+
+    implementation(libs.corountine.android)
+    implementation(libs.hilt)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
+
+    //Supabase
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.postgrest.kt)
+    implementation(libs.ktor.client.android)
 
     // Navigation
     implementation(libs.navigation.compose)

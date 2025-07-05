@@ -11,7 +11,9 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.hugo.authentication.data.dto.ProfileDto
 import com.hugo.authentication.data.local.UserPreferences
+import com.hugo.authentication.data.mapper.toGoogleSignInResult
 import com.hugo.authentication.domain.model.GoogleSignInResult
 import com.hugo.authentication.domain.repository.GoogleAuthRepository
 import com.hugo.authentication.domain.repository.UserProfileRepository
@@ -19,6 +21,8 @@ import com.hugo.utilities.constants.AppConstants.WEB_CLIENT_ID
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.IDToken
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.query.Count
 import kotlinx.coroutines.flow.Flow
 import java.security.MessageDigest
 import java.util.UUID
@@ -29,6 +33,7 @@ import javax.inject.Singleton
 class GoogleAuthRepositoryImpl @Inject constructor(
     private val userPreferences: UserPreferences,
     private val supabaseAuth: Auth, // Supabase Auth client
+    private val postgrest: Postgrest,
     private val userProfileRepository: UserProfileRepository
 ): GoogleAuthRepository {
 
@@ -156,33 +161,56 @@ class GoogleAuthRepositoryImpl @Inject constructor(
 
     private suspend fun signInWithSupabaseAndSync(googleResult: GoogleSignInResult): Result<GoogleSignInResult> {
         return try {
-            // Step 1: Perform the sign-in. This function returns Unit on success.
+            // Step 1 & 2: Authenticate and get user (Your code is correct)
             supabaseAuth.signInWith(IDToken) {
                 provider = Google
                 idToken = googleResult.idToken
-                nonce = googleResult.nonce // IMPORTANT SECURITY FIX: Pass the nonce
+                nonce = googleResult.nonce
+            }
+            val supabaseUser = supabaseAuth.currentUserOrNull()
+                ?: throw Exception("Supabase sign-in failed: user is null")
+
+            // Step 3: Check if a profile exists (Corrected Syntax)
+            val existingProfile = postgrest.from("Profiles")
+                .select {
+                    // To get a count, you specify it inside the select block
+                    count(Count.EXACT)
+                    filter {
+                        eq("id", supabaseUser.id)
+                    }
+                    limit(1) // Only need to check for one row's existence
+                }
+
+            // Step 4: If no profile exists, create one (Correct)
+            if (existingProfile.countOrNull() == 0L) {
+                Log.d("SupabaseSignIn", "New user detected. Creating profile.")
+                userProfileRepository.syncUserProfile(googleResult, supabaseUser.id).getOrThrow()
+            } else {
+                Log.d("SupabaseSignIn", "Returning user. Skipping profile creation.")
             }
 
-            // Step 2: Retrieve the user object AFTER successful sign-in.
-            val supabaseUser = supabaseAuth.currentUserOrNull()
-                ?: throw Exception("Supabase sign-in failed: user is null after sign-in attempt")
+            // Step 5: Fetch the definitive profile (Correct Syntax)
+            val finalProfileDto = postgrest.from("Profiles")
+                .select {
+                    filter {
+                        eq("id", supabaseUser.id)
+                    }
+                }
+                .decodeSingle<ProfileDto>()
 
-            // Step 3: Sync the user profile using the correct user ID
-            userProfileRepository.syncUserProfile(googleResult, supabaseUser.id).getOrThrow()
-
-            // Step 4: Create the final result with the correct Supabase ID
-            val finalResult = googleResult.copy(
-                userId = supabaseUser.id,
-                nonce = null // Clear the single-use nonce before saving
+            // Step 6 & 7: Create result and save to cache (Your code is correct)
+            val finalResult = finalProfileDto.toGoogleSignInResult(
+                idToken = supabaseAuth.currentSessionOrNull()?.accessToken ?: "",
+                email = supabaseUser.email?: ""
             )
+            userPreferences.saveUser(finalResult)
 
             Result.success(finalResult)
         } catch (e: Exception) {
-            Log.e("SupabaseSignIn", "Failed to sign in with Supabase or sync profile", e)
+            Log.e("SupabaseSignIn", "Failed to sign in or sync profile", e)
             Result.failure(e)
         }
     }
-
 
     private fun hashNonce(raw: String): String {
         val bytes = raw.toByteArray()
@@ -190,45 +218,6 @@ class GoogleAuthRepositoryImpl @Inject constructor(
         val digest = md.digest(bytes)
         return digest.fold("") { str, it -> str + "%02x".format(it) }
     }
-
-
-//    private fun handleCredentialResult(result: GetCredentialResponse): Result<GoogleSignInResult> {
-//        val credential = result.credential
-//
-//        return when (credential) {
-//            is CustomCredential -> {
-//                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-//                    try {
-//                        val googleId = GoogleIdTokenCredential.createFrom(credential.data)
-//                        val signInResult = GoogleSignInResult(
-//                            idToken = googleId.idToken,
-//                            displayName = googleId.displayName,
-//                            email = googleId.id,
-//                            profilePictureUrl = googleId.profilePictureUri?.toString(),
-//                            userId = "temp_${googleId.id.hashCode()}"
-//                        )
-//                        Result.success(signInResult)
-//                    } catch (e: GoogleIdTokenParsingException) {
-//                        Result.failure(Exception("Invalid Google ID token", e))
-//                    }
-//                } else {
-//                    Result.failure(Exception("Unsupported credential type: ${credential.type}"))
-//                }
-//            }
-//            // Handle Password credentials (if support them)
-//            is PasswordCredential -> {
-//                // You could implement traditional password sign-in here if needed
-//                Result.failure(Exception("Password authentication not implemented"))
-//            }
-//
-//            // Handle Passkey credentials (if support them)
-//            is PublicKeyCredential -> {
-//                // You could implement passkey authentication here if needed
-//                Result.failure(Exception("Passkey authentication not implemented"))
-//            }
-//            else -> Result.failure(Exception("Unexpected credential type"))
-//        }
-//    }
 
 
 
