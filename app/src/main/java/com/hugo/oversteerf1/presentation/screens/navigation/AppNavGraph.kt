@@ -13,8 +13,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.hugo.account.presentation.components.ProfileCardType
-import com.hugo.account.presentation.screens.ProfileHomeScreen
-import com.hugo.authentication.presentation.screens.AuthScreen
+import com.hugo.account.presentation.screens.SettingsHomeScreen
+import com.hugo.authentication.presentation.screens.Auth.AuthScreen
+import com.hugo.authentication.presentation.screens.Profile.EditProfileScreen
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
@@ -81,7 +82,7 @@ fun AppNavGraph() {
 
                     },
                     onProfileCliclked = {
-                        navController.navigate(Screen.ProfileScreen) {
+                        navController.navigate(Screen.SettingsScreen) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -92,29 +93,24 @@ fun AppNavGraph() {
                 )
             }
 
-            // Profile Screen
-            composable<Screen.ProfileScreen>(
+            // Settings Screen
+            composable<Screen.SettingsScreen>(
                 enterTransition = { fadeIn(animationSpec = fadeSpec) },
                 exitTransition = { fadeOut(animationSpec = fadeSpec) },
                 popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
                 popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
-                ProfileHomeScreen(
+                SettingsHomeScreen(
                     cardOnClicked = { card ->
                         when(card){
-                            ProfileCardType.MyAccount -> navController.navigate(Screen.AuthScreen) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            ProfileCardType.MyAccount -> navController.navigate(Screen.AuthScreen)
                             ProfileCardType.Notifications -> TODO()
                             ProfileCardType.AppSettings -> TODO()
                             ProfileCardType.Feedback -> TODO()
                             ProfileCardType.LegalPrivacy -> TODO()
                         }
-                    }
+                    },
+                    backButtonClicked = {navController.popBackStack()}
                 )
             }
 
@@ -125,7 +121,23 @@ fun AppNavGraph() {
                 popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
                 popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
-                AuthScreen()
+                AuthScreen(
+                    backButtonClicked = {navController.popBackStack()}
+                )
+            }
+
+            // Profile Screen
+            composable<Screen.ProfileScreen>(
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
+            ) {
+                EditProfileScreen(
+                    backButtonClicked = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             // Schedule Home Screen
@@ -147,6 +159,7 @@ fun AppNavGraph() {
                     navController = navController
                 )
             }
+
 
             // Standings Home Screen
             composable<Screen.StandingsScreen>(

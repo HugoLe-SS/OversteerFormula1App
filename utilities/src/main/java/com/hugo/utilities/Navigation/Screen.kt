@@ -18,6 +18,9 @@ sealed interface Screen {
     data object StandingsScreen : Screen
 
     @Serializable
+    data object SettingsScreen : Screen
+
+    @Serializable
     data object ProfileScreen : Screen
 
     @Serializable

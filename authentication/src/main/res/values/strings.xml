@@ -2,4 +2,5 @@
 <resources>
     <string name="skip">Skip</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="my_account">My Account</string>
 </resources>
