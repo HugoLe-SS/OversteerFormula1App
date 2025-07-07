@@ -9,6 +9,8 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.functions.Functions
+import io.github.jan.supabase.functions.functions
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.storage.Storage
@@ -29,6 +31,7 @@ object SupabaseModule {
             install(Postgrest)
             install(Auth)
             install(Storage)
+            install(Functions)
         }
     }
 
@@ -43,5 +46,9 @@ object SupabaseModule {
     @Provides
     @Singleton
     fun provideSupabaseStorage(client: SupabaseClient): Storage = client.storage
+
+    @Provides
+    @Singleton
+    fun provideSupabaseFunctions(client: SupabaseClient): Functions = client.functions
 
 }

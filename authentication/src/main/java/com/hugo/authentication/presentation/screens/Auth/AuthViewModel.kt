@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugo.authentication.domain.model.ProfileUpdate
 import com.hugo.authentication.domain.repository.GoogleAuthRepository
 import com.hugo.authentication.domain.repository.UserProfileRepository
+import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,9 +32,9 @@ class AuthViewModel @Inject constructor(
             googleAuthRepository.observeUserData().collect { userInfo ->
                 _state.update {
                     it.copy(
+                        isInitialLoading = false,
                         userInfo = userInfo,
                         isSignedIn = (userInfo != null),
-                        // When user data loads, pre-fill the editable name field
                         editableDisplayName = userInfo?.displayName ?: ""
                     )
                 }
@@ -48,7 +49,9 @@ class AuthViewModel @Inject constructor(
 
             googleAuthRepository.signInWithGoogle(context)
                 .onSuccess {
-                    _state.update { it.copy(isLoading = false) }
+                    _state.update { it.copy(
+                        isLoading = false,
+                    ) }
                 }
                 .onFailure { e ->
                     _state.update {
@@ -123,5 +126,29 @@ class AuthViewModel @Inject constructor(
                 }
         }
     }
+
+    fun deleteAccount() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true, errorMessage = null) }
+
+            userProfileRepository.deleteAccount()
+                .onSuccess {
+                    AppLogger.d(message = "Account successfully deleted on the server.")
+
+                    googleAuthRepository.signOut(application.applicationContext)
+                        .onSuccess {
+                            AppLogger.d(message =  "Local sign-out successful, UI state will now reset.")
+                        }
+                        .onFailure { e ->
+                            _state.update { it.copy(isLoading = false, errorMessage = "Account deleted, but local sign-out failed: ${e.message}") }
+                        }
+                }
+                .onFailure { e ->
+                    _state.update { it.copy(isLoading = false, errorMessage = e.message) }
+                }
+        }
+    }
+
+
 
 }

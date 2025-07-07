@@ -4,4 +4,6 @@
     <string name="standings">Standings</string>
     <string name="view_results">\nView Result\n</string>
     <string name="home">Home</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -9,5 +9,6 @@ interface UserProfileRepository {
     suspend fun syncUserProfile(user: GoogleSignInResult, supabaseUserId: String): Result<Unit>
     suspend fun updateUserProfile(profileUpdate: ProfileUpdate): Result<GoogleSignInResult>
     suspend fun uploadAvatar(uri: Uri): Result<String> // Returns the public URL
+    suspend fun deleteAccount(): Result<Unit>
 
 }
