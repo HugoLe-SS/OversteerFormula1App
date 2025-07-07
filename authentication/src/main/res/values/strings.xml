@@ -3,4 +3,9 @@
     <string name="skip">Skip</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="my_account">My Account</string>
+    <string name="login">Login</string>
+    <string name="display_name">Display Name</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="delete_account">Delete Account</string>
 </resources>

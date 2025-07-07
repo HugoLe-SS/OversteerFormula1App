@@ -6,8 +6,6 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,30 +23,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hugo.authentication.R
+import com.hugo.authentication.presentation.components.UserImagePickerBox
 import com.hugo.design.components.AppToolbar
+import com.hugo.design.components.ConfirmationDialog
 import com.hugo.design.components.ImageComponent
+import com.hugo.design.components.LoadingIndicatorComponent
+import com.hugo.design.components.StyledOutlinedButton
+import com.hugo.design.components.StyledOutlinedTextField
 import com.hugo.design.ui.theme.AppTheme
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     backButtonClicked: () -> Unit = {},
-    viewModel: AuthViewModel = hiltViewModel()
+    skipButtonClicked: () -> Unit = {},
+    viewModel: AuthViewModel = hiltViewModel(),
 ){
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(state.errorMessage) {
+
         state.errorMessage?.let { error ->
             // Show snackbar or toast
             Log.e("GoogleSignIn", error)
@@ -62,8 +66,10 @@ fun AuthScreen(
                 error,
                 Toast.LENGTH_LONG
             ).show()
+
         }
     }
+
 
     Scaffold(
         topBar = {
@@ -74,71 +80,100 @@ fun AuthScreen(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AppToolbar(
-                    navigationIcon = {
-                        IconButton(
-                            onClick = { backButtonClicked() }
-                        ) {
-                            ImageComponent(
-                                imageResourceValue = com.hugo.design.R.drawable.ic_back,
-                                contentDescription = "Back Button",
+                if (state.isSignedIn && state.userInfo != null){
+                    AppToolbar(
+                        navigationIcon = {
+                            IconButton(
+                                onClick = { backButtonClicked() }
+                            ) {
+                                ImageComponent(
+                                    imageResourceValue = com.hugo.design.R.drawable.ic_back,
+                                    contentDescription = "Back Button",
+                                )
+                            }
+                        },
+
+                        title = {
+                            Text(
+                                text = context.getString(R.string.my_account),
+                                style = AppTheme.typography.titleNormal,
                             )
                         }
-                    },
-
-                    title = {
-                        Text(
-                            text = context.getString(R.string.my_account),
-                            style = AppTheme.typography.titleNormal,
-                        )
-                    }
-                )
-            }
-        },
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colorScheme.background)
-                .padding(innerPadding)
-        ){
-            Column(
-                Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                ImageComponent(
-                    //imageResourceValue = R.drawable.f1banner,
-                    //imageResourceValue = R.drawable.formula1,
-                )
-
-                if (state.isSignedIn && state.userInfo != null) {
-                    // Signed in UI
-                    EditProfileContent(
-                    uiState = state,
-                    onDisplayNameChange = viewModel::onDisplayNameChange,
-                    onNewAvatarSelected = viewModel::onAvatarUriSelected,
-                    onSaveChanges = viewModel::saveChanges,
-                    onSignOut = viewModel::signOut,
                     )
-                } else {
-                    // Sign in UI
-                    SignInContent(
-                        isLoading = state.isLoading,
-                        errorMessage = state.errorMessage,
-                        onSignIn = { viewModel.signInWithGoogle() },
-                        onClearError = { viewModel.clearError() }
+                }
+                else{
+                    AppToolbar(
+                        actions = {
+                            TextButton(
+                                onClick = { skipButtonClicked() }
+                            ) {
+                                Text(
+                                    text = context.getString(R.string.skip),
+                                    style = AppTheme.typography.labelNormal,
+                                    color = AppTheme.colorScheme.onSecondary
+                                )
+                            }
+                        },
+
                     )
                 }
 
             }
+        },
+    ) { innerPadding ->
+        when {
+            state.isInitialLoading ->   Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                LoadingIndicatorComponent(
+                    paddingValues = innerPadding,
+                )
+            }
+            else ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(AppTheme.colorScheme.background)
+                        .padding(innerPadding)
+                ){
+                    Column(
+                        Modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+
+                        if (state.isSignedIn && state.userInfo != null) {
+                            // Signed in UI
+                            EditProfileComposable(
+                                uiState = state,
+                                onDisplayNameChange = viewModel::onDisplayNameChange,
+                                onNewAvatarSelected = viewModel::onAvatarUriSelected,
+                                onSaveChanges = viewModel::saveChanges,
+                                onSignOut = viewModel::signOut,
+                                onDelete = viewModel::deleteAccount
+                            )
+                        } else {
+                            // Sign in UI
+                            GoogleSignInComposable(
+                                isLoading = state.isLoading,
+                                errorMessage = state.errorMessage,
+                                onSignIn = { viewModel.signInWithGoogle() },
+                                onClearError = { viewModel.clearError() },
+                            )
+                        }
+
+                    }
+                }
         }
 
     }
 }
 
 @Composable
-private fun SignInContent(
+private fun GoogleSignInComposable(
     isLoading: Boolean,
     errorMessage: String?,
     onSignIn: () -> Unit,
@@ -147,25 +182,26 @@ private fun SignInContent(
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Button(
-            onClick = onSignIn,
-            enabled = !isLoading,
+        //F1 Banner
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ){
+            ImageComponent(
+                imageResourceValue = R.drawable.f1_banner
+            )
+        }
+
+        StyledOutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-                .height(48.dp)
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    color = AppTheme.colorScheme.onSecondary
-                )
-            } else {
-                Text("Sign in with Google")
-            }
-        }
+                .padding(horizontal = 32.dp),
+            text = stringResource(R.string.sign_in_with_google),
+            isLoading = isLoading,
+            onClick = onSignIn,
+            icon = painterResource(id = R.drawable.ic_google_icon)
+        )
 
         errorMessage?.let { error ->
             Spacer(modifier = Modifier.height(16.dp))
@@ -182,22 +218,66 @@ private fun SignInContent(
 }
 
 @Composable
-private fun EditProfileContent(
+private fun EditProfileComposable(
     uiState: AuthUiState,
     onDisplayNameChange: (String) -> Unit,
     onNewAvatarSelected: (Uri?) -> Unit,
     onSaveChanges: () -> Unit,
     onSignOut: () -> Unit,
+    onDelete: () -> Unit,
 ) {
-    // Example layout:
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+
+        var showSaveChangesDialog by remember { mutableStateOf(false) }
+        var showSignOutDialog by remember { mutableStateOf(false) }
+        var showDeleteDialog by remember { mutableStateOf(false) }
 
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent(),
             onResult = { uri -> onNewAvatarSelected(uri) }
         )
 
-        // Pass the URI for preview from the state
+        // Dialog for Saving Changes
+        ConfirmationDialog(
+            show = showSaveChangesDialog,
+            title = "Save Changes",
+            text = "Are you sure you want to save these changes?",
+            confirmButtonText = "Save",
+            onConfirm = {
+                showSaveChangesDialog = false
+                onSaveChanges()
+            },
+            onDismiss = { showSaveChangesDialog = false }
+        )
+
+        // Dialog for Signing Out
+        ConfirmationDialog(
+            show = showSignOutDialog,
+            title = "Sign Out",
+            text = "Are you sure you want to sign out?",
+            confirmButtonText = "Sign Out",
+            onConfirm = {
+                showSignOutDialog = false
+                onSignOut()
+            },
+            onDismiss = { showSignOutDialog = false }
+        )
+
+        // Dialog for Deleting Account
+        ConfirmationDialog(
+            show = showDeleteDialog,
+            title = "Delete Account",
+            text = "This action is permanent and cannot be undone. Are you absolutely sure?",
+            confirmButtonText = "Delete Permanently",
+            onConfirm = {
+                showDeleteDialog = false
+                onDelete()
+            },
+            onDismiss = { showDeleteDialog = false }
+        )
+
         UserImagePickerBox(
             imageUri = uiState.newAvatarUri,
             userAvatarUrl = uiState.userInfo?.profilePictureUrl,
@@ -206,76 +286,52 @@ private fun EditProfileContent(
 
         Spacer(Modifier.height(24.dp))
 
-        OutlinedTextField(
+        StyledOutlinedTextField(
             value = uiState.editableDisplayName,
             onValueChange = onDisplayNameChange,
-            label = { Text("Display Name") }
+            label = stringResource(R.string.display_name),
+            singleLine = true
         )
 
         Spacer(Modifier.height(24.dp))
 
-        Button(onClick = onSaveChanges, enabled = !uiState.isLoading) {
-            Text("Save Changes")
-        }
+        //Save Changes Button
+        StyledOutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            text = stringResource(R.string.save_changes),
+            isLoading = false,
+            onClick = {showSaveChangesDialog = true},
+        )
 
         Spacer(Modifier.height(16.dp))
 
-        TextButton(onClick = onSignOut) {
-            Text("Sign Out")
-        }
-    }
-}
 
-@Composable
-fun UserImagePickerBox(
-    imageUri: Uri?,
-    userAvatarUrl: String?,
-    onBoxClicked: () -> Unit
-) {
-
-    val shape = RoundedCornerShape(16.dp)
-    val imageModel = imageUri ?: userAvatarUrl
-
-    Box(
-        modifier = Modifier
-            .size(150.dp)
-            .clip(shape)
-            .border(2.dp, Color.White, shape) // white border
-            .clickable {
-                onBoxClicked()
-            }
-            .background(AppTheme.colorScheme.onBackground.copy(alpha = 0.2f)),
-        contentAlignment = Alignment.Center
-    ) {
-        if (imageModel != null) {
-            ImageComponent(
-                imageUrl = imageModel.toString(),
-                contentDescription = "User Image",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(shape),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            //Text("Tap to Upload", color = Color.White)
-            ImageComponent(
-                imageUrl = userAvatarUrl,
-                contentDescription = "User Image",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(shape),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            contentAlignment = Alignment.BottomEnd
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
         ){
-            ImageComponent(
-                imageResourceValue = R.drawable.ic_camera
+            //Sign Out Button
+            StyledOutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+                text = stringResource(R.string.sign_out),
+                onClick = {showSignOutDialog = true},
+            )
+
+            Spacer(Modifier.height(32.dp))
+
+            StyledOutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+                containerColor = Color.Red,
+                text = stringResource(R.string.delete_account),
+                onClick = {showDeleteDialog = true},
+                icon = painterResource(id = R.drawable.ic_delete),
             )
         }
 

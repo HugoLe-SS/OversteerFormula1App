@@ -122,7 +122,8 @@ fun AppNavGraph() {
                 popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
                 AuthScreen(
-                    backButtonClicked = {navController.popBackStack()}
+                    backButtonClicked = {navController.popBackStack()},
+                    skipButtonClicked = {navController.navigate(Screen.HomeScreen)},
                 )
             }
 

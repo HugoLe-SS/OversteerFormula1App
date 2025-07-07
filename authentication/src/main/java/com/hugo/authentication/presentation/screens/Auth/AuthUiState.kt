@@ -4,6 +4,8 @@ import android.net.Uri
 import com.hugo.authentication.domain.model.GoogleSignInResult
 
 data class AuthUiState(
+    val isInitialLoading: Boolean = true,
+
     // Existing states for auth flow
     val isLoading: Boolean = false,
     val isSignedIn: Boolean = false,
@@ -18,5 +20,11 @@ data class AuthUiState(
     val newAvatarUri: Uri? = null,
 
     // A flag to signal when the update is complete, to trigger navigation or a toast
-    val isUpdateSuccessful: Boolean = false
+    val isUpdateSuccessful: Boolean = false,
 )
+
+enum class AuthStatus {
+    UNKNOWN, // The initial state, before we've checked local storage
+    AUTHENTICATED,
+    UNAUTHENTICATED
+}

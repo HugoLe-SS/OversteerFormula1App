@@ -11,6 +11,7 @@ import com.hugo.authentication.domain.model.ProfileUpdate
 import com.hugo.authentication.domain.repository.UserProfileRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.functions.Functions
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.storage.Storage
 import kotlinx.serialization.json.buildJsonObject
@@ -24,7 +25,8 @@ class UserProfileRepositoryImpl @Inject constructor(
     private val supabaseAuth: Auth,
     private val supabaseStorage: Storage,
     @ApplicationContext private val context: Context,
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences,
+    private val functions: Functions
 ): UserProfileRepository {
 
     override suspend fun syncUserProfile(
@@ -122,6 +124,17 @@ class UserProfileRepositoryImpl @Inject constructor(
             Result.success(publicUrl)
         } catch (e: Exception) {
             Log.e("AvatarUpload", "Failed to upload avatar", e)
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        return try {
+            // Invoke the Edge Function by its name
+            functions.invoke("delete-user")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("DeleteAccount", "Failed to delete account", e)
             Result.failure(e)
         }
     }
