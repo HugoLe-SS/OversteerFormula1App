@@ -2,7 +2,7 @@ package com.hugo.datasource.local.entity.Driver
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.hugo.datasource.local.TableConstants
+import com.hugo.datasource.local.RoomDB.TableConstants
 
 
 @Entity(tableName = TableConstants.DRIVER_STANDINGS_LIST)

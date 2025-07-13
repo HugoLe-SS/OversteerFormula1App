@@ -2,7 +2,7 @@ package com.hugo.datasource.local.entity.Constructor
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.hugo.datasource.local.TableConstants
+import com.hugo.datasource.local.RoomDB.TableConstants
 
 @Entity(tableName = TableConstants.CONSTRUCTOR_STANDINGS_LIST)
 data class ConstructorStandingsInfo(

@@ -1,6 +1,6 @@
 package com.hugo.schedule.data.repository
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.schedule.data.mapper.toF1CalendarInfoList

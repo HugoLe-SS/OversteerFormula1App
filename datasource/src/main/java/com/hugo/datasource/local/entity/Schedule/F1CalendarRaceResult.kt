@@ -1,7 +1,7 @@
 package com.hugo.datasource.local.entity.Schedule
 
 import androidx.room.Entity
-import com.hugo.datasource.local.TableConstants
+import com.hugo.datasource.local.RoomDB.TableConstants
 import kotlinx.serialization.Serializable
 
 @Serializable

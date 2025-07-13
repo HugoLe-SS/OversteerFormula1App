@@ -1,7 +1,7 @@
 package com.hugo.authentication.data.mapper
 
 import com.hugo.authentication.data.dto.ProfileDto
-import com.hugo.authentication.domain.model.GoogleSignInResult
+import com.hugo.datasource.local.entity.User.GoogleSignInResult
 
 fun ProfileDto.toGoogleSignInResult(idToken: String, email: String): GoogleSignInResult {
     return GoogleSignInResult(

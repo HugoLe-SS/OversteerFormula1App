@@ -24,6 +24,9 @@ sealed interface Screen {
     data object ProfileScreen : Screen
 
     @Serializable
+    data object NotificationScreen : Screen
+
+    @Serializable
     data object AuthScreen : Screen
 
     @Serializable

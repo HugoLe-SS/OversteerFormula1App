@@ -1,6 +1,6 @@
 package com.hugo.oversteerf1.data.repository
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.datasource.local.entity.F1HomeDetails
 import com.hugo.datasource.local.entity.F1News
 import com.hugo.oversteerf1.data.remote.F1NewsApi

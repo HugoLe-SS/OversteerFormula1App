@@ -87,6 +87,9 @@ dependencies {
     implementation(project(":result"))
     implementation(project(":authentication"))
     implementation(project(":settings"))
+    implementation(project(":notifications"))
+    implementation(project(":network"))
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -138,9 +141,7 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.ktor.client.android)
 
-    //push noti
-    implementation(libs.firebase.messaging.ktx)
-    implementation(libs.firebase.messaging)
+
 
 
 }

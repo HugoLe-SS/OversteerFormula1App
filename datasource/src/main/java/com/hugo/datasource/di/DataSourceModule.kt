@@ -1,8 +1,8 @@
 package com.hugo.datasource.di
 
 import android.content.Context
-import com.hugo.datasource.local.LocalDataSource
-import com.hugo.datasource.local.LocalDataSourceImpl
+import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

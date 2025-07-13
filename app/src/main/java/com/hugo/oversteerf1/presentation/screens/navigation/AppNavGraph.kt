@@ -12,8 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.hugo.account.presentation.components.ProfileCardType
-import com.hugo.account.presentation.screens.SettingsHomeScreen
 import com.hugo.authentication.presentation.screens.Auth.AuthScreen
 import com.hugo.authentication.presentation.screens.Profile.EditProfileScreen
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
@@ -22,6 +20,9 @@ import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.result.presentation.screens.ResultScreen
 import com.hugo.schedule.presentation.screens.Details.CalendarDetailsScreen
 import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
+import com.hugo.settings.presentation.components.ProfileCardType
+import com.hugo.notifications.presentation.NotificationScreen
+import com.hugo.settings.presentation.screens.SettingsHomeScreen
 import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
 import com.hugo.utilities.com.hugo.utilities.Navigation.CustomNavType
@@ -104,7 +105,7 @@ fun AppNavGraph() {
                     cardOnClicked = { card ->
                         when(card){
                             ProfileCardType.MyAccount -> navController.navigate(Screen.AuthScreen)
-                            ProfileCardType.Notifications -> TODO()
+                            ProfileCardType.Notifications -> navController.navigate(Screen.NotificationScreen)
                             ProfileCardType.AppSettings -> TODO()
                             ProfileCardType.Feedback -> TODO()
                             ProfileCardType.LegalPrivacy -> TODO()
@@ -135,6 +136,20 @@ fun AppNavGraph() {
                 popExitTransition = { fadeOut(animationSpec = fadeSpec) }
             ) {
                 EditProfileScreen(
+                    backButtonClicked = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // Profile Screen
+            composable<Screen.NotificationScreen>(
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
+            ) {
+                NotificationScreen(
                     backButtonClicked = {
                         navController.popBackStack()
                     }

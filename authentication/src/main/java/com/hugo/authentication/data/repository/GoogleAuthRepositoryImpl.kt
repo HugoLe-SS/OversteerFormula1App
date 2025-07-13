@@ -7,22 +7,23 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.hugo.authentication.data.dto.ProfileDto
-import com.hugo.authentication.data.local.UserPreferences
 import com.hugo.authentication.data.mapper.toGoogleSignInResult
-import com.hugo.authentication.domain.model.GoogleSignInResult
 import com.hugo.authentication.domain.repository.GoogleAuthRepository
 import com.hugo.authentication.domain.repository.UserProfileRepository
+import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.entity.User.GoogleSignInResult
+import com.hugo.notifications.domain.NotificationRepository
 import com.hugo.utilities.constants.AppConstants.WEB_CLIENT_ID
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.IDToken
-import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.postgrest.query.Count
 import kotlinx.coroutines.flow.Flow
 import java.security.MessageDigest
 import java.util.UUID
@@ -31,30 +32,118 @@ import javax.inject.Singleton
 
 @Singleton
 class GoogleAuthRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val userPreferences: UserPreferences,
     private val supabaseAuth: Auth, // Supabase Auth client
-    private val postgrest: Postgrest,
-    private val userProfileRepository: UserProfileRepository
+    private val userProfileRepository: UserProfileRepository,
+    private val notificationRepository: NotificationRepository
 ): GoogleAuthRepository {
 
-    override suspend fun signInWithGoogle(context: Context): Result<GoogleSignInResult> {
-        Log.d("GoogleSignIn", "WEB_CLIENT_ID: $WEB_CLIENT_ID")
+
+    private val credentialManager = CredentialManager.create(context)
+
+    override suspend fun signInWithGoogle(): Result<GoogleSignInResult> {
         return try {
-            // First try with authorized accounts (returning users)
-            val authorizedResult = attemptSignIn(context, filterByAuthorized = true)
-            authorizedResult ?: run {
-                Log.d("GoogleSignIn", "No authorized accounts found, showing account picker")
-                // If no authorized accounts, try sign-up flow (new users)
-                attemptSignIn(context, filterByAuthorized = false)
-                    ?: Result.failure(Exception("No Google accounts available"))
-            }
+            Log.d("GoogleSignIn", "Attempting sign-in for authorized accounts...")
+            val signInResult = attemptSignUp()
+            Log.d("GoogleSignIn", "Sign-in successful for returning user.")
+
+            return signInResult
         } catch (e: Exception) {
-            Log.e("GoogleSignIn", "Sign-in failed", e)
+            Log.e("GoogleSignIn", "A critical error occurred during the sign-in/sign-up process", e)
             Result.failure(e)
         }
     }
 
-    override suspend fun signOut(context: Context): Result<Unit> {
+    //1 tap sign in
+    private suspend fun attemptSignIn(): Result<GoogleSignInResult> {
+        // Generate nonce and build the option here
+        val rawNonce = UUID.randomUUID().toString()
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(true)
+            .setServerClientId(WEB_CLIENT_ID)
+            .setAutoSelectEnabled(true)
+            .setNonce(hashNonce(rawNonce)) // Set nonce at build time
+            .build()
+
+        // Call the shared logic
+        return performGoogleAuth(googleIdOption, rawNonce)
+    }
+
+    // Sign in + sign up flow
+    private suspend fun attemptSignUp(): Result<GoogleSignInResult> {
+        val rawNonce = UUID.randomUUID().toString()
+
+        // Use GetSignInWithGoogleOption to force the account chooser UI
+        val signInWithGoogleOption = GetSignInWithGoogleOption.Builder(WEB_CLIENT_ID)
+            .setNonce(hashNonce(rawNonce))
+            // You can add other options here if needed, but this is the basic setup
+            .build()
+
+        // We now have a different type of option, so we need a slightly different request.
+        // The shared 'performGoogleAuth' needs to be adjusted or duplicated.
+        // Let's create a separate path for simplicity.
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(signInWithGoogleOption) // Use the new option
+            .build()
+
+        return try {
+            val result = credentialManager.getCredential(context, request)
+            val googleSignInResult = handleGoogleCredential(result, rawNonce)
+            val finalResult = signInWithSupabaseAndSync(googleSignInResult)
+
+            if (finalResult.isSuccess) {
+                finalResult.getOrNull()?.let { userPreferences.saveUser(it) }
+            }
+            finalResult
+        } catch (e: GetCredentialException) {
+            when (e) {
+                is NoCredentialException, is GetCredentialCancellationException -> {
+                    Log.w("GoogleSignIn", "Sign-up flow was cancelled by the user.", e)
+                    Result.failure(Exception("Sign-up was cancelled by the user."))
+                }
+                else -> {
+                    Log.e("GoogleSignIn", "A critical error occurred during sign-up.", e)
+                    Result.failure(e) // Let the top-level handler catch it
+                }
+            }
+        }
+    }
+
+    private suspend fun performGoogleAuth(
+        googleIdOption: GetGoogleIdOption,
+        rawNonce: String // Pass the raw nonce in
+    ): Result<GoogleSignInResult> {
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        return try {
+            val result = credentialManager.getCredential(context, request)
+
+            // Pass rawNonce to the handler, which then passes it to Supabase
+            val googleSignInResult = handleGoogleCredential(result, rawNonce)
+            val finalResult = signInWithSupabaseAndSync(googleSignInResult)
+
+            if (finalResult.isSuccess) {
+                finalResult.getOrNull()?.let { userPreferences.saveUser(it) }
+            }
+            finalResult
+        } catch (e: GetCredentialException) {
+            // Only handle the expected exceptions here. Critical ones will be
+            // caught by the top-level try/catch in signInWithGoogle().
+            when (e) {
+                is NoCredentialException, is GetCredentialCancellationException -> {
+                    Log.w("GoogleSignIn", "Flow cancelled or no credentials for this option.", e)
+                    Result.failure(e)
+                }
+                else -> throw e
+            }
+        }
+    }
+
+    override suspend fun signOut(): Result<Unit> {
         return try {
             userPreferences.clearUser()// clear user data from local storage
             supabaseAuth.signOut() // Sign out from Supabase Auth
@@ -84,65 +173,13 @@ class GoogleAuthRepositoryImpl @Inject constructor(
         return userPreferences.userDataFlow
     }
 
-    private suspend fun attemptSignIn(
-        context: Context,
-        filterByAuthorized: Boolean
-    ): Result<GoogleSignInResult>? {
-        val credentialManager = CredentialManager.create(context)
-
-        val rawNonce = UUID.randomUUID().toString()
-        val hashedNonce = hashNonce(rawNonce)
-
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setServerClientId(WEB_CLIENT_ID)
-            .setAutoSelectEnabled(filterByAuthorized)
-            .setFilterByAuthorizedAccounts(filterByAuthorized)
-            .setNonce(hashedNonce)
-            .build()
-
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-        return try {
-            val result = credentialManager.getCredential(context, request)
-            val googleSignInResult = handleGoogleCredential(result, rawNonce)
-            val finalResult = signInWithSupabaseAndSync(googleSignInResult)
-            if (finalResult.isSuccess) {
-                finalResult.getOrNull()?.let {
-                    Log.d("GoogleSignIn", "Sign-in successful, saving user data")
-                    userPreferences.saveUser(it)
-                }
-            }
-            finalResult
-//            handleCredentialResult(result).also { authResult ->
-//                // Save user data on successful sign-in
-//                if (authResult.isSuccess) {
-//                    authResult.getOrNull()?.let {
-//                        Log.d("GoogleSignIn", "Sign-in successful, saving user data")
-//                        userPreferences.saveUser(it)
-//                    }
-//                }
-//            }
-
-        } catch (e: GetCredentialException) {
-            when (e) {
-                is NoCredentialException -> {
-                    Log.d("GoogleSignIn", "No credentials found for filterByAuthorized: $filterByAuthorized")
-                    null
-                }
-                else -> throw e
-            }
-        }
-    }
-
     private fun handleGoogleCredential(result: GetCredentialResponse, rawNonce: String): GoogleSignInResult {
         val credential = result.credential
         when (credential) {
             is CustomCredential -> {
                 if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                     val googleId = GoogleIdTokenCredential.createFrom(credential.data)
-                    return GoogleSignInResult(
+                    return com.hugo.datasource.local.entity.User.GoogleSignInResult(
                         idToken = googleId.idToken,
                         displayName = googleId.displayName,
                         email = googleId.id,
@@ -158,7 +195,6 @@ class GoogleAuthRepositoryImpl @Inject constructor(
         }
     }
 
-
     private suspend fun signInWithSupabaseAndSync(googleResult: GoogleSignInResult): Result<GoogleSignInResult> {
         return try {
             // Step 1 & 2: Authenticate and get user (Your code is correct)
@@ -170,40 +206,18 @@ class GoogleAuthRepositoryImpl @Inject constructor(
             val supabaseUser = supabaseAuth.currentUserOrNull()
                 ?: throw Exception("Supabase sign-in failed: user is null")
 
-            // Step 3: Check if a profile exists (Corrected Syntax)
-            val existingProfile = postgrest.from("Profiles")
-                .select {
-                    // To get a count, you specify it inside the select block
-                    count(Count.EXACT)
-                    filter {
-                        eq("id", supabaseUser.id)
-                    }
-                    limit(1) // Only need to check for one row's existence
-                }
+            // Step 3: Let the UserProfileRepository handle all profile logic.
+            val finalProfileDto = userProfileRepository.getOrCreateProfile(googleResult, supabaseUser.id).getOrThrow()
 
-            // Step 4: If no profile exists, create one (Correct)
-            if (existingProfile.countOrNull() == 0L) {
-                Log.d("SupabaseSignIn", "New user detected. Creating profile.")
-                userProfileRepository.syncUserProfile(googleResult, supabaseUser.id).getOrThrow()
-            } else {
-                Log.d("SupabaseSignIn", "Returning user. Skipping profile creation.")
-            }
-
-            // Step 5: Fetch the definitive profile (Correct Syntax)
-            val finalProfileDto = postgrest.from("Profiles")
-                .select {
-                    filter {
-                        eq("id", supabaseUser.id)
-                    }
-                }
-                .decodeSingle<ProfileDto>()
-
-            // Step 6 & 7: Create result and save to cache (Your code is correct)
+            // Step 4: Map and save to cache
             val finalResult = finalProfileDto.toGoogleSignInResult(
                 idToken = supabaseAuth.currentSessionOrNull()?.accessToken ?: "",
                 email = supabaseUser.email?: ""
             )
             userPreferences.saveUser(finalResult)
+
+            // Step 5: Sync FCM token
+            notificationRepository.syncFcmToken()
 
             Result.success(finalResult)
         } catch (e: Exception) {

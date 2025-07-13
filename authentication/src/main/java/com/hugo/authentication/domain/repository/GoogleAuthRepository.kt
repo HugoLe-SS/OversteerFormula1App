@@ -1,12 +1,11 @@
 package com.hugo.authentication.domain.repository
 
-import android.content.Context
-import com.hugo.authentication.domain.model.GoogleSignInResult
+import com.hugo.datasource.local.entity.User.GoogleSignInResult
 import kotlinx.coroutines.flow.Flow
 
 interface GoogleAuthRepository {
-    suspend fun signInWithGoogle(context: Context): Result<GoogleSignInResult>
-    suspend fun signOut(context: Context): Result<Unit>
+    suspend fun signInWithGoogle(): Result<GoogleSignInResult>
+    suspend fun signOut(): Result<Unit>
     suspend fun isUserSignedIn(): Boolean
     suspend fun getCachedUser(): GoogleSignInResult?
 

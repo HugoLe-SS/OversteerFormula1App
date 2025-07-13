@@ -1,6 +1,6 @@
 package com.hugo.result.data.repository
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
