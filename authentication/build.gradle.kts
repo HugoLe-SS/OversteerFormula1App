@@ -56,6 +56,8 @@ dependencies {
     implementation(project(":design"))
     implementation(project(":utilities"))
     implementation(project(":network"))
+    implementation(project(":datasource"))
+    implementation(project(":notifications"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -93,12 +95,13 @@ dependencies {
     implementation(libs.functions.kt)
     implementation(libs.ktor.client.android)
 
-    //Google Sign In
+    //Google Sign In - Native
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation (libs.googleid)
 
     // Datastore for storing user data
     implementation(libs.androidx.datastore.preferences)
+
 
 }

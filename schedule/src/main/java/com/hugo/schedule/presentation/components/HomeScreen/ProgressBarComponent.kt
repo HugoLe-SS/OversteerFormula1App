@@ -80,7 +80,7 @@ fun ProgressBarComponent(
                     .weight(1f)
                     .size(24.dp)
                     .align(Alignment.CenterVertically),
-                imageResourceValue = R.drawable.ic_checkered_flag,
+                imageResourceValue = com.hugo.design.R.drawable.ic_checkered_flag,
                 contentDescription = "Chequered Flag"
             )
         }

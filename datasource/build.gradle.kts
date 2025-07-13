@@ -72,5 +72,7 @@ dependencies {
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // Datastore for storing user data
+    implementation(libs.androidx.datastore.preferences)
 
 }

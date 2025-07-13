@@ -78,46 +78,6 @@ class MainActivity () : ComponentActivity() {
     }
 
 
-//    private fun showNotificationExplanationDialog() {
-//        AlertDialog.Builder(this)
-//            .setTitle("Enable Notifications?")
-//            .setMessage("We use notifications to alert you about race schedules, results, and updates.")
-//            .setPositiveButton("Allow") { _, _ ->
-//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-//            }
-//            .setNegativeButton("No thanks") { dialog, _ ->
-//                dialog.dismiss()
-//            }
-//            .setCancelable(false)
-//            .show()
-//    }
-
-
-    //    private fun askNotificationPermission() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            when {
-//                ContextCompat.checkSelfPermission(
-//                    this,
-//                    Manifest.permission.POST_NOTIFICATIONS
-//                ) == PackageManager.PERMISSION_GRANTED -> {
-//                    AppLogger.d(message = "Notification permission already granted")
-//                    //storeFcmToken(permissionGranted = true)
-//                }
-//
-//                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-//                    showNotificationExplanationDialog()
-//                }
-//
-//                else -> {
-//                    showNotificationExplanationDialog()
-//                }
-//            }
-//        } else {
-//            //storeFcmToken(permissionGranted = true)
-//            AppLogger.d(message = "Notification permission already granted")
-//        }
-//    }
-
 }
 
 

@@ -1,6 +1,6 @@
 package com.hugo.oversteerf1.di
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.oversteerf1.BuildConfig
 import com.hugo.oversteerf1.data.remote.F1NewsApi
 import com.hugo.oversteerf1.data.repository.F1NewsRepositoryImpl

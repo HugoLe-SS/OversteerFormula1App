@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.hugo.datasource.dao.BaseDao
-import com.hugo.datasource.local.TableConstants
+import com.hugo.datasource.local.RoomDB.TableConstants
 import com.hugo.datasource.local.entity.Driver.DriverDetails
 
 @Dao

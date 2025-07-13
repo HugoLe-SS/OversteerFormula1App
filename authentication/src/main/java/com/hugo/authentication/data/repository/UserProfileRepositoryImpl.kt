@@ -4,15 +4,15 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.hugo.authentication.data.dto.ProfileDto
-import com.hugo.authentication.data.local.UserPreferences
 import com.hugo.authentication.data.mapper.toGoogleSignInResult
-import com.hugo.authentication.domain.model.GoogleSignInResult
 import com.hugo.authentication.domain.model.ProfileUpdate
 import com.hugo.authentication.domain.repository.UserProfileRepository
+import com.hugo.datasource.local.entity.User.GoogleSignInResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.functions.Functions
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.storage.Storage
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -25,9 +25,44 @@ class UserProfileRepositoryImpl @Inject constructor(
     private val supabaseAuth: Auth,
     private val supabaseStorage: Storage,
     @ApplicationContext private val context: Context,
-    private val userPreferences: UserPreferences,
+    private val userPreferences: com.hugo.datasource.local.UserPreferences,
     private val functions: Functions
 ): UserProfileRepository {
+
+    override suspend fun getOrCreateProfile(
+        googleResult: GoogleSignInResult,
+        userId: String
+    ): Result<ProfileDto> {
+        return try {
+            // Check if a profile exists using the userId string
+            val existingProfile = postgrest.from("Profiles")
+                .select {
+                    count(Count.EXACT)
+                    filter {
+                        eq("id", userId)
+                    }
+                    limit(1)
+                }
+
+            // If not, create it
+            if (existingProfile.countOrNull() == 0L) {
+                syncUserProfile(googleResult, userId).getOrThrow()
+            }
+
+            // Fetch and return the definitive profile
+            val finalProfileDto = postgrest.from("Profiles")
+                .select {
+                    filter {
+                        eq("id", userId)
+                    }
+                }
+                .decodeSingle<ProfileDto>()
+
+            Result.success(finalProfileDto)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
     override suspend fun syncUserProfile(
         user: GoogleSignInResult,

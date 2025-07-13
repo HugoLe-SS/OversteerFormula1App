@@ -1,6 +1,6 @@
 package com.hugo.standings.di
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.standings.data.remote.F1StandingsApi
 import com.hugo.standings.data.repository.F1StandingRepositoryImpl
 import com.hugo.standings.domain.repository.IF1StandingsRepository

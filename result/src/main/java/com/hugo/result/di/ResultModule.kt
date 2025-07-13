@@ -1,6 +1,6 @@
 package com.hugo.result.di
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.result.data.remote.F1ResultApi
 import com.hugo.result.data.repository.F1ResultRepositoryImpl
 import com.hugo.result.domain.repository.IF1ResultRepository

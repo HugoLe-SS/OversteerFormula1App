@@ -1,6 +1,6 @@
 package com.hugo.schedule.di
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.schedule.data.remote.F1ScheduleApi
 import com.hugo.schedule.data.repository.F1CalendarRepositoryImpl
 import com.hugo.schedule.domain.repository.IF1CalendarRepository

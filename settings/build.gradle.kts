@@ -55,6 +55,9 @@ android {
 dependencies {
     implementation(project(":design"))
     implementation(project(":authentication"))
+    implementation(project(":datasource"))
+    implementation(project(":utilities"))
+    implementation(project(":notifications"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -65,8 +68,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
@@ -79,6 +80,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
+
     //Supabase
     implementation(platform(libs.supabase.bom))
     implementation(libs.postgrest.kt)
@@ -87,4 +89,6 @@ dependencies {
     // Navigation
     implementation(libs.navigation.compose)
 
+    // Datastore for storing user data
+    implementation(libs.androidx.datastore.preferences)
 }

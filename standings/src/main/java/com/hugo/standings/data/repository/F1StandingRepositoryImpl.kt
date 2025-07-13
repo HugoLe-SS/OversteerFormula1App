@@ -1,6 +1,6 @@
 package com.hugo.standings.data.repository
 
-import com.hugo.datasource.local.LocalDataSource
+import com.hugo.datasource.local.RoomDB.LocalDataSource
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
 import com.hugo.datasource.local.entity.Driver.DriverDetails

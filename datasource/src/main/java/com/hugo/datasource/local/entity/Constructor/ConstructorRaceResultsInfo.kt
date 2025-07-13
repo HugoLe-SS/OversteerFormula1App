@@ -1,7 +1,7 @@
 package com.hugo.datasource.local.entity.Constructor
 
 import androidx.room.Entity
-import com.hugo.datasource.local.TableConstants
+import com.hugo.datasource.local.RoomDB.TableConstants
 
 @Entity(tableName = TableConstants.CONSTRUCTOR_RACE_LIST,
     primaryKeys = ["driverId", "round"]
