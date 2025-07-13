@@ -1,6 +1,5 @@
 package com.hugo.authentication.presentation.screens.Auth
 
-import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,7 +20,6 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val googleAuthRepository: GoogleAuthRepository,
     private val userProfileRepository: UserProfileRepository,
-    private val application: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthUiState())
@@ -42,12 +40,11 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle() { // NO context parameter
-        val context = application.applicationContext
+    fun signInWithGoogle() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
 
-            googleAuthRepository.signInWithGoogle(context)
+            googleAuthRepository.signInWithGoogle()
                 .onSuccess {
                     _state.update { it.copy(
                         isLoading = false,
@@ -61,10 +58,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun signOut() { // NO context parameter
-        val context = application.applicationContext
+    fun signOut() {
         viewModelScope.launch {
-            googleAuthRepository.signOut(context)
+            googleAuthRepository.signOut()
                 .onFailure { e ->
                     _state.update { it.copy(errorMessage = e.message ?: "Sign-out failed") }
                 }
@@ -135,7 +131,7 @@ class AuthViewModel @Inject constructor(
                 .onSuccess {
                     AppLogger.d(message = "Account successfully deleted on the server.")
 
-                    googleAuthRepository.signOut(application.applicationContext)
+                    googleAuthRepository.signOut()
                         .onSuccess {
                             AppLogger.d(message =  "Local sign-out successful, UI state will now reset.")
                         }

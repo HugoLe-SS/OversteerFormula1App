@@ -203,17 +203,17 @@ private fun GoogleSignInComposable(
             icon = painterResource(id = R.drawable.ic_google_icon)
         )
 
-        errorMessage?.let { error ->
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Error: $error",
-                style = AppTheme.typography.labelSmall,
-                color = AppTheme.colorScheme.primary
-            )
-            TextButton(onClick = onClearError) {
-                Text("Dismiss")
-            }
-        }
+//        errorMessage?.let { error ->
+//            Spacer(modifier = Modifier.height(16.dp))
+//            Text(
+//                text = "Error: $error",
+//                style = AppTheme.typography.labelSmall,
+//                color = AppTheme.colorScheme.primary
+//            )
+//            TextButton(onClick = onClearError) {
+//                Text("Dismiss")
+//            }
+//        }
     }
 }
 
