@@ -1,7 +1,7 @@
 package com.hugo.authentication.presentation.screens.Auth
 
 import android.net.Uri
-import com.hugo.authentication.domain.model.GoogleSignInResult
+import com.hugo.datasource.local.entity.User.GoogleSignInResult
 
 data class AuthUiState(
     val isInitialLoading: Boolean = true,
@@ -9,7 +9,7 @@ data class AuthUiState(
     // Existing states for auth flow
     val isLoading: Boolean = false,
     val isSignedIn: Boolean = false,
-    val userInfo: GoogleSignInResult? = null,
+    val userInfo: com.hugo.datasource.local.entity.User.GoogleSignInResult? = null,
     val errorMessage: String? = null,
 
     // --- NEW: States for editing profile ---
