@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.hugo.datasource.local.entity.User.GoogleSignInResult
 import com.hugo.datasource.local.entity.User.NotificationSettings
+import com.hugo.datasource.local.entity.User.ThemePreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -88,6 +89,23 @@ class UserPreferences(context: Context) {
 
     suspend fun clearUser() {
         dataStore.edit { it.clear() }
+    }
+
+    val themePreferenceFlow: Flow<ThemePreference> = dataStore.data.map { prefs ->
+        // Read the saved string, or default to "SYSTEM" if nothing is saved yet.
+        when (prefs[PreferenceKeys.THEME_PREFERENCE]) {
+            "LIGHT" -> ThemePreference.LIGHT
+            "DARK" -> ThemePreference.DARK
+            else -> ThemePreference.SYSTEM
+        }
+    }
+
+    // --- NEW FUNCTION TO UPDATE THE THEME ---
+    suspend fun updateThemePreference(theme: ThemePreference) {
+        dataStore.edit { prefs ->
+            // Save the enum's name as a String
+            prefs[PreferenceKeys.THEME_PREFERENCE] = theme.name
+        }
     }
 
 

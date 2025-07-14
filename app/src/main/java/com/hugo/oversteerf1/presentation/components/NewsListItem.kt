@@ -67,7 +67,11 @@ fun NewsListItem(news: F1News){
 fun CardPreview(){
 
     NewsListItem(
-        news = TODO()
+        news = F1News(
+            title = "F1 News Title",
+            url = "https://example.com/news",
+            source = "F1 Source"
+        )
     )
 }
 

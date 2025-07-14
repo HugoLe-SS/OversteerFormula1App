@@ -18,4 +18,8 @@ object PreferenceKeys {
     val NOTIF_ALL_SESSIONS = booleanPreferencesKey("notif_all_sessions")
     val NOTIF_BREAKING_NEWS = booleanPreferencesKey("notif_breaking_news")
     val NOTIF_GENERAL = booleanPreferencesKey("notif_general")
+
+    //App Theme
+    val THEME_PREFERENCE = stringPreferencesKey("theme_preference")
+
 }

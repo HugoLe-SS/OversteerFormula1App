@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hugo.design.R.drawable
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.profile.R
@@ -137,7 +138,7 @@ fun ProfileScreenCardComponent(
                     contentAlignment = Alignment.CenterEnd
                 ){
                     ImageComponent(
-                        imageResourceValue = com.hugo.design.R.drawable.ic_forward
+                        imageResourceValue = drawable.ic_forward
                     )
                 }
             }

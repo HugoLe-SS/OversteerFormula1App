@@ -75,7 +75,7 @@ fun RaceScheduleCardComponent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .height(100.dp)
+            .height(120.dp)
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(12.dp)

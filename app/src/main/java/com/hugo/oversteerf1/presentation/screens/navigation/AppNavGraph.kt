@@ -16,12 +16,14 @@ import com.hugo.authentication.presentation.screens.Auth.AuthScreen
 import com.hugo.authentication.presentation.screens.Profile.EditProfileScreen
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
+import com.hugo.news.presentation.F1NewsHomeScreen
+import com.hugo.notifications.presentation.NotificationScreen
 import com.hugo.oversteerf1.presentation.screens.home.HomeScreen
 import com.hugo.result.presentation.screens.ResultScreen
 import com.hugo.schedule.presentation.screens.Details.CalendarDetailsScreen
 import com.hugo.schedule.presentation.screens.Home.ScheduleHomeScreen
 import com.hugo.settings.presentation.components.ProfileCardType
-import com.hugo.notifications.presentation.NotificationScreen
+import com.hugo.settings.presentation.screens.AppSettings.AppSettingsScreen
 import com.hugo.settings.presentation.screens.SettingsHomeScreen
 import com.hugo.standings.presentation.screens.Details.StandingsDetailsScreen
 import com.hugo.standings.presentation.screens.Home.StandingsHomeScreen
@@ -106,7 +108,7 @@ fun AppNavGraph() {
                         when(card){
                             ProfileCardType.MyAccount -> navController.navigate(Screen.AuthScreen)
                             ProfileCardType.Notifications -> navController.navigate(Screen.NotificationScreen)
-                            ProfileCardType.AppSettings -> TODO()
+                            ProfileCardType.AppSettings -> navController.navigate(Screen.AppSettingsScreen)
                             ProfileCardType.Feedback -> TODO()
                             ProfileCardType.LegalPrivacy -> TODO()
                         }
@@ -142,7 +144,7 @@ fun AppNavGraph() {
                 )
             }
 
-            // Profile Screen
+            // Notification Screen
             composable<Screen.NotificationScreen>(
                 enterTransition = { fadeIn(animationSpec = fadeSpec) },
                 exitTransition = { fadeOut(animationSpec = fadeSpec) },
@@ -155,6 +157,21 @@ fun AppNavGraph() {
                     }
                 )
             }
+
+            // AppSettings Screen
+            composable<Screen.AppSettingsScreen>(
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
+            ) {
+                AppSettingsScreen(
+                    backButtonClicked = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
 
             // Schedule Home Screen
             composable<Screen.ScheduleScreen>(
@@ -194,6 +211,18 @@ fun AppNavGraph() {
                         AppLogger.d(message = "Standings Detail Screen driverId: ${driverClickInfo.driverId}")
                         navController.navigate(Screen.StandingsDetailsScreen(constructorClickInfo = null, driverClickInfo = driverClickInfo))
                     }
+                )
+            }
+
+            // News Screen
+            composable<Screen.NewsScreen>(
+                enterTransition = { fadeIn(animationSpec = fadeSpec) },
+                exitTransition = { fadeOut(animationSpec = fadeSpec) },
+                popEnterTransition = { fadeIn(animationSpec = fadeSpec) },
+                popExitTransition = { fadeOut(animationSpec = fadeSpec) }
+            ) {
+                F1NewsHomeScreen(
+                    navController = navController,
                 )
             }
 
