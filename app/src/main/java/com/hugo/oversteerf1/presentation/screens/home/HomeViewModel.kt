@@ -129,7 +129,7 @@ class HomeViewModel @Inject constructor(
     init{
         AppLogger.d(message = "Inside HomeViewModel")
         getF1HomeDetails()
-        getF1News()
+        //getF1News()
     }
 
     private fun getF1HomeDetails(){

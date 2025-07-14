@@ -89,6 +89,7 @@ dependencies {
     implementation(project(":settings"))
     implementation(project(":notifications"))
     implementation(project(":network"))
+    implementation(project(":news"))
 
 
     implementation(libs.androidx.core.ktx)

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.hugo.design.R.drawable
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.BottomNavBar
 import com.hugo.design.components.ErrorDisplayComponent
@@ -29,7 +29,6 @@ import com.hugo.design.components.ImageComponent
 import com.hugo.design.components.LoadingIndicatorComponent
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.oversteerf1.presentation.components.HorizontalPagerItem
-import com.hugo.oversteerf1.presentation.components.NewsListItem
 import com.hugo.oversteerf1.presentation.components.UpcomingRaceCardItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +72,7 @@ fun HomeScreen(
                             onClick = onProfileCliclked
                         ) {
                             ImageComponent(
-                                imageResourceValue = com.hugo.profile.R.drawable.ic_person
+                                imageResourceValue = drawable.ic_account
                             )
                         }
                     },
@@ -141,9 +140,9 @@ fun HomeScreen(
                     }
 
 
-                    items(state.news ?: emptyList()) { news ->
-                        NewsListItem(news)
-                    }
+//                    items(state.news ?: emptyList()) { news ->
+//                        NewsListItem(news)
+//                    }
 
                 }
             }

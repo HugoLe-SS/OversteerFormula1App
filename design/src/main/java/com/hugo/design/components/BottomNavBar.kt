@@ -34,7 +34,8 @@ fun BottomNavBar(navController: NavHostController) {
     val bottomNavItems = listOf(
         BottomNavItem(label = stringResource(R.string.home), icon = R.drawable.ic_home, screen = Screen.HomeScreen),
         BottomNavItem(label = stringResource(R.string.schedule), icon = R.drawable.ic_calendar, screen =  Screen.ScheduleScreen),
-        BottomNavItem(label = stringResource(R.string.standings), icon = R.drawable.ic_trophy, screen =  Screen.StandingsScreen)
+        BottomNavItem(label = stringResource(R.string.standings), icon = R.drawable.ic_trophy, screen =  Screen.StandingsScreen),
+        BottomNavItem(label = stringResource(R.string.news), icon = R.drawable.ic_news, screen =  Screen.NewsScreen)
     )
 
     NavigationBar(

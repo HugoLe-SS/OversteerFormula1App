@@ -47,7 +47,7 @@ fun CardComponent(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(110.dp)
             .clickable { cardOnClicked() }
             .padding(12.dp),
         elevation = elevation,
