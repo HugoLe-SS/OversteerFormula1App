@@ -34,7 +34,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ArticlesList(
     newsInfo: NewsInfo,
-    onArticleClick: () -> Unit = {}
+    onArticleClick: (String) -> Unit = {}
 ) {
     ArticlesComponent(
         headline = newsInfo.headline,
@@ -57,13 +57,13 @@ fun ArticlesComponent(
     imageUrl: String?,
     webUrl: String,
     modifier: Modifier = Modifier,
-    onArticleClick: () -> Unit = {}
+    onArticleClick: (String) -> Unit = {}
 
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onArticleClick() },
+            .clickable { onArticleClick(webUrl) },
             //.padding(horizontal = 16.dp, vertical = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(

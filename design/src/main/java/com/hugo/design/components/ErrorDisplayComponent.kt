@@ -142,6 +142,7 @@ fun ErrorDisplayComponent(
             Text(
                 text = message,
                 style = AppTheme.typography.labelNormal,
+                color = AppTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )

@@ -1,5 +1,7 @@
 package com.hugo.news.presentation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -36,7 +39,7 @@ fun F1NewsHomeScreen(
     cardClicked: (F1CalendarInfo) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
-
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -109,10 +112,9 @@ fun F1NewsHomeScreen(
                     itemContent = { newsInfo ->
                         ArticlesList(
                             newsInfo = newsInfo,
-                            onArticleClick = {
-                                // Handle article click - navigate to article detail
-                                // You can pass the newsInfo or webUrl to navigate
-                                // navController.navigate("article_detail/${newsInfo.webUrl}")
+                            onArticleClick = { url ->
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                context.startActivity(intent)
                             }
                         )
                     }
