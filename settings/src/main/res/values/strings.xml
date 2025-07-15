@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="back_button">Back Button</string>
+    <string name="theme_description">Choose how you want to view the app. Dark mode may be more comfortable for some users.</string>
 </resources>
