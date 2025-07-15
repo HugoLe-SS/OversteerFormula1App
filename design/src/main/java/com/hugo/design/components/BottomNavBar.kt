@@ -78,9 +78,9 @@ fun BottomNavBar(navController: NavHostController) {
 
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = AppTheme.colorScheme.onSecondary,
-                    unselectedIconColor = AppTheme.colorScheme.onBackground,
+                    unselectedIconColor = AppTheme.colorScheme.secondary,
                     selectedTextColor = AppTheme.colorScheme.onSecondary,
-                    unselectedTextColor = AppTheme.colorScheme.onBackground,
+                    unselectedTextColor = AppTheme.colorScheme.secondary,
                     indicatorColor = AppTheme.colorScheme.secondary.copy(alpha = 0.2f)
                 )
             )

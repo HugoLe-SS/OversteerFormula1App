@@ -109,8 +109,8 @@ fun AppNavGraph() {
                             ProfileCardType.MyAccount -> navController.navigate(Screen.AuthScreen)
                             ProfileCardType.Notifications -> navController.navigate(Screen.NotificationScreen)
                             ProfileCardType.AppSettings -> navController.navigate(Screen.AppSettingsScreen)
-                            ProfileCardType.Feedback -> TODO()
-                            ProfileCardType.LegalPrivacy -> TODO()
+                            ProfileCardType.Feedback -> {}
+                            ProfileCardType.LegalPrivacy -> {}
                         }
                     },
                     backButtonClicked = {navController.popBackStack()}

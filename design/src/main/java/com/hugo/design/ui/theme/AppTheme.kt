@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,12 +21,12 @@ private val darkColorScheme = AppColorScheme(
 )
 
 private val lightColorScheme = AppColorScheme(
-    background = Color.White,
-    onBackground = AppColors.onBackground,
-    primary = AppColors.primary,
-    onPrimary = AppColors.onPrimary,
-    secondary = AppColors.secondary,
-    onSecondary = AppColors.onSecondary,
+    background = AppColors.backgroundLight,
+    onBackground = AppColors.onBackgroundLight,
+    primary = AppColors.primaryLight,
+    onPrimary = AppColors.onPrimaryLight,
+    secondary = AppColors.secondaryLight,
+    onSecondary = AppColors.onSecondaryLight,
 )
 
 private val typography = AppTypography(
