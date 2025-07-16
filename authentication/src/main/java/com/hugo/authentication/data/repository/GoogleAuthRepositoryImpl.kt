@@ -1,5 +1,6 @@
 package com.hugo.authentication.data.repository
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.credentials.ClearCredentialStateRequest
@@ -42,10 +43,10 @@ class GoogleAuthRepositoryImpl @Inject constructor(
 
     private val credentialManager = CredentialManager.create(context)
 
-    override suspend fun signInWithGoogle(): Result<GoogleSignInResult> {
+    override suspend fun signInWithGoogle(activity: Activity): Result<GoogleSignInResult> {
         return try {
             Log.d("GoogleSignIn", "Attempting sign-in for authorized accounts...")
-            val signInResult = attemptSignUp()
+            val signInResult = attemptSignUp(activity)
             Log.d("GoogleSignIn", "Sign-in successful for returning user.")
 
             return signInResult
@@ -56,7 +57,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
     }
 
     //1 tap sign in
-    private suspend fun attemptSignIn(): Result<GoogleSignInResult> {
+    private suspend fun attemptSignIn(activity: Activity): Result<GoogleSignInResult> {
         // Generate nonce and build the option here
         val rawNonce = UUID.randomUUID().toString()
         val googleIdOption = GetGoogleIdOption.Builder()
@@ -67,11 +68,11 @@ class GoogleAuthRepositoryImpl @Inject constructor(
             .build()
 
         // Call the shared logic
-        return performGoogleAuth(googleIdOption, rawNonce)
+        return performGoogleAuth(googleIdOption, rawNonce, activity)
     }
 
     // Sign in + sign up flow
-    private suspend fun attemptSignUp(): Result<GoogleSignInResult> {
+    private suspend fun attemptSignUp(activity: Activity): Result<GoogleSignInResult> {
         val rawNonce = UUID.randomUUID().toString()
 
         // Use GetSignInWithGoogleOption to force the account chooser UI
@@ -89,7 +90,8 @@ class GoogleAuthRepositoryImpl @Inject constructor(
             .build()
 
         return try {
-            val result = credentialManager.getCredential(context, request)
+            //val result = credentialManager.getCredential(context, request)
+            val result = credentialManager.getCredential(activity, request)
             val googleSignInResult = handleGoogleCredential(result, rawNonce)
             val finalResult = signInWithSupabaseAndSync(googleSignInResult)
 
@@ -113,14 +115,16 @@ class GoogleAuthRepositoryImpl @Inject constructor(
 
     private suspend fun performGoogleAuth(
         googleIdOption: GetGoogleIdOption,
-        rawNonce: String // Pass the raw nonce in
+        rawNonce: String,
+        activity: Activity
     ): Result<GoogleSignInResult> {
         val request = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
 
         return try {
-            val result = credentialManager.getCredential(context, request)
+            //val result = credentialManager.getCredential(context, request)
+            val result = credentialManager.getCredential(activity, request)
 
             // Pass rawNonce to the handler, which then passes it to Supabase
             val googleSignInResult = handleGoogleCredential(result, rawNonce)

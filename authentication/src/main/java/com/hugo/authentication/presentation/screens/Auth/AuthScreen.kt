@@ -1,5 +1,7 @@
 package com.hugo.authentication.presentation.screens.Auth
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -46,6 +48,7 @@ import com.hugo.design.components.StyledOutlinedTextField
 import com.hugo.design.ui.theme.AppTheme
 
 
+@SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
@@ -54,6 +57,7 @@ fun AuthScreen(
     viewModel: AuthViewModel = hiltViewModel(),
 ){
     val context = LocalContext.current
+    val activity = LocalContext.current as Activity
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(state.errorMessage) {
@@ -160,7 +164,7 @@ fun AuthScreen(
                             GoogleSignInComposable(
                                 isLoading = state.isLoading,
                                 errorMessage = state.errorMessage,
-                                onSignIn = { viewModel.signInWithGoogle() },
+                                onSignIn = { viewModel.signInWithGoogle(activity) },
                                 onClearError = { viewModel.clearError() },
                             )
                         }

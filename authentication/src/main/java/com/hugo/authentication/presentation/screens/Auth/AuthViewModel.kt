@@ -1,5 +1,6 @@
 package com.hugo.authentication.presentation.screens.Auth
 
+import android.app.Activity
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,11 +41,11 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle() {
+    fun signInWithGoogle(activity: Activity) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
 
-            googleAuthRepository.signInWithGoogle()
+            googleAuthRepository.signInWithGoogle(activity)
                 .onSuccess {
                     _state.update { it.copy(
                         isLoading = false,
