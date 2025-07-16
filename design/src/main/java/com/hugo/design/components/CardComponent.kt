@@ -163,7 +163,7 @@ fun CardDetails(
             //Column 3
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(2f)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -234,8 +234,8 @@ fun CardComponentPreview() {
             firstColumnDetails = "Mar",
             secondColumnDescription = "Constructor",
             secondColumnDetails = "Mercedes",
-            circuitImage = R.drawable.flag_belgium,
-            thirdColumnDescription = "Points",
+            //circuitImage = R.drawable.flag_belgium,
+            thirdColumnDescription = "460",
             thirdColumnDetails = "PTS",
             teamColor = Color.Cyan
         )

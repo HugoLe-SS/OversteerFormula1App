@@ -23,6 +23,7 @@ fun F1CalendarListItem(
 ){
     val raceDate = AppUtilities.parseDate(calendarInfo.mainRaceDate)
     val teamColor = AppColors.Circuit.colors[AppColors.Circuit.circuitContinentMap[calendarInfo.circuitId] ?: ""] ?: AppTheme.colorScheme.onSecondary
+
     val circuitImg = remember(calendarInfo.circuitId) {
         Circuit.getCircuitImageRes(calendarInfo.circuitId ?: "")
     }

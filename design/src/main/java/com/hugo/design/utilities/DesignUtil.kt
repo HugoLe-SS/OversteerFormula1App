@@ -23,7 +23,7 @@ enum class Circuit(val circuitId: String, val imageRes: Int) {
     MARINA_BAY("marina_bay", R.drawable.circuit_marina_bay),
     AMERICAS("americas", R.drawable.circuit_americas),
     RODRIGUEZ("rodriguez", R.drawable.circuit_rodriguez),
-    BRAZIL("interlagos", R.drawable.circuit_rodriguez),
+    BRAZIL("interlagos", R.drawable.circuit_interlagos),
     VEGAS("vegas", R.drawable.circuit_vegas),
     LOSAIL("losail", R.drawable.circuit_losail),
     YAS_MARINA("yas_marina", R.drawable.circuit_yas_marina);
@@ -48,7 +48,7 @@ enum class Flag(val country: String, val imageRes: Int){
     SPAIN("Spain",R.drawable.flag_spain),
     CANADA("Canada",R.drawable.flag_canada),
     AUSTRIA("Austria",R.drawable.flag_austria),
-    UK("UK", R.drawable.flag_uk),
+    UK("United Kingdom", R.drawable.flag_uk),
     BELGIUM("Belgium", R.drawable.flag_belgium),
     HUNGARY("Hungary", R.drawable.flag_hungary),
     NETHERLANDS("Netherlands", R.drawable.flag_netherlands),
@@ -57,6 +57,11 @@ enum class Flag(val country: String, val imageRes: Int){
     MEXICO("Mexico", R.drawable.flag_mexico),
     BRAZIL("Brazil", R.drawable.flag_brazil),
     QATAR("Qatar", R.drawable.flag_qatar),
+    ARGENTINA("Argentina", R.drawable.flag_arg),
+    FRANCE("France", R.drawable.flag_fra),
+    GERMANY("Germany", R.drawable.flag_ger),
+    NEWZEALAND("New Zealand", R.drawable.flag_nzl),
+    THAILAND("Thailand", R.drawable.flag_tha),
     UAE("UAE", R.drawable.flag_uae);
 
     companion object {
