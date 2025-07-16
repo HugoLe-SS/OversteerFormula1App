@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
@@ -22,11 +22,18 @@ import com.hugo.datasource.local.entity.Driver.DriverDetails
 import com.hugo.design.R.drawable
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
+import com.hugo.design.utilities.Flag
 import com.hugo.standings.R
 
 @Composable fun DriverBioList(
     driverDetails: DriverDetails,
 ){
+
+    val driverNationality = remember(driverDetails.driverInfo?.getOrNull(3)) {
+        Flag.getFlagImageRes(country = driverDetails.driverInfo?.getOrNull(3) ?: "")
+    }
+
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -35,13 +42,13 @@ import com.hugo.standings.R
         verticalArrangement = Arrangement.Center
     ){
         StandingsBioItem(
-            imageResourceValue = drawable.ic_trophy,
+            imageResourceValue = drawable.ic_driver,
             info = driverDetails.driverInfo?.getOrNull(0) ?: "",
             infoTag = stringResource(R.string.driver_code)
         )
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_engine,
             info = driverDetails.driverInfo?.getOrNull(1) ?: "",
             infoTag = stringResource(R.string.team)
         )
@@ -54,7 +61,7 @@ import com.hugo.standings.R
 
         driverDetails.firstWin?.let {
             StandingsBioItem(
-                imageUrl = driverDetails.imageUrl,
+                imageResourceValue = drawable.ic_trophy,
                 info = "${driverDetails.firstWin}",
                 infoTag = stringResource(R.string.first_win)
             )
@@ -66,19 +73,19 @@ import com.hugo.standings.R
 
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_trophy,
             info = "${driverDetails.wdc}",
             infoTag = stringResource(R.string.world_championships)
         )
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_calendar,
             info = driverDetails.driverInfo?.getOrNull(2) ?: "",
             infoTag = stringResource(R.string.date_of_birth)
         )
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = driverNationality,
             info = driverDetails.driverInfo?.getOrNull(3) ?: "",
             infoTag = stringResource(R.string.nationality)
         )
@@ -98,25 +105,25 @@ import com.hugo.standings.R
         verticalArrangement = Arrangement.Center
     ){
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_driver,
             info = constructorDetails.firstDriver?.getOrNull(1) ?: "",
             infoTag = constructorDetails.firstDriver?.getOrNull(2) ?: "",
         )
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_driver,
             info = constructorDetails.secondDriver?.getOrNull(1) ?: "",
             infoTag = constructorDetails.secondDriver?.getOrNull(2) ?: "",
         )
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_engine,
             info = constructorDetails.chassis?: "",
             infoTag = stringResource(R.string.chassis)
         )
 
         StandingsBioItem(
-            imageResourceValue = drawable.ic_mclaren,
+            imageResourceValue = drawable.ic_engine,
             info = constructorDetails.powerUnit?: "",
             infoTag = stringResource(R.string.power_unit)
         )
@@ -168,7 +175,7 @@ fun StandingsBioItem(
                 .size(18.dp),
             imageResourceValue = imageResourceValue,
             imageUrl = imageUrl,
-            colorFilter = ColorFilter.tint(color = AppTheme.colorScheme.onSecondary),
+            //colorFilter = ColorFilter.tint(color = AppTheme.colorScheme.onSecondary),
         )
 
         Column (
