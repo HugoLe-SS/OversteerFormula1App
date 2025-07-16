@@ -1,0 +1,11 @@
+# Treat all Kotlin files as Kotlin
+*.kt linguist-language=Kotlin
+
+# Mark Java files as "generated" so they don’t count
+*.java linguist-generated
+
+# Optional: treat Groovy build files properly
+*.gradle linguist-language=Groovy
+
+# Optional: treat Kotlin DSL build files properly
+*.gradle.kts linguist-language=Kotlin
