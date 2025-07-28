@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -23,7 +24,7 @@ class StandingsHomeViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _state = MutableStateFlow(StandingsHomeUiState())
-    val state: StateFlow<StandingsHomeUiState> = _state
+    val state: StateFlow<StandingsHomeUiState> = _state.asStateFlow()
 
     private var currentDataFetchJob: Job? = null
 

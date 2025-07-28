@@ -7,6 +7,7 @@ import com.hugo.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -17,7 +18,7 @@ class F1NewsViewModel @Inject constructor(
     private val getF1NewsUseCase: GetF1NewsUseCase
 ): ViewModel() {
      private val _state =  MutableStateFlow<F1NewsUiState>(F1NewsUiState())
-     val state: StateFlow<F1NewsUiState>  = _state
+     val state: StateFlow<F1NewsUiState>  = _state.asStateFlow()
 
     init {
         getF1News(isRefresh = false)

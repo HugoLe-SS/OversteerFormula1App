@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +32,7 @@ class ResultViewModel @Inject constructor(
     private val getF1CalendarResultUseCase: GetF1CalendarResultUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(ResultUIState())
-    val state: StateFlow<ResultUIState> = _state
+    val state: StateFlow<ResultUIState> = _state.asStateFlow()
 
 
     val raceIntervals: StateFlow<List<String?>> = state

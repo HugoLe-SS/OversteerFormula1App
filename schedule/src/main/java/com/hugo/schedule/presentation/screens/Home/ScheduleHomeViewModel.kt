@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +32,7 @@ class ScheduleHomeViewModel @Inject constructor(
 ) :ViewModel() {
 
     private val _state = MutableStateFlow(ScheduleHomeUiState())
-    val state: StateFlow<ScheduleHomeUiState> = _state
+    val state: StateFlow<ScheduleHomeUiState> = _state.asStateFlow()
 
     private val _countdown = MutableStateFlow<CountDownInfo?>(null)
     val countdown: StateFlow<CountDownInfo?> = _countdown
@@ -39,7 +40,7 @@ class ScheduleHomeViewModel @Inject constructor(
     //private val _nextSession = MutableStateFlow<Session?>(null)
     //val nextSession: StateFlow<AppUtilities.Session?> = _nextSession
 
-    val filteredEvents = _state
+    val filteredEvents = _state.asStateFlow()
         .map { state ->
             val currentTime = System.currentTimeMillis()
             state.f1Calendar
