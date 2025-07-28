@@ -9,6 +9,7 @@ import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -22,7 +23,7 @@ class StandingsDetailsViewModel @Inject constructor(
 
 
     private val _state = MutableStateFlow(StandingsDetailsUIState())
-    val state: StateFlow<StandingsDetailsUIState> = _state
+    val state: StateFlow<StandingsDetailsUIState> = _state.asStateFlow()
 
 
     fun fetchDriverDetails(season: String , driverId: String) {
