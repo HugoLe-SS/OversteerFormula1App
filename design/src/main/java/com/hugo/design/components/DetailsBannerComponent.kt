@@ -301,7 +301,7 @@ fun ScheduleDetailsBannerComponent(
                         DetailsRow(
                             modifier = Modifier.weight(1f),
                             text = topSpeed,
-                            description = "Top speed",
+                            description = "Speed",
                             textColor = circuitColor
                         )
 
