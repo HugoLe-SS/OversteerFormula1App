@@ -1,0 +1,17 @@
+package com.hugo.schedule.presentation.screens.Home
+
+import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
+import com.hugo.utilities.AppError
+
+data class ScheduleHomeUiState(
+    val isLoading: Boolean = true,
+    val isRefreshing: Boolean = false,
+    val error: AppError?= null,
+    val f1Calendar: List<F1CalendarInfo> = emptyList(),
+    val currentType: ScheduleType = ScheduleType.UPCOMING
+)
+
+enum class ScheduleType() {
+    UPCOMING,
+    PAST
+}
