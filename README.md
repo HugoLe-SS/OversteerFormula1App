@@ -1,12 +1,12 @@
 # OversteerFormula1App
 
-![Kotlin](https://img.shields.io/badge/Kotlin-1.9-blueviolet?logo=kotlin)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.1.20-blueviolet?logo=kotlin)
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-UI-orange?logo=android)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 > If you like this project, consider giving it a ⭐ on GitHub — it helps others discover it too!
 
-**OversteerFormula1App** is an open-source Android project built with **Kotlin** and **Jetpack Compose**, designed to provide Formula 1 fans with race schedules, standings, news, and live updates.  
+**OversteerFormula1App** is an open-source Android project built with **Kotlin** and **Jetpack Compose**, designed to provide Formula 1 fans with race schedules, standings, race results news, and live updates.  
 
 This is the **first complete version** of the project 🚀
 
@@ -17,6 +17,7 @@ This is the **first complete version** of the project 🚀
   <img src="docs/images/home_screen.png" width="250" />
   <img src="docs/images/standings_screen.png" width="250" />
   <img src="docs/images/schedule_screen.png" width="250" />
+  <img src="docs/images/news_screen.png" width="250" />
 </p>
 
 ---
@@ -100,6 +101,12 @@ This project is licensed under the MIT License – see the LICENSE file for deta
 If you build something cool with OversteerFormula1App, feel free to open a PR to add it to our community list.
 
 If you find this project useful, consider giving it a ⭐ to support development.
+
+---
+
+## ​ Credits
+
+Big thanks to the amazing folks behind [Jolpica F1](https://github.com/jolpica/jolpica-f1) for providing the API that powers the data in this app 🙌
 
 ---
 
