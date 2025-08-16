@@ -15,8 +15,10 @@ This is the **first complete version** of the project 🚀
 ## 📸 Screenshots
 <p align="center">
   <img src="docs/images/home_screen.png" width="250" />
-  <img src="docs/images/standings_screen.png" width="250" />
   <img src="docs/images/schedule_screen.png" width="250" />
+  <img src="docs/images/schedule_details_screen.png" width="250" />
+  <img src="docs/images/result_screen.png" width="250" />
+  <img src="docs/images/standings_screen.png" width="250" />
   <img src="docs/images/news_screen.png" width="250" />
 </p>
 
@@ -72,11 +74,12 @@ Some differences exist compared to Ergast — check our [`docs/`](./docs) folder
 
 Our documentation is available in the [docs/](./docs) folder. It covers:
 
-- [Project architecture](./docs/architecture.md)
-- [API integration](./docs/api.md)
-- [Database schema & offline support](./docs/database.md)
-- [Dependency injection setup](./docs/di.md)
-- [Notification system](./docs/notifications.md)
+- [Project architecture](./docs/architecture.md) → Overview of all modules & architecture diagram
+- [API integration](./docs/api.md)  → How API is called, endpoints used
+- [Database schema & offline support](./docs/database.md)  → Room & DataStore schema, offline support
+- [Dependency injection setup](./docs/di.md) → Hilt setup & dependencies
+- [Authentication integration](./docs/authentication.md)  → How login/register works
+- [Notification system](./docs/notifications.md) → Firebase + Supabase notifications
 
 ---
 
