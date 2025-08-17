@@ -50,7 +50,7 @@ The goal is to provide **offline-first support**, ensuring that users can still 
 📸
 <p align="center">
   <a href="https://dbdocs.io/jolpica/jolpica-f1?view=relationships">
-    <img src="docs/images/jolpica_f1_schema.png" width="800" />
+    <img src="docs/images/home_screen.png" width="800" />
   </a>
 </p>
 
@@ -111,8 +111,6 @@ val PROFILE_PICTURE_URL = stringPreferencesKey("profile_picture_url")
 
 ### Offline-First Data Flow
 
-<p align="center">
-
 ```mermaid
 flowchart LR
     subgraph Cloud
@@ -134,7 +132,6 @@ flowchart LR
     COMPOSE -->|User actions| ROOM
     COMPOSE -->|Preferences| DATASTORE
     ROOM -->|Sync| SUPABASE
-</p>
 ```
 ---
 
