@@ -13,7 +13,6 @@ The goal is to provide **offline-first support**, ensuring that users can still 
 ## Supabase Database
 
 ### ER Diagram
-📸
 <p align="center">
   <a href="https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships">
     <img src="./images/supabase_schema.png" width="800" />
