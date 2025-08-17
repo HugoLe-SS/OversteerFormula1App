@@ -100,7 +100,7 @@ val USER_ID = stringPreferencesKey("user_id")
 val EMAIL = stringPreferencesKey("email")
 val DISPLAY_NAME = stringPreferencesKey("display_name")
 val PROFILE_PICTURE_URL = stringPreferencesKey("profile_picture_url")
-
+```
 ---
 
 ## Sync & Offline-First Strategy
@@ -134,7 +134,8 @@ flowchart LR
     COMPOSE -->|User actions| ROOM
     COMPOSE -->|Preferences| DATASTORE
     ROOM -->|Sync| SUPABASE
-</p>```
+</p>
+```
 ---
 
 ## Future Improvements
