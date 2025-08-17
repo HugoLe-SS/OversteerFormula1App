@@ -48,13 +48,12 @@ The goal is to provide **offline-first support**, ensuring that users can still 
 
 ### ER Diagram
 📸
-<p align="center">
-  <a href="https://dbdocs.io/jolpica/jolpica-f1?view=relationships">
-    <img src="./images/jolpica_f1_schema.png" width="800" />
-  </a>
-</p>
+[📸 View Supabase ER Diagram](https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships)  
+
+![Supabase ER Diagram](./images/supabase_schema.png)
 
 [Click here to view the database online](https://dbdocs.io/jolpica/jolpica-f1?view=relationships)
+
 
 - Contains **external Formula 1 data**.
 - Acts as a **read-only source**, fetched via API and cached locally.
