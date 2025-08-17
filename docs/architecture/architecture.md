@@ -108,6 +108,7 @@ flowchart TD
 
     notifications --> utilities
     app --> notifications
+```
     
 📌 Explanation:  
 - The **App Module** orchestrates everything and connects to each feature module.  
