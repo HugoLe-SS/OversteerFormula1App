@@ -122,12 +122,12 @@ Oversteer F1 uses a combination of **Supabase Edge Functions**, **FCM**, and **c
 #### End-to-End Flow Diagram
 ```mermaid
     flowchart TD
+    A["Cron Job"] --> B["Edge Function"]
+    B --> C["Filter Users by Preferences"]
+    C --> D["Send FCM Notifications"]
+    D --> E["Device Receives Notification"]
+    E --> F["App Handles Payload - data / deep-link"]
 
-    A[Cron Job] --> B[Edge Function]
-    B --> C[Filter Users by Preferences]
-    C --> D[Send FCM Notifications]
-    D --> E[Device Receives Notification]
-    E --> F[App Handles Payload (data / deep-link)]
 ```
 
 
