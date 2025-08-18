@@ -36,13 +36,13 @@ These modules encapsulate user-facing features. Each is designed to be as indepe
 ### Shared/Core Modules
 These modules provide foundational services, utilities, and design system components. They are reusable and consumed by multiple feature modules.
 
-| Module           | Responsibility                                      |
-|------------------|-----------------------------------------------------|
-| `design`         | Centralized UI theming (colors, typography, shapes) |
-| `datasource`     | Local persistence (Room, DataStore) + remote access |
-| `network`        | Supabase API client and integration layer           |
-| `notifications`  | Firebase Cloud Messaging and push notification logic|
-| `utilities`      | Shared helpers, constants, and utility functions    |
+| Module           | Responsibility                                       |
+|------------------|------------------------------------------------------|
+| `design`         | Centralized UI theming (colors, typography, shapes)  |
+| `datasource`     | Local persistence (Room, DataStore) + remote access  |
+| `network`        | Supabase API client and integration layer            |
+| `notifications`  | Firebase Cloud Messaging and push notification logic |
+| `utilities`      | Shared helpers, constants, and utility functions     |
 
 ---
 
