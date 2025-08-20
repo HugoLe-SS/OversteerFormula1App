@@ -54,6 +54,8 @@ The goal is to provide **offline-first support**, ensuring that users can still 
   </a>
 </p>
 
+[![Database Scheme for jolpica-f1](/images/jolpica_f1_schema)](https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships)
+
 [Click here to view the database online](https://dbdocs.io/jolpica/jolpica-f1?view=relationships)
 
 
