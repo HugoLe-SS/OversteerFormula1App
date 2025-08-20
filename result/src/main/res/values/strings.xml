@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arrow_up_icon">Arrow up icon</string>
+    <string name="arrow_down_icon">Arrow down icon</string>
+    <string name="arrow">Arrow ~~~~</string>
+    <string name="pts">"PTS "</string>
+    <string name="timer">Timer</string>
+    <string name="time">Time</string>
+    <string name="gap_to_leader">Gap to leader</string>
+    <string name="interval">Interval</string>
+    <string name="driver_icon">driver icon</string>
+    <string name="banner">Banner</string>
+    <string name="archive_icon">archive icon</string>
+    <string name="fastest_lap">Fastest Lap</string>
+    <string name="fastest_pitstop">Fastest Pitstop</string>
+    <string name="driver_of_the_day">Driver of the day</string>
+</resources>

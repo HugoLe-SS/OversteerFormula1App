@@ -1,0 +1,48 @@
+package com.hugo.standings.data.remote.dto.Standings
+
+import com.google.gson.annotations.SerializedName
+import com.hugo.standings.data.remote.dto.Constructor
+
+data class ConstructorStandingsDto(
+    @SerializedName("MRData")
+    val mrData: ConstructorMRData
+)
+
+data class ConstructorMRData(
+    val xmlns: String,
+    val series: String,
+    val url: String,
+    val limit: Int,
+    val offset: Int,
+    val total: Int,
+    @SerializedName("StandingsTable")
+    val standingsTable: ConstructorStandingsTable
+)
+
+data class ConstructorStandingsTable(
+    val season: String,
+    val round: String,
+    @SerializedName("StandingsLists")
+    val standingsLists: List<ConstructorStandingsList>
+)
+
+data class ConstructorStandingsList(
+    val season: String,
+    val round: String,
+    @SerializedName("ConstructorStandings")
+    val constructorStandings: List<ConstructorStanding>
+)
+
+data class ConstructorStanding(
+    val position: String,
+    val positionText: String,
+    val points: String,
+    val wins: String,
+    @SerializedName("Constructor")
+    val constructor: Constructor
+)
+
+
+
+
+

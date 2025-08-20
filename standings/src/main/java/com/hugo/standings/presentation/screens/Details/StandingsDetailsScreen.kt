@@ -1,0 +1,156 @@
+package com.hugo.standings.presentation.screens.Details
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.hugo.design.components.AppToolbar
+import com.hugo.design.components.ErrorDisplayComponent
+import com.hugo.design.components.ImageComponent
+import com.hugo.design.components.LoadingIndicatorComponent
+import com.hugo.design.ui.theme.AppTheme
+import com.hugo.standings.presentation.components.StandingsDetailScreen.ConstructorBioList
+import com.hugo.standings.presentation.components.StandingsDetailScreen.DriverBioList
+import com.hugo.standings.presentation.components.StandingsDetailScreen.StandingsDetailsBannerListItem
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.ConstructorClickInfo
+import com.hugo.utilities.com.hugo.utilities.Navigation.model.DriverClickInfo
+import com.hugo.utilities.logging.AppLogger
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StandingsDetailsScreen(
+    constructorClickInfo: ConstructorClickInfo? = null,
+    driverClickInfo: DriverClickInfo? = null,
+    backButtonClicked : () -> Unit = {},
+    viewResultButtonClicked: (driverId: String?, constructorId: String?) -> Unit = { _, _ -> },
+    viewModel: StandingsDetailsViewModel = hiltViewModel()
+){
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = driverClickInfo?.driverId, key2 = constructorClickInfo?.constructorId) {
+        AppLogger.d(message = "LaunchedEffect - driverId: ${driverClickInfo?.driverId}, constructorId: ${constructorClickInfo?.constructorId}")
+
+        if (constructorClickInfo?.constructorId != null) {
+            AppLogger.d(message = "Calling fetchConstructorDetails")
+            viewModel.fetchConstructorDetails(season = "current", constructorId = constructorClickInfo.constructorId)
+        } else if (driverClickInfo?.driverId != null) {
+            AppLogger.d(message = "Calling fetchDriverDetails")
+            viewModel.fetchDriverDetails(season = "current", driverId = driverClickInfo.driverId)
+        }
+    }
+
+    Scaffold (
+        topBar = {
+            AppToolbar(
+                navigationIcon = {
+                    IconButton(
+                        onClick = {backButtonClicked()}
+                    ) {
+                        ImageComponent(
+                            imageResourceValue = com.hugo.design.R.drawable.ic_back,
+                            contentDescription = "Back Button",
+                        )
+                    }
+
+                },
+            )
+        },
+    )
+    {
+            innerPadding ->
+                LazyColumn (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(AppTheme.colorScheme.background)
+                        .padding(innerPadding)
+                ){
+                    when{
+                        state.isLoading -> {
+                            item{
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(innerPadding),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        LoadingIndicatorComponent(
+                                            paddingValues = innerPadding,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        state.error != null -> {
+                            item{
+                                ErrorDisplayComponent(
+                                    appError = state.error!!,
+                                    onRetry = {viewModel.onEvent(StandingsDetailsEvent.RetryFetch(
+                                        driverId = driverClickInfo?.driverId,
+                                        constructorId = constructorClickInfo?.constructorId
+                                    ))},
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding)
+                                )
+                            }
+                        }
+                        else-> {
+                            constructorClickInfo?.let {
+                                item{
+                                    StandingsDetailsBannerListItem(
+                                        constructorDetails = state.constructorDetails,
+                                        constructorClickInfo = constructorClickInfo,
+                                        viewResultButtonClicked = {
+                                            viewResultButtonClicked(null, constructorClickInfo.constructorId)
+                                        }
+                                    )
+                                }
+                                item {
+                                    ConstructorBioList(
+                                        constructorDetails = state.constructorDetails?: return@item,
+                                    )
+                                }
+                            }
+
+                            driverClickInfo?.let {
+                                item{
+                                    StandingsDetailsBannerListItem(
+                                        driverDetails = state.driverDetails,
+                                        driverClickInfo = driverClickInfo,
+                                        viewResultButtonClicked = {
+                                            viewResultButtonClicked(
+                                                driverClickInfo.driverId, null
+                                            )
+                                        }
+                                    )
+                                }
+                                item {
+                                    DriverBioList(
+                                        driverDetails = state.driverDetails?: return@item,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+            }
+
+    }
+}

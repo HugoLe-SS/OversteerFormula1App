@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="schedule">Schedule</string>
+    <string name="standings">Standings</string>
+    <string name="view_results">\nView Result\n</string>
+    <string name="home">Home</string>
+    <string name="news">News</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+</resources>
