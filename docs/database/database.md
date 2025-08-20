@@ -16,7 +16,7 @@ The goal is to provide **offline-first support**, ensuring that users can still 
 📸
 <p align="center">
   <a href="https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships">
-    <img src="/images/supabase_schema.png" width="800" />
+    <img src="../images/supabase_schema.png" width="800" />
   </a>
 </p>
 
@@ -50,11 +50,11 @@ The goal is to provide **offline-first support**, ensuring that users can still 
 📸
 <p align="center">
   <a href="https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships">
-    <img src="/images/jolpica_f1_schema" width="800" />
+    <img src="../images/jolpica_f1_schema.png" width="800" />
   </a>
 </p>
 
-[![Database Scheme for jolpica-f1](/images/jolpica_f1_schema)](https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships)
+[![Database Scheme for jolpica-f1](../images/jolpica_f1_schema)](https://dbdocs.io/L%C3%AA%20D%C5%A9ng/OversteerF1?view=relationships)
 
 [Click here to view the database online](https://dbdocs.io/jolpica/jolpica-f1?view=relationships)
 
