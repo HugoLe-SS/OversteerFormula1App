@@ -129,7 +129,7 @@ We fetch these articles directly and display them in the app.
 
 #### Fetch Latest ESPN News
 ```http
-GET https://api.jolpica.com/apis/site/v2/sports/racing/f1/news
+GET https://site.api.espn.com/apis/site/v2/sports/racing/f1/news
 ```
 
 ---
