@@ -55,7 +55,7 @@ This is the **first complete version** of the project 🚀
 ---
 
 ## 📡 API
-We use the [Ergast-compatible F1 API](http://api.jolpi.ca/ergast/f1/) as the primary data source.  
+We use the [Jolpica F1](https://github.com/jolpica/jolpica-f1) as the primary data source.  
 Some differences exist compared to Ergast — check our [`docs/`](./docs) folder for details.  
 
 ---
