@@ -156,25 +156,61 @@ interface F1StandingsApi {
     ): DriverStandingsDto
 }
 
+Inside NetworkModule.kt
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    private const val USER_AGENT = "OversteerF1App/1.0"
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("User-Agent", USER_AGENT)
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://dummy-base-url.com/") // placeholder, override in feature module
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+}
+
+Inside StandingsModule.kt
 @Module
 @InstallIn(SingletonComponent::class)
 class StandingsModule {
 
     @Provides
     @Singleton
-    fun provideF1StandingsApi(): F1StandingsApi {
-        return Retrofit.Builder()
-            .baseUrl(AppConstants.BASE_URL_F1_STANDINGS)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(F1StandingsApi::class.java)
-    }
+    fun provideF1StandingsApi(retrofit: Retrofit): F1StandingsApi =
+    retrofit.newBuilder()
+        .baseUrl(AppConstants.BASE_URL_F1_STANDINGS)
+        .build()
+        .create(F1StandingsApi::class.java)
+
 
     @Provides
     @Singleton
-    fun provideF1StandingsRepository(api: F1StandingsApi, supabase: SupabaseClient, localDataSource: LocalDataSource): IF1StandingsRepository {
+    fun provideF1StandingsRepository(
+        api: F1StandingsApi,
+        supabase: SupabaseClient,
+        localDataSource: LocalDataSource
+    ): IF1StandingsRepository {
         return F1StandingRepositoryImpl(api, supabase, localDataSource)
     }
+
 
 }
 

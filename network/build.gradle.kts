@@ -90,4 +90,11 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.androidx.compose.runtime)
+
+    //retrofit + okhttp3 for API fetching
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging.interceptor)
 }
