@@ -11,7 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.SupabaseClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
@@ -21,17 +20,20 @@ class StandingsModule {
 
     @Provides
     @Singleton
-    fun provideF1StandingsApi(): F1StandingsApi {
-        return Retrofit.Builder()
-            .baseUrl(AppConstants.BASE_URL_F1_STANDINGS)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(F1StandingsApi::class.java)
-    }
+    fun provideF1StandingsApi(retrofit: Retrofit): F1StandingsApi =
+    retrofit.newBuilder()
+        .baseUrl(AppConstants.BASE_URL_F1_STANDINGS)
+        .build()
+        .create(F1StandingsApi::class.java)
+
 
     @Provides
     @Singleton
-    fun provideF1StandingsRepository(api: F1StandingsApi, supabase: SupabaseClient, localDataSource: LocalDataSource): IF1StandingsRepository {
+    fun provideF1StandingsRepository(
+        api: F1StandingsApi,
+        supabase: SupabaseClient,
+        localDataSource: LocalDataSource
+    ): IF1StandingsRepository {
         return F1StandingRepositoryImpl(api, supabase, localDataSource)
     }
 

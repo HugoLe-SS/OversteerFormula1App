@@ -10,7 +10,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -19,17 +18,15 @@ class ResultModule {
 
     @Provides
     @Singleton
-    fun provideF1StandingsApi(): F1ResultApi {
-        return Retrofit.Builder()
+    fun provideF1ResultApi(retrofit: Retrofit): F1ResultApi =
+        retrofit.newBuilder()
             .baseUrl(AppConstants.BASE_URL_F1_STANDINGS)
-            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(F1ResultApi::class.java)
-    }
 
     @Provides
     @Singleton
-    fun provideF1StandingsRepository(api: F1ResultApi, localDataSource: LocalDataSource): IF1ResultRepository {
+    fun provideF1ResultRepository(api: F1ResultApi, localDataSource: LocalDataSource): IF1ResultRepository {
         return F1ResultRepositoryImpl(api, localDataSource)
     }
 
