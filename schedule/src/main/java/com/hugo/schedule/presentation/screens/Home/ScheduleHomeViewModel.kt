@@ -192,11 +192,12 @@ class ScheduleHomeViewModel @Inject constructor(
                 _state.update { it.copy(currentType = event.type) }
                 AppLogger.d(message = "${state.value.currentType}")
             }
-            is ScheduleEvent.ToggleSchedule -> {
+
+            ScheduleEvent.ToggleSchedule -> {
                 getF1Calendar(season = "current", isRefresh = false)
             }
 
-            is ScheduleEvent.RetryFetch -> {
+            ScheduleEvent.RetryFetch -> {
                 AppLogger.d(message = "Retrying fetch in ScheduleHomeViewModel")
                 getF1Calendar(season = "current", isRefresh = false)
             }

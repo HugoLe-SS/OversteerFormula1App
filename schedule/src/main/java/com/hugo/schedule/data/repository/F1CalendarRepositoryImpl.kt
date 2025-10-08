@@ -27,52 +27,95 @@ class F1CalendarRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource
 ): IF1CalendarRepository {
 
+//    override fun getF1Calendar(season: String): Flow<Resource<List<F1CalendarInfo>, AppError>> = flow {
+//        AppLogger.d(message = "Inside getF1Calendar")
+//
+//        //emit(Resource.Loading())
+//
+//        try {
+//            if(!AppLaunchManager.hasFetchedCalendar){
+//                AppLogger.d(message = "Network fetch needed for getting F1 calendar.")
+//                emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
+//
+//                val f1Calendar = f1ScheduleApi
+//                    .getF1Calendar(season)
+//                    .toF1CalendarInfoList()
+//
+//                if(f1Calendar.isNotEmpty()){
+//                    AppLaunchManager.hasFetchedCalendar = true
+//                    insertCalendarInfoListInDB(f1Calendar) // add to RoomDB
+//                    AppLogger.d(message = "Success saving Calendar Info to DB")
+//                }
+//
+//                emit(Resource.Success(f1Calendar))
+//                AppLogger.d(message = "Success getting Calendar Info with size ${f1Calendar.size}")
+//            }
+//
+//            else{
+//                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
+//
+//                val calendarInfoListFromDB = getCalendarInfoListFromDB()
+//                if(!calendarInfoListFromDB.isNullOrEmpty()){
+//                    emit(Resource.Success(calendarInfoListFromDB))
+//                    AppLogger.d(message = "Success getting Calendar from DB with size ${calendarInfoListFromDB.size}")
+//                }
+//            }
+//
+//
+//        } catch (e: IOException) {
+//            // Handle IOException specifically for network issues
+//            emit(Resource.Error(e.toAppError()))
+//        } catch (e: retrofit2.HttpException) {
+//            // Handle HttpException for HTTP errors for Retrofit
+//            emit(Resource.Error(e.toAppError()))
+//        } catch (e: Exception) {
+//            // Handle any other exceptions
+//            emit(Resource.Error(e.toAppError()))
+//        }
+//    }.flowOn(Dispatchers.IO)
+
     override fun getF1Calendar(season: String): Flow<Resource<List<F1CalendarInfo>, AppError>> = flow {
         AppLogger.d(message = "Inside getF1Calendar")
 
-        //emit(Resource.Loading())
+        if (!AppLaunchManager.hasFetchedCalendar) {
+            AppLogger.d(message = "Network fetch needed for getting F1 calendar.")
+            emit(Resource.Loading(isFetchingFromNetwork = true)) // Indicate network fetch
 
-        try {
-            if(!AppLaunchManager.hasFetchedCalendar){
-                AppLogger.d(message = "Network fetch needed for getting F1 calendar.")
-                emit(Resource.Loading(isFetchingFromNetwork = true)) // <<< Indicate network fetch
-
-                val f1Calendar = f1ScheduleApi
+            runCatching {
+                f1ScheduleApi
                     .getF1Calendar(season)
                     .toF1CalendarInfoList()
-
-                if(f1Calendar.isNotEmpty()){
+            }.onSuccess { f1Calendar ->
+                if (f1Calendar.isNotEmpty()) {
                     AppLaunchManager.hasFetchedCalendar = true
-                    insertCalendarInfoListInDB(f1Calendar) // add to RoomDB
+                    insertCalendarInfoListInDB(f1Calendar)
                     AppLogger.d(message = "Success saving Calendar Info to DB")
                 }
 
                 emit(Resource.Success(f1Calendar))
                 AppLogger.d(message = "Success getting Calendar Info with size ${f1Calendar.size}")
+            }.onFailure { e ->
+                emit(Resource.Error(e.toAppError()))
+                AppLogger.e(message = "Error while fetching F1 Calendar: ${e.localizedMessage}")
             }
+        } else {
+            // No network fetch, so no "loading spinner"
+            emit(Resource.Loading(isFetchingFromNetwork = false))
 
-            else{
-                emit(Resource.Loading(isFetchingFromNetwork = false)) // no network fetch, so no loading indicator
-
-                val calendarInfoListFromDB = getCalendarInfoListFromDB()
-                if(!calendarInfoListFromDB.isNullOrEmpty()){
+            runCatching {
+                getCalendarInfoListFromDB()
+            }.onSuccess { calendarInfoListFromDB ->
+                if (!calendarInfoListFromDB.isNullOrEmpty()) {
                     emit(Resource.Success(calendarInfoListFromDB))
                     AppLogger.d(message = "Success getting Calendar from DB with size ${calendarInfoListFromDB.size}")
                 }
+            }.onFailure { e ->
+                emit(Resource.Error(e.toAppError()))
+                AppLogger.e(message = "Error while getting Calendar from DB: ${e.localizedMessage}")
             }
-
-
-        } catch (e: IOException) {
-            // Handle IOException specifically for network issues
-            emit(Resource.Error(e.toAppError()))
-        } catch (e: retrofit2.HttpException) {
-            // Handle HttpException for HTTP errors for Retrofit
-            emit(Resource.Error(e.toAppError()))
-        } catch (e: Exception) {
-            // Handle any other exceptions
-            emit(Resource.Error(e.toAppError()))
         }
     }.flowOn(Dispatchers.IO)
+
 
     // Supabase
     override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitDetails?, AppError>> = flow {
