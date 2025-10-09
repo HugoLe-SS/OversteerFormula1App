@@ -1,5 +1,6 @@
 package com.hugo.datasource.local.RoomDB
 
+import androidx.paging.PagingSource
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
@@ -47,9 +48,9 @@ interface LocalDataSource {
     fun deleteAllConstructorQualifyingListFromDB()
 
     // Constructor Race
-    fun insertConstructorRaceListInDB(constructorRaceList: List<ConstructorRaceResultsInfo>)
-    fun getConstructorRaceListFromDB(constructorId: String): List<ConstructorRaceResultsInfo>
-    fun deleteAllConstructorRaceListFromDB()
+    suspend fun insertConstructorRaceListInDB(constructorRaceList: List<ConstructorRaceResultsInfo>)
+    fun getConstructorRacePagingSource(constructorId: String): PagingSource<Int, ConstructorRaceResultsInfo>
+    suspend fun deleteAllConstructorRaceListFromDB(constructorId: String)
 
     // Constructor Details
     fun insertConstructorDetailsInDB(constructorDetails: ConstructorDetails)
@@ -68,9 +69,9 @@ interface LocalDataSource {
     fun deleteAllDriverQualifyingListFromDB()
 
     //Driver Race
-    fun insertDriverRaceListInDB(driverRaceList: List<DriverRaceResultsInfo>)
-    fun getDriverRaceListFromDB(driverId: String): List<DriverRaceResultsInfo>
-    fun deleteAllDriverRaceListFromDB()
+    suspend fun insertDriverRaceListInDB(driverRaceList: List<DriverRaceResultsInfo>)
+    fun getDriverRaceResultsPagingSource(driverId: String): PagingSource<Int, DriverRaceResultsInfo>
+    suspend fun deleteAllDriverRaceListFromDB(driverId: String)
 
     //Driver Details
     fun insertDriverDetailsInDB(driverDetails: DriverDetails)

@@ -1,6 +1,7 @@
 package com.hugo.datasource.local.RoomDB
 
 import android.content.Context
+import androidx.paging.PagingSource
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
@@ -57,6 +58,7 @@ class LocalDataSourceImpl(
         appDB.getF1CircuitDetailsDao().deleteAllF1CircuitDetailsFromDB()
     }
 
+    // Calendar Result
     override fun insertF1CalendarResultInDB(f1CalendarResult: List<F1CalendarRaceResult>) {
         appDB.getF1CalendarResultDao().insertF1CalendarResultInDB(f1CalendarResult)
     }
@@ -69,6 +71,7 @@ class LocalDataSourceImpl(
         appDB.getF1CalendarResultDao().deleteAllF1CalendarResultFromDB()
     }
 
+    //Constructor Standings
     override fun insertConstructorStandingsListInDB(constructorStandingsList: List<ConstructorStandingsInfo>) {
         appDB.getConstructorStandingsDao().insertConstructorStandingsListInDB(constructorStandingsList)
     }
@@ -81,6 +84,7 @@ class LocalDataSourceImpl(
         appDB.getConstructorStandingsDao().deleteAllConstructorStandingsListFromDB()
     }
 
+    //Constructor Qualifying
     override fun insertConstructorQualifyingListInDB(constructorQualifyingList: List<ConstructorQualifyingResultsInfo>) {
         appDB.getConstructorQualifyingDao().insertConstructorQualifyingResultsInDB(constructorQualifyingList)
     }
@@ -93,18 +97,21 @@ class LocalDataSourceImpl(
         appDB.getConstructorQualifyingDao().deleteAllConstructorQualifyingResultsListFromDB()
     }
 
-    override fun insertConstructorRaceListInDB(constructorRaceList: List<ConstructorRaceResultsInfo>) {
+    //Constructor race results
+
+    override suspend fun insertConstructorRaceListInDB(constructorRaceList: List<ConstructorRaceResultsInfo>) {
         appDB.getConstructorRaceDao().insertConstructorRaceResultsListInDB(constructorRaceList)
     }
 
-    override fun getConstructorRaceListFromDB(constructorId: String): List<ConstructorRaceResultsInfo> {
-        return appDB.getConstructorRaceDao().getConstructorRaceResultsListFromDB(constructorId)
+    override fun getConstructorRacePagingSource(constructorId: String): PagingSource<Int, ConstructorRaceResultsInfo> {
+        return appDB.getConstructorRaceDao().getConstructorRaceResultsPagingSource(constructorId)
     }
 
-    override fun deleteAllConstructorRaceListFromDB() {
-        appDB.getConstructorRaceDao().deleteAllConstructorRaceResultsListFromDB()
+    override suspend fun deleteAllConstructorRaceListFromDB(constructorId: String) {
+        appDB.getConstructorRaceDao().deleteAllConstructorRaceResultsListFromDB(constructorId)
     }
 
+    //Constructor Details
     override fun insertConstructorDetailsInDB(constructorDetails: ConstructorDetails) {
         appDB.getConstructorDetailsDao().insertConstructorDetailsInDB(constructorDetails)
     }
@@ -117,6 +124,7 @@ class LocalDataSourceImpl(
         appDB.getConstructorDetailsDao().deleteAllConstructorDetailsFromDB()
     }
 
+    //Driver Standings
     override fun insertDriverStandingsListInDB(driverStandingsList: List<DriverStandingsInfo>) {
         appDB.getDriverStandingsDao().insertDriverStandingsListInDB(driverStandingsList)
     }
@@ -129,6 +137,7 @@ class LocalDataSourceImpl(
         appDB.getDriverStandingsDao().deleteAllDriverStandingsListFromDB()
     }
 
+    //Driver Qualifying
     override fun insertDriverQualifyingListInDB(driverQualifyingList: List<DriverQualifyingResultsInfo>) {
         appDB.getDriverQualifyingDao().insertDriverQualifyingResultsInDB(driverQualifyingList)
     }
@@ -141,16 +150,16 @@ class LocalDataSourceImpl(
         appDB.getDriverQualifyingDao().deleteAllDriverQualifyingResultsListFromDB()
     }
 
-    override fun insertDriverRaceListInDB(driverRaceList: List<DriverRaceResultsInfo>) {
+    override suspend fun insertDriverRaceListInDB(driverRaceList: List<DriverRaceResultsInfo>) {
         appDB.getDriverRaceDao().insertDriverRaceResultsListInDB(driverRaceList)
     }
 
-    override fun getDriverRaceListFromDB(driverId: String): List<DriverRaceResultsInfo> {
-        return appDB.getDriverRaceDao().getDriverRaceResultsListFromDB(driverId)
+    override fun getDriverRaceResultsPagingSource(driverId: String): PagingSource<Int, DriverRaceResultsInfo> {
+        return appDB.getDriverRaceDao().getDriverRaceResultsPagingSource(driverId)
     }
 
-    override fun deleteAllDriverRaceListFromDB() {
-        appDB.getDriverRaceDao().deleteAllDriverRaceResultsListFromDB()
+    override suspend fun deleteAllDriverRaceListFromDB(driverId: String) {
+        appDB.getDriverRaceDao().deleteAllDriverRaceResultsListFromDB(driverId)
     }
 
     override fun insertDriverDetailsInDB(driverDetails: DriverDetails) {

@@ -1,7 +1,7 @@
 package com.hugo.datasource.di
 
 import android.content.Context
-import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.dataStore.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

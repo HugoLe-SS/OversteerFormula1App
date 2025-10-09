@@ -2,6 +2,7 @@ package com.hugo.result.presentation.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.result.domain.usecase.GetConstructorQualifyingResultsUseCase
 import com.hugo.result.domain.usecase.GetConstructorRaceResultsUseCase
@@ -42,8 +43,6 @@ class ResultViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
-
-
 
 
     private fun calculateIntervals(results: List<F1CalendarRaceResult>): List<String?> {
@@ -162,41 +161,16 @@ class ResultViewModel @Inject constructor(
     }
 
     private fun getDriverRaceResults(season: String, driverId: String) {
-        getDriverRaceResultsUseCase(season = season, driverId = driverId)
-            .onEach { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        AppLogger.d(message = "DriverDetailsViewModel Loading")
-                        _state.update { it.copy(
-                            isLoading = true,
-                            error = null
-                        )}
-                    }
+        val pagingFlow = getDriverRaceResultsUseCase(season, driverId)
+            .cachedIn(viewModelScope)
 
-                    is Resource.Success -> {
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                driverRaceResults = resource.data ?: emptyList(),
-                                error = null
-                            )
-                        }
-                        AppLogger.d(message = "Success Getting Driver race results")
-                    }
-
-                    is Resource.Error -> {
-                        AppLogger.e(message = "DriverDetailsViewModel Error")
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                error = resource.error
-                            )
-                        }
-                    }
-
-                    else -> Unit
-                }
-            }.launchIn(viewModelScope)
+        _state.update {
+            it.copy(
+                isLoading = false,
+                error = null,
+                driverRaceResults = pagingFlow
+            )
+        }
     }
 
     private fun getDriverQualifyingResults(season: String, driverId: String) {
@@ -237,41 +211,17 @@ class ResultViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-    private fun getConstructorRaceResults(season: String, constructorId:String){
-        getConstructorRaceResultsUseCase(season = season, constructorId = constructorId).onEach { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    AppLogger.d(message = "ConstructorDetailsViewModel Loading")
-                    _state.update {
-                        it.copy(
-                            isLoading = true,
-                            error = null
-                        )
-                    }
-                }
-                is Resource.Success -> {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            constructorRaceResults = resource.data ?: emptyList(),
-                            error = null
-                        )
-                    }
-                    AppLogger.d(message = "Success ${resource.data?.size}")
-                }
-                is Resource.Error -> {
-                    AppLogger.e(message = "ConstructorDetailsViewModel Error")
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            error = resource.error
-                        )
-                    }
-                }
-                else -> Unit
-            }
-        }.launchIn(viewModelScope)
+    private fun getConstructorRaceResults(season: String, constructorId: String) {
+        val pagingFlow = getConstructorRaceResultsUseCase(season, constructorId)
+            .cachedIn(viewModelScope)
 
+        _state.update {
+            it.copy(
+                isLoading = false,
+                error = null,
+                constructorRaceResults = pagingFlow
+            )
+        }
     }
 
     private fun getConstructorQualifyingResults(season: String, constructorId:String){

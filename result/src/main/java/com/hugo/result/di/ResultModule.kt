@@ -1,6 +1,7 @@
 package com.hugo.result.di
 
 import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.TransactionProvider
 import com.hugo.result.data.remote.F1ResultApi
 import com.hugo.result.data.repository.F1ResultRepositoryImpl
 import com.hugo.result.domain.repository.IF1ResultRepository
@@ -26,8 +27,8 @@ class ResultModule {
 
     @Provides
     @Singleton
-    fun provideF1ResultRepository(api: F1ResultApi, localDataSource: LocalDataSource): IF1ResultRepository {
-        return F1ResultRepositoryImpl(api, localDataSource)
+    fun provideF1ResultRepository(api: F1ResultApi, localDataSource: LocalDataSource, transactionProvider: TransactionProvider): IF1ResultRepository {
+        return F1ResultRepositoryImpl(api, localDataSource, transactionProvider)
     }
 
 }

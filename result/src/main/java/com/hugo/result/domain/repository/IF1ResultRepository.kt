@@ -1,5 +1,6 @@
 package com.hugo.result.domain.repository
 
+import androidx.paging.PagingData
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
@@ -10,11 +11,13 @@ import com.hugo.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface IF1ResultRepository {
-    fun getDriverRaceResults(season: String, driverId: String): Flow<Resource<List<DriverRaceResultsInfo>, AppError>>
+    //fun getDriverRaceResults(season: String, driverId: String): Flow<Resource<List<DriverRaceResultsInfo>, AppError>>
+
+    fun getDriverRaceResults(season: String, driverId: String): Flow<PagingData<DriverRaceResultsInfo>>
 
     fun getDriverQualifyingResults(season: String, driverId: String): Flow<Resource<List<DriverQualifyingResultsInfo>, AppError>>
 
-    fun getConstructorRaceResults(season: String, constructorId: String): Flow<Resource<List<ConstructorRaceResultsInfo>, AppError>>
+    fun getConstructorRaceResults(season: String, constructorId: String): Flow<PagingData<ConstructorRaceResultsInfo>>
 
     fun getConstructorQualifyingResults(season: String, constructorId: String): Flow<Resource<List<ConstructorQualifyingResultsInfo>, AppError>>
 

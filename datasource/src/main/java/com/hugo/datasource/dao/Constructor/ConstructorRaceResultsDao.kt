@@ -1,5 +1,6 @@
 package com.hugo.datasource.dao.Constructor
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,12 +13,12 @@ import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 interface ConstructorRaceResultsDao: BaseDao<ConstructorRaceResultsInfo> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertConstructorRaceResultsListInDB(constructorRaceResultsList: List<ConstructorRaceResultsInfo>)
+    suspend fun insertConstructorRaceResultsListInDB(constructorRaceResultsList: List<ConstructorRaceResultsInfo>)
 
     @Query("SELECT * FROM ${TableConstants.CONSTRUCTOR_RACE_LIST} WHERE constructorId = :constructorId")
-    fun getConstructorRaceResultsListFromDB(constructorId: String): List<ConstructorRaceResultsInfo>
+    fun getConstructorRaceResultsPagingSource(constructorId: String): PagingSource<Int, ConstructorRaceResultsInfo>
 
-    @Query("DELETE FROM ${TableConstants.CONSTRUCTOR_RACE_LIST}")
-    fun deleteAllConstructorRaceResultsListFromDB()
+    @Query("DELETE FROM ${TableConstants.CONSTRUCTOR_RACE_LIST} WHERE constructorId = :constructorId")
+    suspend fun deleteAllConstructorRaceResultsListFromDB(constructorId: String)
 
 }

@@ -68,11 +68,16 @@ dependencies {
     implementation(libs.room)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+    implementation(libs.androidx.room.paging)
 
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
     // Datastore for storing user data
     implementation(libs.androidx.datastore.preferences)
+
+    //Paging 3
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
 }

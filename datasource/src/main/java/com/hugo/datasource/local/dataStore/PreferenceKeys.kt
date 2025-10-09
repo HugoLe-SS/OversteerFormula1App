@@ -1,4 +1,4 @@
-package com.hugo.datasource.local
+package com.hugo.datasource.local.dataStore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -17,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ErrorDisplayComponent
@@ -37,6 +37,8 @@ fun ResultScreen(
     circuitDetails: F1CircuitDetails? = null
 ){
     val state by viewModel.state.collectAsState()
+    val driverRaceItems = state.driverRaceResults.collectAsLazyPagingItems()
+    val constructorRaceItems = state.constructorRaceResults.collectAsLazyPagingItems()
     val intervals by viewModel.raceIntervals.collectAsState()
 
     LaunchedEffect(key1 = driverId, key2 = constructorId, key3 = circuitDetails){
@@ -60,7 +62,7 @@ fun ResultScreen(
 
         circuitDetails?.circuitId?.let {
             viewModel.fetchF1CalendarResult(season = "current", circuitId = circuitDetails.circuitId)
-            AppLogger.d(message = "LaunchedEffect - circuitId: ${circuitDetails?.circuitId}")
+            AppLogger.d(message = "LaunchedEffect - circuitId: ${circuitDetails.circuitId}")
         }
 
     }
@@ -124,6 +126,7 @@ fun ResultScreen(
                         }
 
                         else -> {
+                            // Circuit Banner
                             item{
                                 CircuitResultBannerComponent(
                                     f1CalendarResult = state.f1CalendarResult,
@@ -131,22 +134,24 @@ fun ResultScreen(
                                 )
                             }
 
-                            state.driverRaceResults?.let{
-                                items(state.driverRaceResults) { raceResult ->
-                                    RaceResultListItem(
-                                        driverRaceResult = raceResult
-                                    )
+                            // Driver Race Results(Paging)
+                            driverRaceItems.let { pagingItems ->
+                                items(pagingItems.itemCount) { index ->
+                                    pagingItems[index]?.let { raceResult ->
+                                        RaceResultListItem(driverRaceResult = raceResult)
+                                    }
+                                }
+                            }
+                            // Constructor Race Results(Paging)
+                            constructorRaceItems.let { pagingItems ->
+                                items(pagingItems.itemCount) { index ->
+                                    pagingItems[index]?.let { raceResult ->
+                                        RaceResultListItem(constructorRaceResult = raceResult)
+                                    }
                                 }
                             }
 
-                            state.constructorRaceResults?.let{
-                                items(state.constructorRaceResults) { raceResult ->
-                                    RaceResultListItem(
-                                        constructorRaceResult = raceResult
-                                    )
-                                }
-                            }
-
+                            //Circuit Result
                             state.f1CalendarResult?.let { results ->
                                 //val intervals = calculateIntervals(results = results)
                                 itemsIndexed(results) { index, raceResult ->
