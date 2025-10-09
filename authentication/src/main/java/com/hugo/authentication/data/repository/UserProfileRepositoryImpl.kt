@@ -7,6 +7,7 @@ import com.hugo.authentication.data.dto.ProfileDto
 import com.hugo.authentication.data.mapper.toGoogleSignInResult
 import com.hugo.authentication.domain.model.ProfileUpdate
 import com.hugo.authentication.domain.repository.UserProfileRepository
+import com.hugo.datasource.local.dataStore.UserPreferences
 import com.hugo.datasource.local.entity.User.GoogleSignInResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.jan.supabase.auth.Auth
@@ -25,7 +26,7 @@ class UserProfileRepositoryImpl @Inject constructor(
     private val supabaseAuth: Auth,
     private val supabaseStorage: Storage,
     @ApplicationContext private val context: Context,
-    private val userPreferences: com.hugo.datasource.local.UserPreferences,
+    private val userPreferences: UserPreferences,
     private val functions: Functions
 ): UserProfileRepository {
 

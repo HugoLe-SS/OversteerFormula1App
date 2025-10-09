@@ -20,6 +20,7 @@ hiltNavginComposeVersion = "1.2.0"
 appcompat = "1.7.1"
 material = "1.12.0"
 material3 = "1.3.2"
+pagingRuntime = "3.3.6"
 roomCompiler = "2.7.0"
 splashScreenVersion = "1.0.1"
 coilVersion = "3.0.4"
@@ -41,6 +42,8 @@ firebaseMessaging = "24.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -75,6 +78,8 @@ androidx-compose-runtime = {group = "androidx.compose.runtime", name = "runtime"
 room = {group = "androidx.room", name = "room-runtime", version.ref = "roomCompiler"}
 room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler"}
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomCompiler"}
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomCompiler" }
+
 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }

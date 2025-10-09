@@ -17,7 +17,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.hugo.authentication.data.mapper.toGoogleSignInResult
 import com.hugo.authentication.domain.repository.GoogleAuthRepository
 import com.hugo.authentication.domain.repository.UserProfileRepository
-import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.dataStore.UserPreferences
 import com.hugo.datasource.local.entity.User.GoogleSignInResult
 import com.hugo.notifications.domain.NotificationRepository
 import com.hugo.utilities.constants.AppConstants.WEB_CLIENT_ID

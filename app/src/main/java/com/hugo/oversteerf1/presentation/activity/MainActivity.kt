@@ -13,7 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.dataStore.UserPreferences
 import com.hugo.datasource.local.entity.User.ThemePreference
 import com.hugo.design.ui.theme.AppTheme
 import com.hugo.oversteerf1.presentation.screens.navigation.AppNavGraph

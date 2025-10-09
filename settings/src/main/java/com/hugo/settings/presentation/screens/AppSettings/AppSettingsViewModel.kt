@@ -2,7 +2,7 @@ package com.hugo.settings.presentation.screens.AppSettings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.dataStore.UserPreferences
 import com.hugo.datasource.local.entity.User.ThemePreference
 import com.hugo.utilities.logging.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel

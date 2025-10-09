@@ -3,8 +3,8 @@ package com.hugo.notifications.data
 import android.util.Log
 import androidx.datastore.preferences.core.Preferences
 import com.google.firebase.messaging.FirebaseMessaging
-import com.hugo.datasource.local.PreferenceKeys
-import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.dataStore.PreferenceKeys
+import com.hugo.datasource.local.dataStore.UserPreferences
 import com.hugo.notifications.domain.NotificationRepository
 import com.hugo.notifications.domain.NotificationSettingType
 import com.hugo.utilities.logging.AppLogger
