@@ -21,7 +21,7 @@ fun <T> PullToRefreshLazyColumn(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
-    key: ((item: T) -> Any)? = null, // Optional key for items
+    key: ((item: T) -> Any)? = null, // Optional key for items to avoid unnecessary recomposition
     emptyState: (@Composable () -> Unit)? = null, // Optional empty state
     header: (@Composable () -> Unit)? = null,
     itemContent: @Composable (item: T) -> Unit,

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugo.datasource.local.entity.User.ThemePreference
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ImageComponent
@@ -35,7 +36,7 @@ fun AppSettingsScreen(
     backButtonClicked: () -> Unit = {}
 ) {
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val themeOptions = listOf(
         ThemePreference.SYSTEM.name,

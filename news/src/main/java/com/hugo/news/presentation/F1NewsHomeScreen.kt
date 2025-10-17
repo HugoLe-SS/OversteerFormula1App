@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.design.components.AppToolbar
@@ -38,7 +39,7 @@ fun F1NewsHomeScreen(
     viewModel: F1NewsViewModel = hiltViewModel(),
     cardClicked: (F1CalendarInfo) -> Unit = {}
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     Scaffold(

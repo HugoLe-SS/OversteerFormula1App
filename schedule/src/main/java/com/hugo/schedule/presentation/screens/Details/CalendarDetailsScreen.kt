@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.design.components.AppToolbar
@@ -33,7 +34,7 @@ fun CalendarDetailsScreen(
     calendarInfo: F1CalendarInfo,
     viewResultButtonClicked: (F1CircuitDetails)-> Unit = {}
 ){
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect (key1 = calendarInfo.circuitId) {
         viewModel.fetchCircuitDetails(circuitId = calendarInfo.circuitId)

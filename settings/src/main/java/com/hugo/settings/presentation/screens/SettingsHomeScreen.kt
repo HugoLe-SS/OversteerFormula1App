@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
@@ -34,7 +35,7 @@ fun SettingsHomeScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     backButtonClicked: () -> Unit = {}
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
