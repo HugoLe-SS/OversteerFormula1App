@@ -2,9 +2,8 @@ package com.hugo.datasource.di
 
 import android.content.Context
 import androidx.room.Room
+import com.hugo.datasource.dao.Driver.DriverDetailsDao
 import com.hugo.datasource.local.RoomDB.AppDB
-import com.hugo.datasource.local.RoomDB.LocalDataSource
-import com.hugo.datasource.local.RoomDB.LocalDataSourceImpl
 import com.hugo.datasource.local.TransactionProvider
 import dagger.Module
 import dagger.Provides
@@ -17,11 +16,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DataSourceModule {
 
-    @Provides
-    @Singleton
-    fun providesLocalDataSource(@ApplicationContext context: Context): LocalDataSource {
-        return LocalDataSourceImpl(context)
-    }
+//    @Provides
+//    @Singleton
+//    fun providesLocalDataSource(@ApplicationContext context: Context): LocalDataSource {
+//        return LocalDataSourceImpl(context)
+//    }
 
     @Provides
     @Singleton
@@ -34,6 +33,7 @@ class DataSourceModule {
             "app_database"
         ).build()
     }
+
     @Provides
     @Singleton
     fun provideTransactionProvider(db: AppDB): TransactionProvider {
