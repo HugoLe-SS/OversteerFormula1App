@@ -4,7 +4,11 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorQuali.ConstructorQualifyingLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorRace.ConstructorRaceLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverQuali.DriverQualifyingLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverRace.DriverRaceLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.F1CalendarResult.F1CalendarResultLocalDataSource
 import com.hugo.datasource.local.TransactionProvider
 import com.hugo.datasource.local.entity.Constructor.ConstructorQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
@@ -12,7 +16,6 @@ import com.hugo.datasource.local.entity.Driver.DriverQualifyingResultsInfo
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 import com.hugo.result.data.mapper.toConstructorQualifyingResultInfoList
-import com.hugo.result.data.mapper.toConstructorRaceResultInfoList
 import com.hugo.result.data.mapper.toDriverQualifyingResultInfoList
 import com.hugo.result.data.mapper.toF1CalendarResultList
 import com.hugo.result.data.paging.ConstructorRaceResultsRemoteMediator
@@ -35,7 +38,11 @@ import javax.inject.Inject
 
 class F1ResultRepositoryImpl @Inject constructor(
     private val f1ResultApi: F1ResultApi,
-    private val localDataSource: LocalDataSource,
+    private val driverRaceLocalDataSource: DriverRaceLocalDataSource,
+    private val constructorRaceLocalDataSource: ConstructorRaceLocalDataSource,
+    private val constructorQualifyingLocalDataSource: ConstructorQualifyingLocalDataSource,
+    private val driverQualifyingLocalDataSource: DriverQualifyingLocalDataSource,
+    private val f1CalendarResultLocalDataSource: F1CalendarResultLocalDataSource,
     private val transactionProvider: TransactionProvider
 ): IF1ResultRepository {
 
@@ -129,7 +136,7 @@ class F1ResultRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     override fun getDriverRaceResults(season: String, driverId: String): Flow<PagingData<DriverRaceResultsInfo>> {
 
-        val pagingSourceFactory = { localDataSource.getDriverRaceResultsPagingSource(driverId) }
+        val pagingSourceFactory = { driverRaceLocalDataSource.getDriverRaceResultsPagingSource(driverId) }
 
         return Pager(
             config = PagingConfig(
@@ -140,7 +147,7 @@ class F1ResultRepositoryImpl @Inject constructor(
                 season = season,
                 driverId = driverId,
                 apiService = f1ResultApi,
-                localDataSource = localDataSource,
+                localDataSource = driverRaceLocalDataSource,
                 transactionProvider =  transactionProvider
             ),
             pagingSourceFactory = pagingSourceFactory
@@ -195,7 +202,7 @@ class F1ResultRepositoryImpl @Inject constructor(
         season: String,
         constructorId: String
     ): Flow<PagingData<ConstructorRaceResultsInfo>> {
-        val pagingSourceFactory = { localDataSource.getConstructorRacePagingSource(constructorId) }
+        val pagingSourceFactory = { constructorRaceLocalDataSource.getConstructorRacePagingSource(constructorId) }
 
         return Pager(
             config = PagingConfig(
@@ -206,7 +213,7 @@ class F1ResultRepositoryImpl @Inject constructor(
                 season = season,
                 constructorId = constructorId,
                 apiService = f1ResultApi,
-                localDataSource = localDataSource,
+                localDataSource = constructorRaceLocalDataSource,
                 transactionProvider =  transactionProvider
             ),
             pagingSourceFactory = pagingSourceFactory
@@ -216,14 +223,15 @@ class F1ResultRepositoryImpl @Inject constructor(
     // Constructor DB operations
     private suspend fun insertConstructorQualifyingListInDB(constructorQualifyingList: List<ConstructorQualifyingResultsInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertConstructorQualifyingListInDB(constructorQualifyingList)
+            constructorQualifyingLocalDataSource.insertConstructorQualifyingListInDB(constructorQualifyingList)
             AppLogger.d(message = "Success insertConstructorQualifyingListInDB with size ${constructorQualifyingList.size}")
         }
     }
 
     private suspend fun getConstructorQualifyingListFromDB(constructorId: String): List<ConstructorQualifyingResultsInfo>? {
         return withContext(Dispatchers.IO){
-            val constructorQualifyingList = localDataSource.getConstructorQualifyingListFromDB(constructorId)
+            val constructorQualifyingList =
+                constructorQualifyingLocalDataSource.getConstructorQualifyingListFromDB(constructorId)
             constructorQualifyingList.ifEmpty {
                 null
             }
@@ -232,7 +240,7 @@ class F1ResultRepositoryImpl @Inject constructor(
 
     private suspend fun insertConstructorRaceListInDB(constructorRaceList: List<ConstructorRaceResultsInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertConstructorRaceListInDB(constructorRaceList)
+            constructorRaceLocalDataSource.insertConstructorRaceListInDB(constructorRaceList)
             AppLogger.d(message = "Success insertConstructorRaceListInDB with size ${constructorRaceList.size}")
         }
     }
@@ -240,14 +248,14 @@ class F1ResultRepositoryImpl @Inject constructor(
     // Driver DB operations
     private suspend fun insertDriverQualifyingResultsListInDB(driverQualifyingResultsInfo: List<DriverQualifyingResultsInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertDriverQualifyingListInDB(driverQualifyingResultsInfo)
+            driverQualifyingLocalDataSource.insertDriverQualifyingListInDB(driverQualifyingResultsInfo)
             AppLogger.d(message = "Success insertDriverQualifyingResultsListInDB with size ${driverQualifyingResultsInfo.size}")
         }
     }
 
     private suspend fun getDriverQualifyingResultsListFromDB(driverId: String): List<DriverQualifyingResultsInfo>? {
         return withContext(Dispatchers.IO){
-            val driverQualifyingResultsInfo = localDataSource.getDriverQualifyingListFromDB(driverId)
+            val driverQualifyingResultsInfo = driverQualifyingLocalDataSource.getDriverQualifyingListFromDB(driverId)
             driverQualifyingResultsInfo.ifEmpty {
                 null
             }
@@ -256,7 +264,7 @@ class F1ResultRepositoryImpl @Inject constructor(
 
     private suspend fun insertDriverRaceResultsListInDB(driverRaceResultsInfo: List<DriverRaceResultsInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertDriverRaceListInDB(driverRaceResultsInfo)
+            driverRaceLocalDataSource.insertDriverRaceListInDB(driverRaceResultsInfo)
             AppLogger.d(message = "Success insertDriverRaceResultsListInDB with size ${driverRaceResultsInfo.size}")
         }
     }
@@ -273,14 +281,14 @@ class F1ResultRepositoryImpl @Inject constructor(
     //Circuit Result DB operations
     private suspend fun insertCalendarResultListInDB(calendarResult: List<F1CalendarRaceResult>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertF1CalendarResultInDB(calendarResult)
+            f1CalendarResultLocalDataSource.insertF1CalendarResultInDB(calendarResult)
             AppLogger.d(message = "Success insertF1CalendarResultInDB with size ${calendarResult.size}")
         }
     }
 
     private suspend fun getCalendarResultListFromDB(circuitId: String): List<F1CalendarRaceResult>? {
         return withContext(Dispatchers.IO){
-            val calendarResult = localDataSource.getF1CalendarResultFromDB(circuitId = circuitId)
+            val calendarResult = f1CalendarResultLocalDataSource.getF1CalendarResultFromDB(circuitId = circuitId)
             calendarResult.ifEmpty {
                 null
             }

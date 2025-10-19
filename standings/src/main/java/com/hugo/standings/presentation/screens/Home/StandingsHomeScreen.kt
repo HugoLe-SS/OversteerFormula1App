@@ -163,6 +163,7 @@ fun StandingsHomeScreen(
                         when (it) {
                             is ConstructorStandingsInfo -> {it.constructorId}
                             is DriverStandingsInfo -> {it.driverId}
+                            else -> "unknown_${it.hashCode()}"
                         }
                     },
                     header = bannerComposable,

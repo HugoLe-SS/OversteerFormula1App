@@ -139,7 +139,9 @@ fun ResultScreen(
                             driverRaceItems.let { pagingItems ->
                                 items(
                                     count = pagingItems.itemCount,
-                                    key = { index -> pagingItems[index]?.round ?: index }
+                                    key = { index ->  val item = driverRaceItems[index]
+                                        "${item?.round}_${item?.driverId ?: index}"
+                                    }
                                 ) { index ->
                                     pagingItems[index]?.let { raceResult ->
                                         RaceResultListItem(driverRaceResult = raceResult)
@@ -150,7 +152,9 @@ fun ResultScreen(
                             constructorRaceItems.let { pagingItems ->
                                 items(
                                     count = pagingItems.itemCount,
-                                    key = { index -> pagingItems[index]?.round ?: index }
+                                    key = { index ->  val item = constructorRaceItems[index]
+                                        "${item?.round}_${item?.driverId ?: index}"
+                                    }
                                 ) { index ->
                                     pagingItems[index]?.let { raceResult ->
                                         RaceResultListItem(constructorRaceResult = raceResult)
@@ -163,7 +167,7 @@ fun ResultScreen(
                                 //val intervals = calculateIntervals(results = results)
                                 itemsIndexed(
                                     items = results,
-                                    key = { _, raceResult -> raceResult.circuitId }
+                                    key = { _, raceResult -> "circuit_${raceResult.driverId}" }
                                 ) { index, raceResult ->
                                     RaceResultListItem(
                                         circuitRaceResult = raceResult,

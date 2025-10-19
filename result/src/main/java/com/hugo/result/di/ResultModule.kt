@@ -1,6 +1,10 @@
 package com.hugo.result.di
 
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorQuali.ConstructorQualifyingLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorRace.ConstructorRaceLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverQuali.DriverQualifyingLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverRace.DriverRaceLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.F1CalendarResult.F1CalendarResultLocalDataSource
 import com.hugo.datasource.local.TransactionProvider
 import com.hugo.result.data.remote.F1ResultApi
 import com.hugo.result.data.repository.F1ResultRepositoryImpl
@@ -27,8 +31,20 @@ class ResultModule {
 
     @Provides
     @Singleton
-    fun provideF1ResultRepository(api: F1ResultApi, localDataSource: LocalDataSource, transactionProvider: TransactionProvider): IF1ResultRepository {
-        return F1ResultRepositoryImpl(api, localDataSource, transactionProvider)
+    fun provideF1ResultRepository(
+        api: F1ResultApi,
+        driverRaceLocalDataSource: DriverRaceLocalDataSource,
+        constructorRaceLocalDataSource: ConstructorRaceLocalDataSource,
+        constructorQualifyingLocalDataSource: ConstructorQualifyingLocalDataSource,
+        driverQualifyingLocalDataSource: DriverQualifyingLocalDataSource,
+        f1CalendarResultLocalDataSource: F1CalendarResultLocalDataSource,
+        transactionProvider: TransactionProvider
+    ): IF1ResultRepository {
+        return F1ResultRepositoryImpl(
+            api, driverRaceLocalDataSource, constructorRaceLocalDataSource,
+            constructorQualifyingLocalDataSource, driverQualifyingLocalDataSource,
+            f1CalendarResultLocalDataSource, transactionProvider
+        )
     }
 
 }

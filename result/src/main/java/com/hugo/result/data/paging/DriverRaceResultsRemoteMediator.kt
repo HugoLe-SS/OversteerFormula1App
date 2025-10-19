@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverRace.DriverRaceLocalDataSource
 import com.hugo.datasource.local.TransactionProvider
 import com.hugo.datasource.local.entity.Driver.DriverRaceResultsInfo
 import com.hugo.result.data.mapper.toDriverRaceResultInfoList
@@ -16,7 +16,7 @@ class DriverRaceResultsRemoteMediator(
     private val season: String,
     private val driverId: String,
     private val apiService: F1ResultApi,
-    private val localDataSource: LocalDataSource,
+    private val localDataSource: DriverRaceLocalDataSource,
     private val transactionProvider: TransactionProvider
 ) : RemoteMediator<Int, DriverRaceResultsInfo>() {
 

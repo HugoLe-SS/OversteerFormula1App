@@ -1,6 +1,9 @@
 package com.hugo.standings.di
 
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorDetails.ConstructorDetailsLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorStandings.ConstructorStandingsLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverDetails.DriverDetailsLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverStandings.DriverStandingsLocalDataSource
 import com.hugo.standings.data.remote.F1StandingsApi
 import com.hugo.standings.data.repository.F1StandingRepositoryImpl
 import com.hugo.standings.domain.repository.IF1StandingsRepository
@@ -32,10 +35,19 @@ class StandingsModule {
     fun provideF1StandingsRepository(
         api: F1StandingsApi,
         supabase: SupabaseClient,
-        localDataSource: LocalDataSource
+        driverStandingsLocalDataSource: DriverStandingsLocalDataSource,
+        constructorStandingsLocalDataSource: ConstructorStandingsLocalDataSource,
+        driverDetailsLocalDataSource: DriverDetailsLocalDataSource,
+        constructorDetailsLocalDataSource: ConstructorDetailsLocalDataSource,
     ): IF1StandingsRepository {
-        return F1StandingRepositoryImpl(api, supabase, localDataSource)
+        return F1StandingRepositoryImpl(
+            api,
+            supabase,
+            driverStandingsLocalDataSource,
+            constructorStandingsLocalDataSource,
+            driverDetailsLocalDataSource,
+            constructorDetailsLocalDataSource,
+        )
     }
-
 
 }

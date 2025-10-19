@@ -1,6 +1,6 @@
 package com.hugo.oversteerf1.data.repository
 
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.F1HomeDetails.F1HomeDetailsLocalDataSource
 import com.hugo.datasource.local.entity.F1HomeDetails
 import com.hugo.datasource.local.entity.F1News
 import com.hugo.oversteerf1.data.remote.F1NewsApi
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class F1NewsRepositoryImpl @Inject constructor(
     private val f1NewsApi: F1NewsApi,
     private val supabaseClient: SupabaseClient,
-    private val localDataSource: LocalDataSource
+    private val f1HomeDetailsLocalDataSource: F1HomeDetailsLocalDataSource
 ): IF1NewsRepository {
 
     override fun getF1News(): Flow<Resource<List<F1News>, AppError>> = flow {
@@ -89,14 +89,14 @@ class F1NewsRepositoryImpl @Inject constructor(
 
     private suspend fun insertF1HomeDetails(f1HomeDetails: List<F1HomeDetails>){
         withContext(Dispatchers.IO){
-            localDataSource.insertF1HomeDetailsInDB(f1HomeDetails)
+            f1HomeDetailsLocalDataSource.insertF1HomeDetailsInDB(f1HomeDetails)
             AppLogger.d(message = "Success insertF1HomeDetails with size:  ${f1HomeDetails.size}")
         }
     }
 
     private suspend fun getF1HomeDetailsFromDB(): List<F1HomeDetails>? {
         return withContext(Dispatchers.IO){
-            localDataSource.getF1HomeDetailsFromDB()
+            f1HomeDetailsLocalDataSource.getF1HomeDetailsFromDB()
         }
     }
 

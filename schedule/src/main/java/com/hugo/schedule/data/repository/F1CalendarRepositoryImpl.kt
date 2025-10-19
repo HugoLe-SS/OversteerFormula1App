@@ -1,6 +1,7 @@
 package com.hugo.schedule.data.repository
 
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.F1Calendar.F1CalendarLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.F1CircuitsDetails.F1CircuitsDetailsLocalDataSource
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.schedule.data.mapper.toF1CalendarInfoList
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class F1CalendarRepositoryImpl @Inject constructor(
     private val f1ScheduleApi: F1ScheduleApi,
     private val supabaseClient: SupabaseClient,
-    private val localDataSource: LocalDataSource
+    private val f1CalendarLocalDataSource: F1CalendarLocalDataSource,
+    private val f1CircuitsDetailsLocalDataSource: F1CircuitsDetailsLocalDataSource
 ): IF1CalendarRepository {
 
 //    override fun getF1Calendar(season: String): Flow<Resource<List<F1CalendarInfo>, AppError>> = flow {
@@ -117,7 +119,7 @@ class F1CalendarRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
 
-    // Supabase
+    // supabase
     override fun getF1CircuitDetails(circuitId: String): Flow<Resource<F1CircuitDetails?, AppError>> = flow {
         AppLogger.d(message = "Inside getF1CircuitDetails")
         //emit(Resource.Loading())
@@ -165,32 +167,30 @@ class F1CalendarRepositoryImpl @Inject constructor(
     //Calendar Schedule Info
     private suspend fun insertCalendarInfoListInDB(calendarInfo: List<F1CalendarInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertF1CalendarInDB(calendarInfo)
+            f1CalendarLocalDataSource.insertF1CalendarInDB(calendarInfo)
             AppLogger.d(message = "Success insertCalendarInfoListInDB with size ${calendarInfo.size}")
         }
     }
 
     private suspend fun getCalendarInfoListFromDB(): List<F1CalendarInfo>? {
         return withContext(Dispatchers.IO){
-            val calendarInfoList = localDataSource.getF1CalendarFromDB()
-            if(calendarInfoList.isEmpty()){
+            val calendarInfoList = f1CalendarLocalDataSource.getF1CalendarFromDB()
+            calendarInfoList.ifEmpty {
                 null
-            } else{
-                calendarInfoList
             }
         }
     }
 
     private suspend fun insertCalendarDetailsInDB(calendarDetails: F1CircuitDetails) {
         withContext(Dispatchers.IO){
-            localDataSource.insertF1CircuitDetailsInDB(calendarDetails)
+            f1CircuitsDetailsLocalDataSource.insertF1CircuitDetailsInDB(calendarDetails)
             AppLogger.d(message = "Success insertCalendarInfoListInDB with circuitID:  ${calendarDetails.circuitId}")
         }
     }
 
     private suspend fun getCalendarDetailsFromDB(circuitId: String): F1CircuitDetails? {
         return withContext(Dispatchers.IO){
-            localDataSource.getF1CircuitDetailsFromDB(circuitId)
+            f1CircuitsDetailsLocalDataSource.getF1CircuitDetailsFromDB(circuitId)
         }
     }
 

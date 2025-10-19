@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorRace.ConstructorRaceLocalDataSource
 import com.hugo.datasource.local.TransactionProvider
 import com.hugo.datasource.local.entity.Constructor.ConstructorRaceResultsInfo
 import com.hugo.result.data.mapper.toConstructorRaceResultInfoList
@@ -17,7 +17,7 @@ class ConstructorRaceResultsRemoteMediator @Inject constructor(
     private val season: String,
     private val constructorId: String,
     private val apiService: F1ResultApi,
-    private val localDataSource: LocalDataSource,
+    private val localDataSource: ConstructorRaceLocalDataSource,
     private val transactionProvider: TransactionProvider
 ): RemoteMediator<Int, ConstructorRaceResultsInfo>() {
     override suspend fun load(
