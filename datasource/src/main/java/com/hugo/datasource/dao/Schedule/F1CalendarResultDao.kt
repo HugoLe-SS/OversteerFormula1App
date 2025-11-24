@@ -9,7 +9,7 @@ import com.hugo.datasource.local.RoomDB.TableConstants
 import com.hugo.datasource.local.entity.Schedule.F1CalendarRaceResult
 
 @Dao
-interface F1CalendarResult: BaseDao<F1CalendarRaceResult> {
+interface F1CalendarResultDao: BaseDao<F1CalendarRaceResult> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertF1CalendarResultInDB(f1CalendarInfo: List<F1CalendarRaceResult>)
 

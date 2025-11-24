@@ -142,6 +142,10 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.ktor.client.android)
 
+    //Paging 3
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
 
 
 

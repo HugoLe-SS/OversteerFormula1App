@@ -2,7 +2,7 @@ package com.hugo.notifications.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hugo.datasource.local.UserPreferences
+import com.hugo.datasource.local.dataStore.UserPreferences
 import com.hugo.notifications.domain.NotificationRepository
 import com.hugo.notifications.domain.NotificationSettingType
 import com.hugo.utilities.logging.AppLogger

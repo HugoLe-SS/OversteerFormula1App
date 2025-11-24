@@ -15,7 +15,7 @@ import com.hugo.datasource.dao.Driver.DriverRaceResultsDao
 import com.hugo.datasource.dao.Driver.DriverStandingsDao
 import com.hugo.datasource.dao.Home.F1HomeDetailsDao
 import com.hugo.datasource.dao.Schedule.F1CalendarDao
-import com.hugo.datasource.dao.Schedule.F1CalendarResult
+import com.hugo.datasource.dao.Schedule.F1CalendarResultDao
 import com.hugo.datasource.dao.Schedule.F1CircuitDetailsDao
 import com.hugo.datasource.local.converter.Converters
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
@@ -50,7 +50,7 @@ abstract class AppDB : RoomDatabase() {
 
     abstract fun getF1CircuitDetailsDao(): F1CircuitDetailsDao
 
-    abstract fun getF1CalendarResultDao(): F1CalendarResult
+    abstract fun getF1CalendarResultDao(): F1CalendarResultDao
 
     abstract fun getConstructorStandingsDao(): ConstructorStandingsDao
 

@@ -10,6 +10,7 @@ coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTest = "<version>"
 kotlinxSerializationJson = "1.8.1"
 lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
@@ -20,6 +21,8 @@ hiltNavginComposeVersion = "1.2.0"
 appcompat = "1.7.1"
 material = "1.12.0"
 material3 = "1.3.2"
+mockk = "1.14.6"
+pagingRuntime = "3.3.6"
 roomCompiler = "2.7.0"
 splashScreenVersion = "1.0.1"
 coilVersion = "3.0.4"
@@ -38,9 +41,12 @@ composeTesting = "1.0.0-alpha04"
 firebaseMessagingKtx = "24.1.1"
 googleGmsGoogleServices = "4.4.2"
 firebaseMessaging = "24.1.1"
+junitJunit = "4.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -59,8 +65,11 @@ hilt = {group = "com.google.dagger", name = "hilt-android", version.ref = "hiltV
 hilt_compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion"}
 hilt_navigation_compose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavginComposeVersion"}
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 splash-screen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreenVersion" }
 coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilVersion"  }
 coilNetwork = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilVersion"  }
@@ -75,6 +84,8 @@ androidx-compose-runtime = {group = "androidx.compose.runtime", name = "runtime"
 room = {group = "androidx.room", name = "room-runtime", version.ref = "roomCompiler"}
 room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler"}
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "roomCompiler"}
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomCompiler" }
+
 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
@@ -95,6 +106,7 @@ ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref
 androidx-compose-testing = { group = "androidx.xr.compose", name = "compose-testing", version.ref = "composeTesting" }
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

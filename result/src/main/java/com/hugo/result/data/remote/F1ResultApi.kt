@@ -7,13 +7,16 @@ import com.hugo.result.data.remote.dto.RaceResult.DriverRaceResultDto
 import com.hugo.result.data.remote.dto.RaceResult.F1CalendarResultDto
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface F1ResultApi {
     // Driver Race result based on season and ID
     @GET("ergast/f1/{season}/drivers/{driverId}/results")
     suspend fun getDriverRaceResult(
         @Path("season") season: String,
-        @Path("driverId") driverId: String
+        @Path("driverId") driverId: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): DriverRaceResultDto
 
     // Driver Qualifying result based on season and ID
@@ -27,7 +30,9 @@ interface F1ResultApi {
     @GET("ergast/f1/{season}/constructors/{constructorId}/results")
     suspend fun getConstructorRaceResult(
         @Path("season") season: String,
-        @Path("constructorId") constructorId: String
+        @Path("constructorId") constructorId: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): ConstructorRaceResultDto
 
     // Constructor Qualifying result based on season and ID

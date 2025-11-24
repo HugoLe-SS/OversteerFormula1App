@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ErrorDisplayComponent
 import com.hugo.design.components.ImageComponent
@@ -36,7 +37,7 @@ fun StandingsDetailsScreen(
     viewResultButtonClicked: (driverId: String?, constructorId: String?) -> Unit = { _, _ -> },
     viewModel: StandingsDetailsViewModel = hiltViewModel()
 ){
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = driverClickInfo?.driverId, key2 = constructorClickInfo?.constructorId) {
         AppLogger.d(message = "LaunchedEffect - driverId: ${driverClickInfo?.driverId}, constructorId: ${constructorClickInfo?.constructorId}")

@@ -63,6 +63,30 @@ class CalendarDetailsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+//    fun getCircuitDetailsAlternative(circuitId: String): StateFlow<CalendarDetailsUiState> =
+//        getF1CircuitInfoUseCase(circuitId)
+//            .map { result ->
+//                when (result) {
+//                    is Resource.Loading -> CalendarDetailsUiState(
+//                        isLoading = result.isFetchingFromNetwork
+//                    )
+//                    is Resource.Success -> CalendarDetailsUiState(
+//                        isLoading = false,
+//                        f1CircuitDetails = result.data
+//                    )
+//                    is Resource.Error -> CalendarDetailsUiState(
+//                        isLoading = false,
+//                        error = result.error
+//                    )
+//                }
+//            }
+//            .stateIn(
+//                viewModelScope,
+//                SharingStarted.WhileSubscribed(5000),
+//                CalendarDetailsUiState()
+//            )
+//}
+
     fun onEvent(event: CalendarDetailsEvent) {
         when (event) {
             is CalendarDetailsEvent.RetryFetch -> { // Assume RetryFetch carries circuitId now

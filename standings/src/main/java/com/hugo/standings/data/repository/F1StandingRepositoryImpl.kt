@@ -1,6 +1,9 @@
 package com.hugo.standings.data.repository
 
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorDetails.ConstructorDetailsLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.ConstructorStandings.ConstructorStandingsLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverDetails.DriverDetailsLocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.DriverStandings.DriverStandingsLocalDataSource
 import com.hugo.datasource.local.entity.Constructor.ConstructorDetails
 import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
 import com.hugo.datasource.local.entity.Driver.DriverDetails
@@ -28,7 +31,10 @@ import javax.inject.Inject
 class F1StandingRepositoryImpl @Inject constructor(
     private val f1StandingsApi: F1StandingsApi,
     private val supabaseClient: SupabaseClient,
-    private val localDataSource: LocalDataSource
+    private val driverStandingsLocalDataSource: DriverStandingsLocalDataSource,
+    private val constructorStandingsLocalDataSource: ConstructorStandingsLocalDataSource,
+    private val driverDetailsLocalDataSource: DriverDetailsLocalDataSource,
+    private val constructorDetailsLocalDataSource: ConstructorDetailsLocalDataSource,
 
 ): IF1StandingsRepository {
 
@@ -222,64 +228,60 @@ class F1StandingRepositoryImpl @Inject constructor(
     //Constructor
     private suspend fun insertConstructorStandingsListInDB(constructorStandingsList: List<ConstructorStandingsInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertConstructorStandingsListInDB(constructorStandingsList)
+            constructorStandingsLocalDataSource.insertConstructorStandingsListInDB(constructorStandingsList)
             AppLogger.d(message = "Success insertConstructorStandingsListInDB with size ${constructorStandingsList.size}")
         }
     }
 
     private suspend fun getConstructorStandingsListFromDB(): List<ConstructorStandingsInfo>? {
         return withContext(Dispatchers.IO){
-            val constructorStandingsList = localDataSource.getConstructorStandingsListFromDB()
-            if(constructorStandingsList.isEmpty()){
+            val constructorStandingsList = constructorStandingsLocalDataSource.getConstructorStandingsListFromDB()
+            constructorStandingsList.ifEmpty {
                 null
-            } else{
-                constructorStandingsList
             }
         }
     }
 
     private suspend fun insertConstructorDetailsInDB(constructorDetails: ConstructorDetails) {
         withContext(Dispatchers.IO){
-            localDataSource.insertConstructorDetailsInDB(constructorDetails)
+            constructorDetailsLocalDataSource.insertConstructorDetailsInDB(constructorDetails)
             AppLogger.d(message = "Success insertConstructorDetailsInDB for constructorId: ${constructorDetails.constructorId}")
         }
     }
 
     private suspend fun getConstructorDetailsFromDB(constructorId: String): ConstructorDetails? {
         return withContext(Dispatchers.IO) {
-            localDataSource.getConstructorDetailsFromDB(constructorId)
+            constructorDetailsLocalDataSource.getConstructorDetailsFromDB(constructorId)
         }
     }
 
     //Driver
     private suspend fun insertDriverStandingsListInDB(driverStandingsList: List<DriverStandingsInfo>) {
         withContext(Dispatchers.IO){
-            localDataSource.insertDriverStandingsListInDB(driverStandingsList)
+            driverStandingsLocalDataSource.insertDriverStandingsListInDB(driverStandingsList)
             AppLogger.d(message = "Success insertDriverStandingsListInDB with size ${driverStandingsList.size}")
         }
     }
 
     private suspend fun getDriverStandingsListFromDB(): List<DriverStandingsInfo>? {
         return withContext(Dispatchers.IO){
-            val driverStandingsList = localDataSource.getDriverStandingsListFromDB()
-            if(driverStandingsList.isEmpty()){
+            val driverStandingsList = driverStandingsLocalDataSource.getDriverStandingsListFromDB()
+            driverStandingsList.ifEmpty {
                 null
-            } else{
-                driverStandingsList
             }
         }
     }
 
     private suspend fun insertDriverDetailsInDB(driverDetails: DriverDetails) {
         withContext(Dispatchers.IO){
-            localDataSource.insertDriverDetailsInDB(driverDetails)
+            driverDetailsLocalDataSource.insertDriverDetailsInDB(driverDetails)
             AppLogger.d(message = "Success insertDriverDetailsInDB for driverId: ${driverDetails.driverId}")
         }
     }
 
     private suspend fun getDriverDetailsFromDB(driverId: String): DriverDetails? {
         return withContext(Dispatchers.IO) {
-            localDataSource.getDriverDetailsFromDB(driverId)
+            driverDetailsLocalDataSource.getDriverDetailsFromDB(driverId)
         }
     }
 

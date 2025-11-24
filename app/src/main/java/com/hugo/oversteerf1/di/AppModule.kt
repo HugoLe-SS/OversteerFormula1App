@@ -1,6 +1,6 @@
 package com.hugo.oversteerf1.di
 
-import com.hugo.datasource.local.RoomDB.LocalDataSource
+import com.hugo.datasource.local.RoomDB.datasource.F1HomeDetails.F1HomeDetailsLocalDataSource
 import com.hugo.oversteerf1.BuildConfig
 import com.hugo.oversteerf1.data.remote.F1NewsApi
 import com.hugo.oversteerf1.data.repository.F1NewsRepositoryImpl
@@ -53,7 +53,11 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsRepository (api: F1NewsApi, supabase: SupabaseClient, localDataSouce: LocalDataSource) : IF1NewsRepository {
-        return F1NewsRepositoryImpl(api, supabase, localDataSouce)
+    fun provideNewsRepository (
+        api: F1NewsApi,
+        supabase: SupabaseClient,
+        f1HomeDetailsLocalDataSource: F1HomeDetailsLocalDataSource
+    ) : IF1NewsRepository {
+        return F1NewsRepositoryImpl(api, supabase, f1HomeDetailsLocalDataSource)
     }
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ImageComponent
 import com.hugo.design.ui.theme.AppTheme
@@ -36,7 +37,7 @@ fun EditProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     backButtonClicked: () -> Unit = {}
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     // This LaunchedEffect will listen for a successful update and navigate back

@@ -12,11 +12,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.hugo.datasource.local.entity.Schedule.F1CircuitDetails
 import com.hugo.design.components.AppToolbar
 import com.hugo.design.components.ErrorDisplayComponent
@@ -36,8 +37,10 @@ fun ResultScreen(
     constructorId: String?= null,
     circuitDetails: F1CircuitDetails? = null
 ){
-    val state by viewModel.state.collectAsState()
-    val intervals by viewModel.raceIntervals.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val driverRaceItems = state.driverRaceResults.collectAsLazyPagingItems()
+    val constructorRaceItems = state.constructorRaceResults.collectAsLazyPagingItems()
+    val intervals by viewModel.raceIntervals.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = driverId, key2 = constructorId, key3 = circuitDetails){
 
@@ -60,7 +63,7 @@ fun ResultScreen(
 
         circuitDetails?.circuitId?.let {
             viewModel.fetchF1CalendarResult(season = "current", circuitId = circuitDetails.circuitId)
-            AppLogger.d(message = "LaunchedEffect - circuitId: ${circuitDetails?.circuitId}")
+            AppLogger.d(message = "LaunchedEffect - circuitId: ${circuitDetails.circuitId}")
         }
 
     }
@@ -124,6 +127,7 @@ fun ResultScreen(
                         }
 
                         else -> {
+                            // Circuit Banner
                             item{
                                 CircuitResultBannerComponent(
                                     f1CalendarResult = state.f1CalendarResult,
@@ -131,25 +135,40 @@ fun ResultScreen(
                                 )
                             }
 
-                            state.driverRaceResults?.let{
-                                items(state.driverRaceResults) { raceResult ->
-                                    RaceResultListItem(
-                                        driverRaceResult = raceResult
-                                    )
+                            // Driver Race Results(Paging)
+                            driverRaceItems.let { pagingItems ->
+                                items(
+                                    count = pagingItems.itemCount,
+                                    key = { index ->  val item = driverRaceItems[index]
+                                        "${item?.round}_${item?.driverId ?: index}"
+                                    }
+                                ) { index ->
+                                    pagingItems[index]?.let { raceResult ->
+                                        RaceResultListItem(driverRaceResult = raceResult)
+                                    }
+                                }
+                            }
+                            // Constructor Race Results(Paging)
+                            constructorRaceItems.let { pagingItems ->
+                                items(
+                                    count = pagingItems.itemCount,
+                                    key = { index ->  val item = constructorRaceItems[index]
+                                        "${item?.round}_${item?.driverId ?: index}"
+                                    }
+                                ) { index ->
+                                    pagingItems[index]?.let { raceResult ->
+                                        RaceResultListItem(constructorRaceResult = raceResult)
+                                    }
                                 }
                             }
 
-                            state.constructorRaceResults?.let{
-                                items(state.constructorRaceResults) { raceResult ->
-                                    RaceResultListItem(
-                                        constructorRaceResult = raceResult
-                                    )
-                                }
-                            }
-
+                            //Circuit Result
                             state.f1CalendarResult?.let { results ->
                                 //val intervals = calculateIntervals(results = results)
-                                itemsIndexed(results) { index, raceResult ->
+                                itemsIndexed(
+                                    items = results,
+                                    key = { _, raceResult -> "circuit_${raceResult.driverId}" }
+                                ) { index, raceResult ->
                                     RaceResultListItem(
                                         circuitRaceResult = raceResult,
                                         interval = intervals.getOrNull(index) ?: "Leader" // Use "Leader" for the first item

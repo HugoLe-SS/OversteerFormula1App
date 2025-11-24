@@ -1,4 +1,4 @@
-package com.hugo.datasource.local
+package com.hugo.datasource.local.dataStore
 
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences
@@ -18,22 +18,22 @@ class UserPreferences(context: Context) {
 
     // Flow to observe login state
     val isUserSignedInFlow: Flow<Boolean> = dataStore.data.map { prefs ->
-        !prefs[com.hugo.datasource.local.PreferenceKeys.ID_TOKEN].isNullOrEmpty()
+        !prefs[PreferenceKeys.ID_TOKEN].isNullOrEmpty()
     }
 
     // Flow to get user data
     val userDataFlow: Flow<GoogleSignInResult?> = dataStore.data.map { prefs ->
-        val idToken = prefs[com.hugo.datasource.local.PreferenceKeys.ID_TOKEN]
-        val userId = prefs[com.hugo.datasource.local.PreferenceKeys.USER_ID]
-        val email = prefs[com.hugo.datasource.local.PreferenceKeys.EMAIL]
+        val idToken = prefs[PreferenceKeys.ID_TOKEN]
+        val userId = prefs[PreferenceKeys.USER_ID]
+        val email = prefs[PreferenceKeys.EMAIL]
 
         if (idToken != null && userId != null && email != null) {
             GoogleSignInResult(
                 idToken = idToken,
                 userId = userId,
                 email = email,
-                displayName = prefs[com.hugo.datasource.local.PreferenceKeys.DISPLAY_NAME],
-                profilePictureUrl = prefs[com.hugo.datasource.local.PreferenceKeys.PROFILE_PICTURE_URL]
+                displayName = prefs[PreferenceKeys.DISPLAY_NAME],
+                profilePictureUrl = prefs[PreferenceKeys.PROFILE_PICTURE_URL]
             )
         } else {
             null
@@ -69,11 +69,11 @@ class UserPreferences(context: Context) {
     // save user data
     suspend fun saveUser(signInResult: GoogleSignInResult) {
         dataStore.edit { prefs ->
-            prefs[com.hugo.datasource.local.PreferenceKeys.ID_TOKEN] = signInResult.idToken
-            prefs[com.hugo.datasource.local.PreferenceKeys.USER_ID] = signInResult.userId
-            prefs[com.hugo.datasource.local.PreferenceKeys.EMAIL] = signInResult.email?: ""
-            prefs[com.hugo.datasource.local.PreferenceKeys.DISPLAY_NAME] = signInResult.displayName ?: ""
-            prefs[com.hugo.datasource.local.PreferenceKeys.PROFILE_PICTURE_URL] = signInResult.profilePictureUrl ?: ""
+            prefs[PreferenceKeys.ID_TOKEN] = signInResult.idToken
+            prefs[PreferenceKeys.USER_ID] = signInResult.userId
+            prefs[PreferenceKeys.EMAIL] = signInResult.email?: ""
+            prefs[PreferenceKeys.DISPLAY_NAME] = signInResult.displayName ?: ""
+            prefs[PreferenceKeys.PROFILE_PICTURE_URL] = signInResult.profilePictureUrl ?: ""
         }
     }
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Constructor.ConstructorStandingsInfo
 import com.hugo.datasource.local.entity.Driver.DriverStandingsInfo
@@ -43,7 +44,7 @@ fun StandingsHomeScreen(
     driverCardClicked: (DriverClickInfo) -> Unit = {},
     constructorCardClicked: (ConstructorClickInfo) -> Unit = {}
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val selectedIndex = when (state.currentType) {
         StandingsType.CONSTRUCTOR -> 0
@@ -158,6 +159,13 @@ fun StandingsHomeScreen(
                         .fillMaxSize()
                         .padding(innerPadding)
                         .background(AppTheme.colorScheme.background),
+                    key = {
+                        when (it) {
+                            is ConstructorStandingsInfo -> {it.constructorId}
+                            is DriverStandingsInfo -> {it.driverId}
+                            else -> "unknown_${it.hashCode()}"
+                        }
+                    },
                     header = bannerComposable,
                     itemContent = { itemData ->
 

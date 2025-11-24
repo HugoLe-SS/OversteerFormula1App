@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.hugo.design.R.drawable
 import com.hugo.design.components.AppToolbar
@@ -39,9 +40,9 @@ fun HomeScreen(
     bannerOnClicked: (Int) -> Unit = {},
     onProfileCliclked: () -> Unit = {},
 ) {
-    val state by viewModel.state.collectAsState()
-    val countdown by viewModel.countdown.collectAsState()
-    val upcomingRaceDetail by viewModel.upcomingRaceDetail.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val countdown by viewModel.countdown.collectAsStateWithLifecycle()
+    val upcomingRaceDetail by viewModel.upcomingRaceDetail.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = state.f1HomeDetails) {
         upcomingRaceDetail?.let {

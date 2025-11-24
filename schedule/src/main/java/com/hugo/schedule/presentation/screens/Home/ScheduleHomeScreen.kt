@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.hugo.datasource.local.entity.Schedule.F1CalendarInfo
 import com.hugo.design.components.AppToolbar
@@ -38,10 +39,10 @@ fun ScheduleHomeScreen(
     viewScheduleButtonClicked: (F1CalendarInfo) -> Unit = {},
     cardClicked: (F1CalendarInfo) -> Unit = {}
 ) {
-    val state by viewModel.state.collectAsState()
-    val filteredEvents by viewModel.filteredEvents.collectAsState()
-    val trimmedFilteredEvents by viewModel.trimmedFilteredEvents.collectAsState()
-    val countdown by viewModel.countdown.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val filteredEvents by viewModel.filteredEvents.collectAsStateWithLifecycle()
+    val trimmedFilteredEvents by viewModel.trimmedFilteredEvents.collectAsStateWithLifecycle()
+    val countdown by viewModel.countdown.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = filteredEvents.firstOrNull()) {
         filteredEvents.firstOrNull()?.let {
@@ -167,6 +168,7 @@ fun ScheduleHomeScreen(
                         .fillMaxSize()
                         .padding(innerPadding)
                         .background(AppTheme.colorScheme.background),
+                    key = {it.circuitId},
                     header = bannerComposable,
                     itemContent = { f1CalendarItem ->
                         F1CalendarListItem(
